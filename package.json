@@ -1,0 +1,19 @@
+{
+  "name": "lolbets-project",
+  "version": "1.0.0",
+  "description": "League of Legends Betting Website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/castiel1309/lolbets-project.git"
+  },
+  "author": "Trevor McCubbin, Vashti Lanz Rubio, Jackson Kwan, Castiel Le, Marian Ruth Lina",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/castiel1309/lolbets-project/issues"
+  },
+  "homepage": "https://gitlab.com/castiel1309/lolbets-project#readme"
+}
