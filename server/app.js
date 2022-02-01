@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-const router = require("./routes/api.js");
+const router = require("./routes/api");
+const path = require("path");
 
 // all api calls to db is in /murals
 app.use("/api", router);
