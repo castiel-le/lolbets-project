@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "jest"
   },
   "keywords": [],
@@ -22,5 +23,9 @@
     "node-cache": "^5.1.2",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.2.0"
+  },
+  "engines": {
+    "node": "11.10.0",
+    "npm": "6.7.0"
   }
 }
