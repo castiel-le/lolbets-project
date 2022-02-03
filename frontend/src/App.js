@@ -1,22 +1,16 @@
-
+import logo from './testlogo.svg';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src="%PUBLIC_URL%/logo192.png" className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
+        <div class="svg-container">
+          <img src={logo} width="64" className="App-logo" alt="logo" />
+        </div>
+        <p id="desc">
+          Based page of LoLBets
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
     </div>
   );
