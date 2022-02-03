@@ -21,7 +21,9 @@ export default class NavBar extends Component {
         super(props);
         this.state = {
             anchorToNav: null,
-            anchorToUSer: null
+            anchorToUSer: null,
+            openUserMenu: false,
+            openSideMenu: false,
         };
         this.handleOpenNavMenu = this.handleOpenNavMenu.bind(this);
         this.handleCloseNavMenu = this.handleCloseNavMenu.bind(this);
@@ -30,19 +32,31 @@ export default class NavBar extends Component {
     }
 
     handleOpenNavMenu(event) {
-        this.setState({anchorToNav: event.currentTarget});
+        this.setState({
+            anchorToNav: event.currentTarget,
+            openSideMenu: true
+        });
     }
 
     handleOpenUserMenu(event) {
-        this.setState({anchorToUser: event.currentTarget});
+        this.setState({
+            anchorToUser: event.currentTarget,
+            openUserMenu: true
+        });
     }
 
     handleCloseNavMenu() {
-        this.setState({anchorToNav: null});
+        this.setState({
+            anchorToNav: null,
+            openSideMenu: false
+        });
     }
 
     handleCloseUserMenu() {
-        this.setState({anchorToUser: null});
+        this.setState({
+            anchorToUser: null,
+            openUserMenu: false
+        });
     }
 
     render() {
@@ -82,7 +96,7 @@ export default class NavBar extends Component {
                             vertical: 'top',
                             horizontal: 'left',
                         }}
-                        open={Boolean(this.anchorToNav)}
+                        open={this.state.openSideMenu}
                         onClose={this.handleCloseNavMenu}
                         sx={{
                             display: { xs: 'block', md: 'none' },
@@ -134,7 +148,7 @@ export default class NavBar extends Component {
                             vertical: 'top',
                             horizontal: 'right',
                         }}
-                        open={Boolean(this.anchorToUser)}
+                        open={this.state.openUserMenu}
                         onClose={this.handleCloseUserMenu}
                         >
                         {settings.map((setting) => (
