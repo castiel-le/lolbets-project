@@ -8,7 +8,7 @@ export const theme = createTheme({
         main: '#0f1519',
       },
       secondary: {
-        main: '#f50057',
+        main: 'rgb(0, 100, 100)',
       },
       text: {
         primary: '#123456',
@@ -17,11 +17,17 @@ export const theme = createTheme({
         default: '#0f1519',
       },
     },
-    overrides: {
-        MuiMenu: {
-            background: {
-                default: '#0f1519',
-              },
-        } 
-    }
+    components: {
+      // Name of the component
+      MuiButton: {
+        styleOverrides: {
+          // Name of the slot
+          root: {
+            // Some CSS
+            fontSize: '14px',
+            borderRadius: 16,
+          },
+        },
+      },
+    },
   });
