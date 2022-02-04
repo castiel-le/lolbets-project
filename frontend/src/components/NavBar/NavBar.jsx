@@ -121,25 +121,31 @@ export default class NavBar extends Component {
                 <AppBar position="static" color='primary' sx={{px: 2}}>
                     <Container maxWidth="xl">
                         <Toolbar disableGutters>
+                            
                             <Typography
                                 variant="h6"
                                 noWrap
                                 component="div"
                                 sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
                             >
-                                <img className="navbar-logo" src="logo192.png" alt='lolbets logo'/>
+                                <NavLink to={"/"} style={{all: "inherit", cursor: "pointer", marginRight: "0px"}}>
+                                    <img className="navbar-logo" src="logo192.png" alt='lolbets logo'/>
+                                </NavLink>
                             </Typography>
 
                             <Hamburger toggleDrawer={this.toggleDrawer} />
-                            
+
                             <Typography
                                 variant="h6"
                                 noWrap
                                 component="div"
                                 sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
                             >
-                                <img className="navbar-logo" src="logo192.png" alt='lolbets logo'/>
+                                <NavLink to={"/"} style={{all: "inherit", cursor: "pointer", marginRight: "0px"}}>
+                                    <img className="navbar-logo" src="logo192.png" alt='lolbets logo'/>
+                                </NavLink>
                             </Typography>
+
                             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                                     {pages.map((page) => (
                                     <Button
@@ -157,6 +163,7 @@ export default class NavBar extends Component {
                                     </Button>
                                     ))}
                             </Box>
+
                             {this.props.user
                                 ? <UserAvatar 
                                     openUserMenu={this.state.openUserMenu} 
