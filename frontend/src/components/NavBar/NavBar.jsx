@@ -20,7 +20,7 @@ import { theme } from './theme';
 import { ThemeProvider } from '@mui/material/styles';
 import { Login } from '@mui/icons-material';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = ['Bets', 'Teams', 'Leaderboard'];
 const settings = ['Profile', 'Friends', 'Bet History', 'Logout'];
 
 const Hamburger = (props) => {
@@ -79,6 +79,10 @@ const UserAvatar = (props) => {
     );
 }
 
+const SideDrawer = (props) => {
+
+}
+
 
 export default class NavBar extends Component {
 
@@ -121,7 +125,7 @@ export default class NavBar extends Component {
                 <AppBar position="static" color='primary' sx={{px: 2}}>
                     <Container maxWidth="xl">
                         <Toolbar disableGutters>
-                            
+
                             <Typography
                                 variant="h6"
                                 noWrap
@@ -151,7 +155,7 @@ export default class NavBar extends Component {
                                     <Button
                                         key={page}
                                         onClick={this.handleCloseNavMenu}
-                                        sx={{ my: 2, color: 'white', display: 'block', mx: '2',
+                                        sx={{ my: 2, color: 'inherit', display: 'block', mx: '2',
                                             '&:hover': {
                                                 backgroundColor: "rgba(128,128,128,.3);",
                                             }}
@@ -174,10 +178,11 @@ export default class NavBar extends Component {
                                 : <Stack direction="row" spacing={1}>
                                     <Button 
                                         variant="contained" 
-                                        startIcon={<Login />} 
+                                        startIcon={<Login />}
                                         color='secondary' 
                                         sx={{
                                             color: "#0f1519", 
+                                            fontSize: {xs: "0", md: "inherit"},
                                             '&:hover': {
                                                 backgroundColor: "rgb(0, 200, 200)",
                                             }}}>
