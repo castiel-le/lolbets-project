@@ -17,4 +17,11 @@ export const theme = createTheme({
         default: '#0f1519',
       },
     },
+    overrides: {
+        MuiMenu: {
+            background: {
+                default: '#0f1519',
+              },
+        } 
+    }
   });
