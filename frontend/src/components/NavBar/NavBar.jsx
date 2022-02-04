@@ -13,6 +13,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 
+import { NavLink } from 'react-router-dom';
+
 import './NavBar.css';
 import { theme } from './theme';
 import { ThemeProvider } from '@mui/material/styles';
@@ -149,7 +151,9 @@ export default class NavBar extends Component {
                                             }}
                                         }
                                     >
-                                        {page}
+                                        <NavLink to={"/test"} style={{textDecoration: "none", color: "inherit"}}>
+                                            {page}
+                                        </NavLink>
                                     </Button>
                                     ))}
                             </Box>
