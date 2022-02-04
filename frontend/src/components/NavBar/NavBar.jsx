@@ -13,6 +13,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 
+import SideDrawer from "./SideDrawer"
+
 import { NavLink } from 'react-router-dom';
 
 import './NavBar.css';
@@ -26,7 +28,7 @@ const settings = ['Profile', 'Friends', 'Bet History', 'Logout'];
 const Hamburger = (props) => {
     return (
         <ThemeProvider theme={theme} >
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }} >
                 <IconButton
                     size="large"
                     aria-label="account of current user"
@@ -79,10 +81,6 @@ const UserAvatar = (props) => {
     );
 }
 
-const SideDrawer = (props) => {
-
-}
-
 
 export default class NavBar extends Component {
 
@@ -91,7 +89,7 @@ export default class NavBar extends Component {
         this.state = {
             anchorToUser: null,
             openUserMenu: false,
-            sideMenuOpen: true,
+            sideMenuOpen: false,
         };
 
         this.handleOpenUserMenu = this.handleOpenUserMenu.bind(this);
@@ -122,6 +120,7 @@ export default class NavBar extends Component {
     render() {
         return (
             <ThemeProvider theme={theme} >
+                <SideDrawer toggleDrawer={this.toggleDrawer} visible={this.state.sideMenuOpen}/>
                 <AppBar position="static" color='primary' sx={{px: 2}}>
                     <Container maxWidth="xl">
                         <Toolbar disableGutters>
