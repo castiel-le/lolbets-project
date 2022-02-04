@@ -123,7 +123,7 @@ export default class NavBar extends Component {
                                 component="div"
                                 sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
                             >
-                                <img id="navbar-logo" src="logo192.png" alt='lolbets logo'/>
+                                <img className="navbar-logo" src="logo192.png" alt='lolbets logo'/>
                             </Typography>
 
                             <Hamburger toggleDrawer={this.toggleDrawer} />
@@ -134,7 +134,7 @@ export default class NavBar extends Component {
                                 component="div"
                                 sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
                             >
-                                <img id="navbar-logo" src="logo192.png" alt='lolbets logo'/>
+                                <img className="navbar-logo" src="logo192.png" alt='lolbets logo'/>
                             </Typography>
                             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                                 {pages.map((page) => (
