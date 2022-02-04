@@ -116,7 +116,7 @@ export default class NavBar extends Component {
     render() {
         return (
             <ThemeProvider theme={theme} >
-                <AppBar position="static" color='primary'>
+                <AppBar position="static" color='primary' sx={{px: 2}}>
                     <Container maxWidth="xl">
                         <Toolbar disableGutters>
                             <Typography
@@ -139,15 +139,19 @@ export default class NavBar extends Component {
                                 <img className="navbar-logo" src="logo192.png" alt='lolbets logo'/>
                             </Typography>
                             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                                {pages.map((page) => (
-                                <Button
-                                    key={page}
-                                    onClick={this.handleCloseNavMenu}
-                                    sx={{ my: 2, color: 'white', display: 'block' }}
-                                >
-                                    {page}
-                                </Button>
-                                ))}
+                                    {pages.map((page) => (
+                                    <Button
+                                        key={page}
+                                        onClick={this.handleCloseNavMenu}
+                                        sx={{ my: 2, color: 'white', display: 'block', mx: '2',
+                                            '&:hover': {
+                                                backgroundColor: "rgba(128,128,128,.3);",
+                                            }}
+                                        }
+                                    >
+                                        {page}
+                                    </Button>
+                                    ))}
                             </Box>
                             {this.props.user
                                 ? <UserAvatar 
@@ -157,7 +161,15 @@ export default class NavBar extends Component {
                                     handleCloseUserMenu={this.handleCloseUserMenu}
                                 />
                                 : <Stack direction="row" spacing={1}>
-                                    <Button variant="contained" startIcon={<Login />} color='secondary'>
+                                    <Button 
+                                        variant="contained" 
+                                        startIcon={<Login />} 
+                                        color='secondary' 
+                                        sx={{
+                                            color: "#0f1519", 
+                                            '&:hover': {
+                                                backgroundColor: "rgb(0, 200, 200)",
+                                            }}}>
                                         Login
                                     </Button>
                                 </Stack>
