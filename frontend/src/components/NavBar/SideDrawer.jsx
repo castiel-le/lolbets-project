@@ -1,14 +1,15 @@
-import * as React from 'react';
+import { Fragment } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import CasinoIcon from '@mui/icons-material/Casino';
+import Paper from '@mui/material/Paper'
+import { ThemeProvider } from '@mui/material/styles';
+
+import './NavBar.css'
 
 export default function TemporaryDrawer(props) {
 
@@ -19,24 +20,13 @@ export default function TemporaryDrawer(props) {
       onClick={props.toggleDrawer}
       onKeyDown={props.toggleDrawer}
     >
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
+      <List >
+        {props.pages.map((text, index) => (
+          <ListItem button key={text} sx={{borderRadius: 0, }}>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              <CasinoIcon sx={{ color: '#f9f9f9' }}/>
             </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemText primary={text} sx={{color: '#f9f9f9', fontFamily: "Lemon-Milk-Light"}}/>
           </ListItem>
         ))}
       </List>
@@ -44,14 +34,18 @@ export default function TemporaryDrawer(props) {
   );
 
   return (
-        <React.Fragment>
+    <ThemeProvider theme={props.theme} >
+        <Fragment backgroundColor="red" >
           <Drawer
             anchor={'left'}
             open={props.visible}
             onClose={props.toggleDrawer}
           >
-            {list('left')}
+            <Paper sx={{ backgroundColor: "#1f1f1f", height: "100vh"}}>
+              {list('left')}
+            </Paper>
           </Drawer>
-        </React.Fragment>
+        </Fragment>
+    </ThemeProvider>
   );
 }

@@ -50,7 +50,7 @@ const UserAvatar = (props) => {
             <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                     <IconButton onClick={props.handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" sx={{height: 32, width: 32,}}/>
                     </IconButton>
                 </Tooltip>
                 <Menu
@@ -120,7 +120,7 @@ export default class NavBar extends Component {
     render() {
         return (
             <ThemeProvider theme={theme} >
-                <SideDrawer toggleDrawer={this.toggleDrawer} visible={this.state.sideMenuOpen}/>
+                <SideDrawer toggleDrawer={this.toggleDrawer} visible={this.state.sideMenuOpen} pages={pages} theme={theme}/>
                 <AppBar position="static" color='primary' sx={{px: 2}}>
                     <Container maxWidth="xl">
                         <Toolbar disableGutters>
@@ -203,7 +203,6 @@ export default class NavBar extends Component {
                                     </Button>
                                 </Stack>
                             }
-                            
                         </Toolbar>
                     </Container>
                 </AppBar>
@@ -211,4 +210,3 @@ export default class NavBar extends Component {
         );
     }
 }
-
