@@ -134,7 +134,7 @@ export default class NavBar extends Component {
                                 component="div"
                                 sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
                             >
-                                <img src="logo192.png" alt='lolbets logo'/>
+                                <img id="navbar-logo" src="logo192.png" alt='lolbets logo'/>
                             </Typography>
                             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                                 {pages.map((page) => (
