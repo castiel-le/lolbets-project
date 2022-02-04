@@ -35,7 +35,7 @@ const Hamburger = (props) => {
                     onClick={props.toggleDrawer}
                     color="inherit"
                 >
-                <MenuIcon />
+                <MenuIcon fontSize='large'/>
                 </IconButton>
             </Box>
         </ThemeProvider>
@@ -182,11 +182,25 @@ export default class NavBar extends Component {
                                         color='secondary' 
                                         sx={{
                                             color: "#0f1519", 
-                                            fontSize: {xs: "0", md: "inherit"},
+                                            display: {xs: "none", md: "inherit"},
                                             '&:hover': {
                                                 backgroundColor: "rgb(0, 200, 200)",
-                                            }}}>
+                                            }}}
+                                    >
                                         Login
+                                    </Button>
+                                    <Button
+                                      variant="contained"
+                                      color="secondary"
+                                      sx={{
+                                        color: "#0f1519", 
+                                        display: {xs: "inherit", md: "none"},
+                                        padding: "3px",
+                                        '&:hover': {
+                                            backgroundColor: "rgb(0, 200, 200)",
+                                        }}}
+                                    >
+                                      <Login />
                                     </Button>
                                 </Stack>
                             }
