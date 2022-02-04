@@ -11,10 +11,12 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
 
 import './NavBar.css';
 import { theme } from './theme';
 import { ThemeProvider } from '@mui/material/styles';
+import { Login } from '@mui/icons-material';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Friends', 'Bet History', 'Logout'];
@@ -147,13 +149,20 @@ export default class NavBar extends Component {
                                 </Button>
                                 ))}
                             </Box>
-
-                            <UserAvatar 
-                                openUserMenu={this.state.openUserMenu} 
-                                anchorToUser={this.state.anchorToUser} 
-                                handleOpenUserMenu={this.handleOpenUserMenu} 
-                                handleCloseUserMenu={this.handleCloseUserMenu}
-                            />
+                            {this.props.user
+                                ? <UserAvatar 
+                                    openUserMenu={this.state.openUserMenu} 
+                                    anchorToUser={this.state.anchorToUser} 
+                                    handleOpenUserMenu={this.handleOpenUserMenu} 
+                                    handleCloseUserMenu={this.handleCloseUserMenu}
+                                />
+                                : <Stack direction="row" spacing={1}>
+                                    <Button variant="contained" startIcon={<Login />} color='secondary'>
+                                        Login
+                                    </Button>
+                                </Stack>
+                            }
+                            
                         </Toolbar>
                     </Container>
                 </AppBar>
