@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper'
 import { ThemeProvider } from '@mui/material/styles';
 
 import './NavBar.css'
+import { NavLink } from 'react-router-dom';
 
 export default function TemporaryDrawer(props) {
 
@@ -20,14 +21,16 @@ export default function TemporaryDrawer(props) {
       onClick={props.toggleDrawer}
       onKeyDown={props.toggleDrawer}
     >
-      <List >
+      <List sx={{borderRadius: 0, }}>
         {props.pages.map((text, index) => (
-          <ListItem button key={text} sx={{borderRadius: 0, }}>
-            <ListItemIcon>
-              <CasinoIcon sx={{ color: '#f9f9f9' }}/>
-            </ListItemIcon>
-            <ListItemText primary={text} sx={{color: '#f9f9f9', fontFamily: "Lemon-Milk-Light"}}/>
-          </ListItem>
+          <NavLink to={props.pageLinks[index]} >
+            <ListItem button key={text} >
+              <ListItemIcon>
+                <CasinoIcon sx={{ color: '#f9f9f9' }}/>
+              </ListItemIcon>
+              <ListItemText primary={text} sx={{color: '#f9f9f9', fontFamily: "Lemon-Milk-Light"}}/>
+            </ListItem>
+          </NavLink>
         ))}
       </List>
     </Box>
@@ -35,7 +38,7 @@ export default function TemporaryDrawer(props) {
 
   return (
     <ThemeProvider theme={props.theme} >
-        <Fragment backgroundColor="red" >
+        <Fragment>
           <Drawer
             anchor={'left'}
             open={props.visible}

@@ -23,7 +23,10 @@ import { ThemeProvider } from '@mui/material/styles';
 import { Login } from '@mui/icons-material';
 
 const pages = ['Bets', 'Teams', 'Leaderboard'];
+const pageLinks = ['/bets', '/teams', '/leaderboard']
+
 const settings = ['Profile', 'Friends', 'Bet History', 'Logout'];
+const settingsLinks = ['/profile', '/friends', '/bethistory', '/logout']
 
 const Hamburger = (props) => {
     return (
@@ -120,7 +123,7 @@ export default class NavBar extends Component {
     render() {
         return (
             <ThemeProvider theme={theme} >
-                <SideDrawer toggleDrawer={this.toggleDrawer} visible={this.state.sideMenuOpen} pages={pages} theme={theme}/>
+                <SideDrawer toggleDrawer={this.toggleDrawer} visible={this.state.sideMenuOpen} pages={pages} pageLinks={pageLinks} theme={theme}/>
                 <AppBar position="static" color='primary' sx={{px: 2}}>
                     <Container maxWidth="xl">
                         <Toolbar disableGutters>
@@ -150,17 +153,17 @@ export default class NavBar extends Component {
                             </Typography>
 
                             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                                    {pages.map((page) => (
+                                    {pages.map((page, index) => (
                                     <Button
                                         key={page}
                                         onClick={this.handleCloseNavMenu}
-                                        sx={{ my: 2, color: 'inherit', display: 'block', mx: '2',
+                                        sx={{ py: 2, color: 'inherit', display: 'block', px: '2',
                                             '&:hover': {
                                                 backgroundColor: "rgba(128,128,128,.3);",
                                             }}
                                         }
                                     >
-                                        <NavLink to={"/test"} style={{textDecoration: "none", color: "inherit"}}>
+                                        <NavLink to={pageLinks[index]} style={{textDecoration: "none", color: "inherit"}}>
                                             {page}
                                         </NavLink>
                                     </Button>
@@ -175,32 +178,36 @@ export default class NavBar extends Component {
                                     handleCloseUserMenu={this.handleCloseUserMenu}
                                 />
                                 : <Stack direction="row" spacing={1}>
-                                    <Button 
-                                        variant="contained" 
-                                        startIcon={<Login />}
-                                        color='secondary' 
+                                    <NavLink to={"/login"} style={{all: "inherit", cursor: "pointer"}}>
+                                        <Button 
+                                            variant="contained" 
+                                            startIcon={<Login />}
+                                            color='secondary' 
+                                            sx={{
+                                                color: "#0f1519", 
+                                                display: {xs: "none", md: "inherit"},
+                                                '&:hover': {
+                                                    backgroundColor: "rgb(0, 200, 200)",
+                                                }}}
+                                        >
+                                            Login
+                                        </Button>
+                                    </NavLink>
+                                    <NavLink to={"/login"} style={{all: "inherit", cursor: "pointer"}}>
+                                        <Button
+                                        variant="contained"
+                                        color="secondary"
                                         sx={{
                                             color: "#0f1519", 
-                                            display: {xs: "none", md: "inherit"},
+                                            display: {xs: "inherit", md: "none"},
+                                            padding: "3px",
                                             '&:hover': {
                                                 backgroundColor: "rgb(0, 200, 200)",
                                             }}}
-                                    >
-                                        Login
-                                    </Button>
-                                    <Button
-                                      variant="contained"
-                                      color="secondary"
-                                      sx={{
-                                        color: "#0f1519", 
-                                        display: {xs: "inherit", md: "none"},
-                                        padding: "3px",
-                                        '&:hover': {
-                                            backgroundColor: "rgb(0, 200, 200)",
-                                        }}}
-                                    >
-                                      <Login />
-                                    </Button>
+                                        >
+                                            <Login />
+                                        </Button>
+                                    </NavLink>
                                 </Stack>
                             }
                         </Toolbar>
