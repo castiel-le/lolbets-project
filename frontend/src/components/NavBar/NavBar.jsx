@@ -1,32 +1,30 @@
+// Imports from modules
 import { Component } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import Stack from '@mui/material/Stack';
-
-import SideDrawer from "./SideDrawer"
-
 import { NavLink } from 'react-router-dom';
+import { 
+    AppBar, 
+    Box, 
+    Toolbar, 
+    IconButton, 
+    Typography, 
+    Menu, 
+    Container, 
+    Avatar, 
+    Button, 
+    Tooltip, 
+    MenuItem, 
+    Stack
+} from '@mui/material'
+import { ThemeProvider } from '@mui/material/styles';
+import { Login, Menu as MenuIcon } from '@mui/icons-material';
 
+// Custom components imports
+import SideDrawer from "./SideDrawer"
 import './NavBar.css';
 import { theme } from './theme';
-import { ThemeProvider } from '@mui/material/styles';
-import { Login } from '@mui/icons-material';
 
-const pages = ['Bets', 'Teams', 'Leaderboard'];
-const pageLinks = ['/bets', '/teams', '/leaderboard']
-
-const settings = ['Profile', 'Friends', 'Bet History', 'Logout'];
-const settingsLinks = ['/profile', '/friends', '/bethistory', '/logout']
+import { pages, pageLinks } from '../../config/pages'
+import { settings, settingLink } from '../../config/userDropDown'
 
 const Hamburger = (props) => {
     return (
@@ -73,10 +71,12 @@ const UserAvatar = (props) => {
                     onClose={props.handleCloseUserMenu}
                     color='inherit'
                 >
-                    {settings.map((setting) => (
-                        <MenuItem key={setting} onClick={props.handleCloseUserMenu}>
-                            <Typography textAlign="center">{setting}</Typography>
-                        </MenuItem>
+                    {settings.map((setting, index) => (
+                        <NavLink to={settingLink[index]} >
+                            <MenuItem key={setting} onClick={props.handleCloseUserMenu}>
+                                <Typography textAlign="center">{setting}</Typography>
+                            </MenuItem>
+                        </NavLink>
                     ))}
                 </Menu>
             </Box>
