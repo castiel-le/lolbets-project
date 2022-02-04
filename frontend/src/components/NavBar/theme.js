@@ -11,7 +11,7 @@ export const theme = createTheme({
         main: 'rgb(0, 100, 100)',
       },
       text: {
-        primary: '#123456',
+        primary: '#f9f9f9',
       },
       background: {
         default: '#0f1519',
@@ -26,6 +26,7 @@ export const theme = createTheme({
             // Some CSS
             fontSize: '14px',
             borderRadius: 16,
+            fontFamily: "Lemon-Milk-Light"
           },
         },
       },
