@@ -1,0 +1,8 @@
+.idea/
+target/*
+db.config
+/src/out/
+/src/lolbets-project.iml
+.idea
+pom.xml
+src/
