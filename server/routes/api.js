@@ -55,6 +55,20 @@ router.post("/signup", async (req, res) => {
 });
 
 
+//Route to get match information
+router.get("/matches", async (req, res) => {
+    res.json({
+        "match_id": 9,
+        "team1_id": 181,
+        "team2_id": 183,
+        "winner_id": 183,
+        "match_start_time": 1644037200,
+        "in_progress": false,
+        "game_length": 2932,
+        "pandascore_id": 620600
+        });
+})
+
 module.exports = [
     router,
 ]
