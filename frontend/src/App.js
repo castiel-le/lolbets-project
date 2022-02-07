@@ -19,7 +19,21 @@ function App() {
               Based page of LoLBets
             </p>
           </header>} />
-          <Route path="/test" element={<h1>Hello</h1>} />
+          <Route path="/login" element={<h1> Sign In </h1>} />
+          <Route path='/signup' element={<h1> Sign Up </h1>} /> 
+          <Route path='/bets' element={<h1> Bets </h1>} />
+          <Route path='/bets/:id' element={<h1> Bet Number </h1>} />
+          <Route path='/bets/create' element={<h1> Create Bet </h1>} />
+          <Route path='/bets/edit/:id' element={<h1> Edit Bet Number </h1>} />
+          <Route path='/profile' element={<h1> My Profile </h1>} />
+          <Route path='/user/:id' element={<h1> User Number </h1>} />
+          <Route path='/user/:id/history' element={<h1> User Number History </h1>} />
+          <Route path='/leaderboard' element={<h1> Leaderboard </h1>} />
+          <Route path='/teams' element={<h1> Teams </h1>} />
+          <Route path='/teams/:id' element={<h1> Team Number </h1>} />
+          <Route path='/user/search/:username' element={<h1> Search User </h1>} />
+          <Route path='/teams/search/:teamname' element={<h1> Search Team </h1>} />
+          <Route path='*' element={<h1> Not Found </h1>} />
         </Routes>
       </Router>
     </div>
