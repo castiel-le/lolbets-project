@@ -1,6 +1,7 @@
 import logo from './testlogo.svg';
 import './App.css';
 
+import SignInForm from './components/Login/SignInForm'
 import NavBar from "./components/NavBar/NavBar"
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
@@ -19,7 +20,7 @@ function App() {
               Based page of LoLBets
             </p>
           </header>} />
-          <Route path="/login" element={<h1> Sign In </h1>} />
+          <Route path="/login" element={<SignInForm />} />
           <Route path='/signup' element={<h1> Sign Up </h1>} /> 
           <Route path='/bets' element={<h1> Bets </h1>} />
           <Route path='/bets/:id' element={<h1> Bet Number </h1>} />
