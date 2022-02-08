@@ -1,6 +1,7 @@
 import logo from './testlogo.svg';
 import './App.css';
 
+import BetBox from './components/Bets/BetBox';
 import SignInForm from './components/Login/SignInForm'
 import Signup from './components/Signup/CreateAccountForm'
 import NavBar from "./components/NavBar/NavBar"
@@ -23,7 +24,7 @@ function App() {
           </header>} />
           <Route path="/login" element={<SignInForm />} />
           <Route path='/signup' element={<Signup />} /> 
-          <Route path='/bets' element={<h1> Bets </h1>} />
+          <Route path='/bets' element={<BetBox time={{'hour': '8', 'min': '00', 'period': 'PM'}} team1="C9" team2="TSM" coins1="100" coins2="200"/>} />
           <Route path='/bets/:id' element={<h1> Bet Number </h1>} />
           <Route path='/bets/create' element={<h1> Create Bet </h1>} />
           <Route path='/bets/edit/:id' element={<h1> Edit Bet Number </h1>} />
