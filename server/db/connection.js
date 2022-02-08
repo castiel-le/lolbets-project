@@ -48,8 +48,11 @@ const Badge = sequelize.define('badge', {
   },  
 }, {timestamps:false});
 
-(async function (){
+async function getBadges(){
     const badges = await Badge.findAll();
     console.log(badges.every(badge => badge instanceof Badge));
-    console.log("All badges: ", JSON.stringify(badges, null, 2));
-})();
+    console.log("All badges: ", JSON.stringify(badges).replace("/\\/g", ""));
+    return badges;
+}
+
+module.exports = getBadges;

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const getBadges = require("../db/connection")
 
 router.get("/helloworld", async (req, res) => {
     res.json({"message":"Hello There"});
@@ -68,6 +69,12 @@ router.get("/matches", async (req, res) => {
         "pandascore_id": 620600
         });
 })
+
+
+//Route to get badges
+router.get("/badges", async (req, res) => {
+    res.json(await getBadges());
+});
 
 module.exports = [
     router,
