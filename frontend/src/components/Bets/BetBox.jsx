@@ -37,7 +37,7 @@ export default class BetBox extends Component {
             <AccordionSummary
               aria-controls="panel1bh-content"
               id="panel1bh-header"
-              sx={{display: 'flex', ":hover": {backgroundColor: '#1E2A32'}, ":focus": {backgroundColor: 'inherit'}}}
+              sx={{display: 'flex', ":hover": {backgroundColor: this.state.expanded ? 'inherit' : '#1E2A32'}}}
             >
               {/* This section takes care of them time */}
               <Box sx={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -81,7 +81,7 @@ export default class BetBox extends Component {
                   <Button 
                       variant='contained' 
                       onClick={() => this.props.selectBet(1, this.props.team1, this.props.team2)}
-                      sx={{ boxShadow: 'unset',borderRadius: 16, backgroundColor: 'unset', color: '#f9f9f9', fontFamily: 'Lemon-Milk-Bold', height: '45px', width: '85px', fontSize: '26px', marginLeft: 'auto', ":hover": {backgroundColor: '#f9f9f9', color: '#111111'}}}>
+                      sx={{ textDecoration: 'underline', boxShadow: 'unset',borderRadius: 16, backgroundColor: 'unset', color: '#f9f9f9', fontFamily: 'Lemon-Milk-Bold', height: '45px', width: '85px', fontSize: '26px', marginLeft: 'auto', ":hover": {textDecoration: 'underline', backgroundColor: '#f9f9f9', color: '#111111'}}}>
                       Bet
                   </Button>
                   
