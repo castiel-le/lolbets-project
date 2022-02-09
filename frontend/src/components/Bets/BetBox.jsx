@@ -1,4 +1,4 @@
-import {Component} from 'react';
+import {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 
@@ -6,7 +6,6 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Avatar, Button } from '@mui/material';
 
 import './BetBox.css'
@@ -29,7 +28,7 @@ export default class BetBox extends Component {
 
   render() {
     return (
-      <div style={{ width: '100%', justifyContent: 'center' }}>
+      <Fragment >
         <Box
           sx={{ display: 'flex', p: 1, bgcolor: 'inherit', justifyContent: 'center', width: '85%', mx: 'auto' }}
         >
@@ -61,11 +60,11 @@ export default class BetBox extends Component {
                         {this.props.team1.wins} - {this.props.team1.losses}
                       </Typography>
                   </Box>
-                  <Avatar my='auto' justifyContent='center' textAlign='center' src={this.props.team1.image} sx={{ height: '72px', width: '72px'}}/>
+                  <Avatar my='auto' src={this.props.team1.image} sx={{ height: '72px', width: '72px'}}/>
                   <Typography fontFamily={'Lemon-Milk-Light'} fontSize='14px' mx='32px' textAlign={'center'} my='auto'>
                     VS
                   </Typography>
-                  <Avatar my='auto' justifyContent='center' textAlign='center' src={this.props.team2.image} sx={{ height: '72px', width: '72px'}}/>
+                  <Avatar my='auto' src={this.props.team2.image} sx={{ height: '72px', width: '72px'}}/>
                   <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'flex-start'}}>
                     <Typography fontFamily={'Lemon-Milk-Medium'} mx='24px' textAlign={'left'} my='auto' fontSize='18px'>
                       {this.props.team2.name}
@@ -97,7 +96,7 @@ export default class BetBox extends Component {
           </Accordion>
           </Item>
         </Box>
-      </div>
+      </Fragment>
     );
   }
 }
