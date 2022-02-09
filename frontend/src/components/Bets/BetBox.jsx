@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import { Avatar, Button } from '@mui/material';
 
 import './BetBox.css'
+import BetDetails from './BetDetails';
 
 export default class BetBox extends Component {
 
@@ -20,10 +21,13 @@ export default class BetBox extends Component {
     this.handleExpand = this.handleExpand.bind(this);
   }
 
-  handleExpand() {
-    this.setState({
-      expanded: !this.state.expanded
-    })
+  handleExpand(event) {
+    console.log(event.target.tagName)
+    if (event.target.tagName.toLowerCase() !== "button") {
+      this.setState({
+        expanded: !this.state.expanded
+      })
+    }
   }
 
   render() {
@@ -33,7 +37,7 @@ export default class BetBox extends Component {
           sx={{ display: 'flex', p: 1, bgcolor: 'inherit', justifyContent: 'center', width: '85%', mx: 'auto' }}
         >
           <Item sx={{ flexGrow: 1, bgcolor: 'inherit', border: '0px' }}>
-          <Accordion expanded={this.state.expanded} onChange={this.handleExpand} sx={{ flexGrow: 1, backgroundColor: '#090e13 ', color: '#f9f9f9' }}>
+          <Accordion expanded={this.state.expanded} onChange={(event) => this.handleExpand(event)} sx={{ flexGrow: 1, backgroundColor: '#090e13 ', color: '#f9f9f9' }}>
             <AccordionSummary
               aria-controls="panel1bh-content"
               id="panel1bh-header"
@@ -49,6 +53,7 @@ export default class BetBox extends Component {
                     {this.props.time.min} {this.props.time.period}
                   </Typography>
                 </Box>
+                {/* End of the time section*/}
               
                 {/* This section takes care of the middle avatars */}
                 <Box sx={{display: 'flex', flexDirection: 'row'}}>
@@ -73,26 +78,25 @@ export default class BetBox extends Component {
                       {this.props.team2.wins} - {this.props.team2.losses}
                     </Typography>
                   </Box>
-                  
                 </Box>
+                {/* End of middle avatar section*/}
 
-                {/* This is here so that the avatars are centered*/}
+
+                {/* This holds the bet button to the top right of the bet box*/}
                 <Box sx={{ display: 'flex', flexDirection: 'row', width: '10%' }}>
                   <Button 
                       variant='contained' 
                       onClick={() => this.props.selectBet(1, this.props.team1, this.props.team2)}
-                      sx={{ textDecoration: 'underline', boxShadow: 'unset',borderRadius: 16, backgroundColor: 'unset', color: '#f9f9f9', fontFamily: 'Lemon-Milk-Bold', height: '45px', width: '85px', fontSize: '26px', marginLeft: 'auto', ":hover": {textDecoration: 'underline', backgroundColor: '#f9f9f9', color: '#111111'}}}>
+                      sx={{ textDecoration: 'underline', boxShadow: 'unset', borderRadius: 16, backgroundColor: this.state.expanded ? '#f9f9f9' : 'unset', color: this.state.expanded ? '#111111' : '#f9f9f9', fontFamily: 'Lemon-Milk-Bold', height: '45px', width: '85px', fontSize: '26px', marginLeft: 'auto', ":hover": {textDecoration: 'underline', backgroundColor: this.state.expanded ? 'gray' : '#f9f9f9', color: '#111111'}}}>
                       Bet
                   </Button>
-                  
                 </Box>
+                {/* End of button placement */}
+
               </Box>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-                Aliquam eget maximus est, id dignissim quam.
-              </Typography>
+              <BetDetails />
             </AccordionDetails>
           </Accordion>
           </Item>
