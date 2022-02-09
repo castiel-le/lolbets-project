@@ -8,8 +8,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Avatar, Button } from '@mui/material';
-import SportsMmaIcon from '@mui/icons-material/SportsMma';
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 
 import './BetBox.css'
 
@@ -31,21 +29,20 @@ export default class BetBox extends Component {
 
   render() {
     return (
-      <div style={{ width: '100%' }}>
+      <div style={{ width: '100%', justifyContent: 'center' }}>
         <Box
-          sx={{ display: 'flex', p: 1, bgcolor: 'background.paper', borderRadius: 1, justifyContent: 'center', width: '80%' }}
+          sx={{ display: 'flex', p: 1, bgcolor: 'inherit', justifyContent: 'center', width: '85%', mx: 'auto' }}
         >
-          <Item sx={{ flexGrow: 1 }}>
-          <Accordion expanded={this.state.expanded} onChange={this.handleExpand} >
+          <Item sx={{ flexGrow: 1, bgcolor: 'inherit', border: '0px' }}>
+          <Accordion expanded={this.state.expanded} onChange={this.handleExpand} sx={{ flexGrow: 1, backgroundColor: '#090e13 ', color: '#f9f9f9' }}>
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1bh-content"
               id="panel1bh-header"
-              sx={{display: 'flex'}}
+              sx={{display: 'flex', ":hover": {backgroundColor: '#1E2A32'}, ":focus": {backgroundColor: 'inherit'}}}
             >
               {/* This section takes care of them time */}
               <Box sx={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Box sx={{ width: '10%', flexShrink: 0, display: 'flex', flexDirection: 'row' }} >
+                <Box sx={{ width: '10%', flexShrink: 0, display: 'flex', flexDirection: 'row', minWidth: '84px' }} >
                   <Typography fontFamily={'Lemon-Milk-Bold'} fontSize='32px' >
                     {this.props.time.hour}
                   </Typography>
@@ -56,19 +53,38 @@ export default class BetBox extends Component {
               
                 {/* This section takes care of the middle avatars */}
                 <Box sx={{display: 'flex', flexDirection: 'row'}}>
-                  <Typography>
-                    {this.props.team1}
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'flex-start'}}>
+                      <Typography fontFamily={'Lemon-Milk-Medium'} mx='24px' textAlign={'right'} my='auto' fontSize='18px'>
+                        {this.props.team1.name}
+                      </Typography>
+                      <Typography fontFamily={'Lemon-Milk-Light'} mx='30px' textAlign={'right'} my='auto' fontSize='14px'>
+                        {this.props.team1.wins} - {this.props.team1.losses}
+                      </Typography>
+                  </Box>
+                  <Avatar my='auto' justifyContent='center' textAlign='center' src={this.props.team1.image} sx={{ height: '72px', width: '72px'}}/>
+                  <Typography fontFamily={'Lemon-Milk-Light'} fontSize='14px' mx='32px' textAlign={'center'} my='auto'>
+                    VS
                   </Typography>
-                  <Avatar />
-                  <SportsMmaIcon />
-                  <Avatar />
-                  <Typography>
-                    {this.props.team2}
-                  </Typography>
+                  <Avatar my='auto' justifyContent='center' textAlign='center' src={this.props.team2.image} sx={{ height: '72px', width: '72px'}}/>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'flex-start'}}>
+                    <Typography fontFamily={'Lemon-Milk-Medium'} mx='24px' textAlign={'left'} my='auto' fontSize='18px'>
+                      {this.props.team2.name}
+                    </Typography>
+                    <Typography fontFamily={'Lemon-Milk-Light'} mx='30px' textAlign={'left'} my='auto' fontSize='14px'>
+                      {this.props.team2.wins} - {this.props.team2.losses}
+                    </Typography>
+                  </Box>
+                  
                 </Box>
-                
+
                 {/* This is here so that the avatars are centered*/}
-                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', width: '10%' }}>
+                  <Button 
+                      variant='contained' 
+                      sx={{ boxShadow: 'unset',borderRadius: 16, backgroundColor: 'unset', color: '#f9f9f9', fontFamily: 'Lemon-Milk-Bold', height: '45px', width: '85px', fontSize: '26px', marginLeft: 'auto', ":hover": {backgroundColor: '#f9f9f9', color: '#111111'}}}>
+                      Bet
+                  </Button>
+                  
                 </Box>
               </Box>
             </AccordionSummary>
@@ -79,11 +95,6 @@ export default class BetBox extends Component {
               </Typography>
             </AccordionDetails>
           </Accordion>
-          </Item>
-          <Item>
-            <Button >
-              Bet
-            </Button>
           </Item>
         </Box>
       </div>
