@@ -8,24 +8,24 @@ export default class AllBets extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            drawerOpen: false,
+            betOpen: false,
             selectedBet: null,
             betTeams: []
         };
-        this.toggleOpenDrawer = this.toggleOpenDrawer.bind(this);
+        this.toggleOpenBet = this.toggleOpenBet.bind(this);
         this.selectBet = this.selectBet.bind(this);
     }
 
-    toggleOpenDrawer() {
-        if (this.state.drawerOpen) {
+    toggleOpenBet() {
+        if (this.state.betOpen) {
             this.setState({
-                drawerOpen: false,
+                betOpen: false,
                 selectedBet: null,
                 betTeams: []
             });
         } else {
             this.setState({
-                drawerOpen: true,
+                betOpen: true,
             });
         }
     }
@@ -35,7 +35,7 @@ export default class AllBets extends Component {
             selectBet: bet,
             betTeams: [team1, team2]
         });
-        this.toggleOpenDrawer();
+        this.toggleOpenBet();
     }
 
     render() {
@@ -47,7 +47,7 @@ export default class AllBets extends Component {
                     team2={{name: 'Team SoloMid', image: 'https://cdn.pandascore.co/images/team/image/387/team-solomid-bjjwknt9.png', wins: 1, losses: 2}}
                     selectBet={this.selectBet}
                 />
-                <PlaceBetDrawer open={this.state.drawerOpen} toggleOpenDrawer={this.toggleOpenDrawer} />
+                <PlaceBetDrawer open={this.state.betOpen} toggleOpenBet={this.toggleOpenBet} />
             </div>
         );
     }
