@@ -1,6 +1,6 @@
 import { Component, Fragment, forwardRef } from "react";
 
-import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Slide } from '@mui/material';
+import { Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Slide, Avatar } from '@mui/material';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -25,16 +25,19 @@ export default class PlaceBetDrawer extends Component {
                     onClose={this.props.toggleOpenBet}
                     aria-describedby="alert-dialog-slide-description"
                 >
-                    <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+                    <DialogTitle>{"Place Bet"}</DialogTitle>
                     <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description">
-                        Let Google help apps determine location. This means sending anonymous
-                        location data to Google, even when no apps are running.
-                    </DialogContentText>
+                        <Box>
+                            <Avatar />
+                        </Box>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            Let Google help apps determine location. This means sending anonymous
+                            location data to Google, even when no apps are running.
+                        </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                    <Button onClick={this.props.toggleOpenBet}>Disagree</Button>
-                    <Button onClick={this.props.toggleOpenBet}>Agree</Button>
+                        <Button onClick={this.props.toggleOpenBet}>Cancel</Button>
+                        <Button onClick={this.props.toggleOpenBet}>Confirm</Button>
                     </DialogActions>
                 </Dialog>
             </Fragment>

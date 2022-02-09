@@ -1,7 +1,7 @@
 import {Component} from 'react';
 
 import BetBox from './BetBox'
-import PlaceBetDrawer from './PlaceBetDrawer';
+import PlaceBetPopup from './PlaceBetPopup';
 
 export default class AllBets extends Component {
 
@@ -47,7 +47,7 @@ export default class AllBets extends Component {
                     team2={{name: 'Team SoloMid', image: 'https://cdn.pandascore.co/images/team/image/387/team-solomid-bjjwknt9.png', wins: 1, losses: 2}}
                     selectBet={this.selectBet}
                 />
-                <PlaceBetDrawer open={this.state.betOpen} toggleOpenBet={this.toggleOpenBet} />
+                <PlaceBetPopup open={this.state.betOpen} toggleOpenBet={this.toggleOpenBet} />
             </div>
         );
     }
