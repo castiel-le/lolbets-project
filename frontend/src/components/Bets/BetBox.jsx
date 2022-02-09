@@ -80,6 +80,7 @@ export default class BetBox extends Component {
                 <Box sx={{ display: 'flex', flexDirection: 'row', width: '10%' }}>
                   <Button 
                       variant='contained' 
+                      onClick={() => this.props.selectBet(1, this.props.team1, this.props.team2)}
                       sx={{ boxShadow: 'unset',borderRadius: 16, backgroundColor: 'unset', color: '#f9f9f9', fontFamily: 'Lemon-Milk-Bold', height: '45px', width: '85px', fontSize: '26px', marginLeft: 'auto', ":hover": {backgroundColor: '#f9f9f9', color: '#111111'}}}>
                       Bet
                   </Button>
