@@ -37,7 +37,7 @@ export default class BetBox extends Component {
           sx={{ display: 'flex', p: 1, bgcolor: 'inherit', justifyContent: 'center', width: '85%', mx: 'auto' }}
         >
           <Item sx={{ flexGrow: 1, bgcolor: 'inherit', border: '0px' }}>
-          <Accordion expanded={this.state.expanded} onChange={(event) => this.handleExpand(event)} sx={{ flexGrow: 1, backgroundColor: '#090e13 ', color: '#f9f9f9' }}>
+          <Accordion expanded={this.state.expanded} onChange={(event) => this.handleExpand(event)} sx={{ flexGrow: 1, backgroundColor: '#223039', color: '#f9f9f9' }}>
             <AccordionSummary
               aria-controls="panel1bh-content"
               id="panel1bh-header"
@@ -58,7 +58,7 @@ export default class BetBox extends Component {
                 {/* This section takes care of the middle avatars */}
                 <Box sx={{display: 'flex', flexDirection: 'row'}}>
                   <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'flex-start'}}>
-                      <Typography fontFamily={'Lemon-Milk-Medium'} mx='24px' textAlign={'right'} my='auto' fontSize='18px'>
+                      <Typography fontFamily={'Lemon-Milk-Medium'} mx='24px' textAlign={'right'} my='auto' fontSize='20px'>
                         {this.props.team1.name}
                       </Typography>
                       <Typography fontFamily={'Lemon-Milk-Light'} mx='30px' textAlign={'right'} my='auto' fontSize='14px'>
@@ -71,7 +71,7 @@ export default class BetBox extends Component {
                   </Typography>
                   <Avatar my='auto' src={this.props.team2.image} sx={{ height: '72px', width: '72px'}}/>
                   <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'flex-start'}}>
-                    <Typography fontFamily={'Lemon-Milk-Medium'} mx='24px' textAlign={'left'} my='auto' fontSize='18px'>
+                    <Typography fontFamily={'Lemon-Milk-Medium'} mx='24px' textAlign={'left'} my='auto' fontSize='20px'>
                       {this.props.team2.name}
                     </Typography>
                     <Typography fontFamily={'Lemon-Milk-Light'} mx='30px' textAlign={'left'} my='auto' fontSize='14px'>
@@ -86,8 +86,8 @@ export default class BetBox extends Component {
                 <Box sx={{ display: 'flex', flexDirection: 'row', width: '10%' }}>
                   <Button 
                       variant='contained' 
-                      onClick={() => this.props.selectBet(1, this.props.team1, this.props.team2)}
-                      sx={{ textDecoration: 'underline', boxShadow: 'unset', borderRadius: 16, backgroundColor: this.state.expanded ? '#f9f9f9' : 'unset', color: this.state.expanded ? '#111111' : '#f9f9f9', fontFamily: 'Lemon-Milk-Bold', height: '45px', width: '85px', fontSize: '26px', marginLeft: 'auto', ":hover": {textDecoration: 'underline', backgroundColor: this.state.expanded ? 'gray' : '#f9f9f9', color: '#111111'}}}>
+                      onClick={() => this.props.selectBet({team1: this.props.team1, team2: this.props.team2}, this.props.team1, this.props.team2)}
+                      sx={{my: this.state.expanded ? 'inherit' : 'auto', textDecoration: 'underline', boxShadow: 'unset', borderRadius: 16, backgroundColor: this.state.expanded ? '#f9f9f9' : 'unset', color: this.state.expanded ? '#111111' : '#f9f9f9', fontFamily: 'Lemon-Milk-Bold', height: '45px', width: '85px', fontSize: '26px', marginLeft: 'auto', ":hover": {textDecoration: 'underline', backgroundColor: this.state.expanded ? 'gray' : '#f9f9f9', color: '#111111'}}}>
                       Bet
                   </Button>
                 </Box>
