@@ -29,7 +29,7 @@ const sequelize = new Sequelize(
     }
 })();*/
 
-const Badge = sequelize.define('badge', {
+/*const Badge = sequelize.define('badge', {
   // Model attributes are defined here
   badge_id: {
     type: DataTypes.INTEGER,
@@ -46,13 +46,13 @@ const Badge = sequelize.define('badge', {
     type: DataTypes.STRING,
     allowNull: false
   },  
-}, {timestamps:false});
+}, {timestamps:false});*/
 
-async function getBadges(){
+/*async function getBadges(){
     const badges = await Badge.findAll();
     console.log(badges.every(badge => badge instanceof Badge));
     console.log("All badges: ", JSON.stringify(badges).replace("/\\/g", ""));
     return badges;
-}
+}*/
 
-module.exports = getBadges;
+module.exports = sequelize;
