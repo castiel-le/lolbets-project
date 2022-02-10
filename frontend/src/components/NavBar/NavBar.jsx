@@ -21,7 +21,7 @@ import { Login, Menu as MenuIcon } from '@mui/icons-material';
 // Custom components imports
 import SideDrawer from "./SideDrawer"
 import './NavBar.css';
-import { theme } from './theme';
+import { theme } from './navbartheme';
 
 import { pages, pageLinks } from '../../config/pages'
 import { settings, settingLink } from '../../config/userDropDown'
