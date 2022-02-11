@@ -10,9 +10,34 @@ export default class AllBets extends Component {
         this.state = {
             betOpen: false,
             selectedBet: null,
+            upcomingMatches: null
         };
         this.toggleOpenBet = this.toggleOpenBet.bind(this);
         this.selectBet = this.selectBet.bind(this);
+        this.fetchAllUpcomingMatches = this.fetchAllUpcomingMatches.bind(this);
+    }
+
+    componentDidMount() {
+        this.fetchAllUpcomingMatches();
+    }
+
+    fetchAllUpcomingMatches() {
+        fetch("/api/matches")
+        .then(response => {
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            return response.json();
+        })
+        .then(json => {
+            this.setState({
+                upcomingMatches: json
+            })
+        })
+        .catch(error => {
+            console.error(error)
+        });
     }
 
     toggleOpenBet() {
@@ -45,14 +70,14 @@ export default class AllBets extends Component {
                     team2={{name: 'Team SoloMid', image: 'https://cdn.pandascore.co/images/team/image/387/team-solomid-bjjwknt9.png', wins: 1, losses: 2}}
                     selectBet={this.selectBet}
                 />
-                {this.state.betOpen
+                {/*this.state.betOpen
                 ? <PlaceBetPopup 
                     open={this.state.betOpen} 
                     bet={this.state.selectedBet} 
                     toggleOpenBet={this.toggleOpenBet} 
                 />
                 : null
-                }
+                */}
                 
             </div>
         );
