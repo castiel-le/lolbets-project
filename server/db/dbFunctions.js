@@ -16,7 +16,9 @@ async function getTeams() {
 async function getTeamById(id) {
     const team = await models.Team.findAll({
         where: {
+            /* eslint-disable */
             team_id: id
+            /* eslint-enable */
         }
     });
     return team;
@@ -26,7 +28,9 @@ async function getTeamById(id) {
 async function getMatches() {
     const matches = await models.Match.findAll();
     matches.forEach(m => {
+        /* eslint-disable */
         m.dataValues.match_start_time = new Date(m.dataValues.match_start_time).valueOf();
+        /* eslint-enable */
     }
     );
     console.log(matches);
@@ -43,7 +47,9 @@ async function getUsers() {
 async function getUserById(id) {
     const user = await models.User.findAll({
         where: {
+            /* eslint-disable */
             user_id: id
+            /* eslint-enable */
         }
     });
     return user;
