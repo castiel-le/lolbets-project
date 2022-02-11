@@ -1,4 +1,4 @@
-import logo from './testlogo.svg';
+import logo from './logo.svg';
 import './App.css';
 
 import AllBets from './components/Bets/AllBets';
@@ -7,6 +7,7 @@ import Signup from './components/Signup/CreateAccountForm'
 import NavBar from "./components/NavBar/NavBar"
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
+import SignIn from './components/Login/SignInForm'
 function App() {
   return (
     <div className="App">
