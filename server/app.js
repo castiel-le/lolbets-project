@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 app.use("/api", router);
 
 //configure app to use bodyparser, which lets the app process POST requests
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // directory for react components
