@@ -14,9 +14,12 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
 
-const theme = createTheme();
+import {theme} from '../NavBar/navbartheme';
+import {bordertheme} from './logintheme';
+import "./SignInForm.css";
+
 
 export default class SignInForm extends Component {
 
@@ -75,6 +78,7 @@ export default class SignInForm extends Component {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
+                
                   }}
                 >
                   <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -84,30 +88,38 @@ export default class SignInForm extends Component {
                     Sign in
                   </Typography>
                   <Box component="form" onSubmit={this.handleSubmit} noValidate sx={{ mt: 1 }}>
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      autoComplete="email"
-                      autoFocus
-                      error={this.state.emailError}
-                      helperText={this.state.emailErrorText}
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
-                      error={this.state.passwordError}
-                      helperText={this.state.passwordErrorText}
-                    />
+                    <ThemeProvider theme={bordertheme}>
+                      <p>Email Address</p>
+                      <TextField
+                        margin="0"
+                        required
+                        fullWidth
+                        id="email"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        error={this.state.emailError}
+                        helperText={this.state.emailErrorText}
+                        sx={{ backgroundColor: "#233039"}}
+                        color="secondary"
+                        focused
+                      />
+                      <p>Password</p>
+                      <TextField
+                        margin="0"
+                        required
+                        fullWidth
+                        name="password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        error={this.state.passwordError}
+                        helperText={this.state.passwordErrorText}
+                        sx={{ backgroundColor: "#233039"}}
+                        color="secondary"
+                        focused
+                      />
+                    </ThemeProvider>
                     <FormControlLabel
                       control={<Checkbox id="remember" value="remember" color="primary" />}
                       label="Remember me"
@@ -116,7 +128,7 @@ export default class SignInForm extends Component {
                       type="submit"
                       fullWidth
                       variant="contained"
-                      sx={{ mt: 3, mb: 2 }}
+                      sx={{ mt: 3, mb: 2, backgroundColor: 'secondary.main' }}
                     >
                       Sign In
                     </Button>
