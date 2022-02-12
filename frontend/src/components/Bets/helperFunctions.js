@@ -15,32 +15,22 @@ export function getGameStartTimeObject(date) {
     };
 }
 
-export function getTeamObject(teamID) {
-    let name = '';
-    let image = '';
-    let abbreviation = '';
-    let wins = 0;
-    let losses = 0;
-    
-    const team = async () => await fetchTeamInfo(teamID)
-                .then(team => {
-                    name = team.team_name;
-                    image = team.logo;
-                    wins = team.wins;
-                    losses = team.losses;
-                    abbreviation = team.abbreviation;
-                })
-                .catch(error => {
-                    console.error(error);
-                })
-    team();
-
+export function getTeamObject(team) {
+    console.log(team);
+    return {
+        name: team.team_name,
+        image: team.logo,
+        abbreviation: team.abbreviation,
+        wins: team.wins,
+        losses: team.losses
+    }
+    /*
     return {
         name: 'Cloud 9', 
         image: 'https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png', 
         wins: 2, 
         losses: 0
-    };
+    };*/
 }
 
 export async function fetchTeamInfo(teamID) {
@@ -48,6 +38,6 @@ export async function fetchTeamInfo(teamID) {
     if (!response.ok) {
       throw new Error("Error retrieving data");
     }
-    const team = await response.json();
+    let team = await response.json();
     return team;
 }

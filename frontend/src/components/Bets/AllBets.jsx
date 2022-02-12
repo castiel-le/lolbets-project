@@ -1,5 +1,7 @@
+import { Box } from '@mui/system';
 import {Component} from 'react';
 
+import { getFormattedDate, getGameStartTimeObject, getTeamObject, fetchTeamInfo } from './helperFunctions';
 import BetBox from './BetBox'
 import PlaceBetPopup from './PlaceBetPopup';
 
@@ -63,13 +65,33 @@ export default class AllBets extends Component {
 
     render() {
         return (
-            <div style={{ backgroundColor: '#0f1519', height: '85vh'}}>
-                <BetBox 
-                    time={{'hour': '8', 'min': '00', 'period': 'PM'}} 
-                    team1={{name: 'Cloud 9', image: 'https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png', wins: 2, losses: 0}}
-                    team2={{name: 'Team SoloMid', image: 'https://cdn.pandascore.co/images/team/image/387/team-solomid-bjjwknt9.png', wins: 1, losses: 2}}
-                    selectBet={this.selectBet}
-                />
+            <div style={{ backgroundColor: '#0f1519', height: '100%'}}>
+                {this.state.upcomingMatches 
+
+                // if upcoming matches are set, render this
+                ? 
+                this.state.upcomingMatches.map( match => {
+                    let date = new Date(match.match_start_time);
+                    let formattedDate = getFormattedDate(date);
+                    let team1Info = fetchTeamInfo(match.team1_id);
+                    let team2Info = fetchTeamInfo(match.team2_id);
+
+                    return (
+                        <Box key={match.match_id}>
+                        <h1>{formattedDate}</h1>
+                        <BetBox 
+                            time={getGameStartTimeObject(date)} 
+                            team1={team1Info.then(getTeamObject(team1Info), console.error("error"))}
+                            team2={getTeamObject(team2Info)}
+                            selectBet={this.selectBet}
+                        />
+                        </Box>
+                    )
+                })
+
+                // if the upcoming matches are not set do not display anything
+                : null
+                }
                 {/*this.state.betOpen
                 ? <PlaceBetPopup 
                     open={this.state.betOpen} 
