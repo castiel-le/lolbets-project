@@ -9,6 +9,7 @@ import SignInForm from './components/Login/SignInForm'
 import Signup from './components/Signup/CreateAccountForm'
 import NavBar from "./components/NavBar/NavBar"
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Team from "./components/Team/Team"
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
           <Route path='/user/:id/history' element={<h1> User Number History </h1>} />
           <Route path='/leaderboard' element={<h1> Leaderboard </h1>} />
           <Route path='/teams' element={<h1> Teams </h1>} />
-          <Route path='/teams/:id' element={<h1> Team Number </h1>} />
+          <Route path='/teams/:id' element={<Team />} />
           <Route path='/user/search/:username' element={<h1> Search User </h1>} />
           <Route path='/teams/search/:teamname' element={<h1> Search Team </h1>} />
           <Route path='*' element={<h1> Not Found </h1>} />
