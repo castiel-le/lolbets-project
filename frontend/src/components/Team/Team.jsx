@@ -20,8 +20,8 @@ export default class Team extends Component {
                     <Grid item xs={5}>
                         <TeamSection />
                     </Grid>
-                    <Grid item xs={7}>
-                        <TeamSection />
+                    <Grid item xs={7} style={{border: 5, backgroundColor: "blue"}}>
+                        Match
                     </Grid>
                 </Grid>
             </ThemeProvider>
