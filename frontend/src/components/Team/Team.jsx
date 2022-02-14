@@ -16,7 +16,7 @@ export default class Team extends Component {
     render() {
         return(
             <ThemeProvider theme={theme}>
-                <Box display="flex" flexDirection="row">
+                <Box display="flex" flexDirection="row" justifyContent="center">
                     <TeamSection />
                     
                 </Box>
