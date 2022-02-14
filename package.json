@@ -5,8 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./server/server.js",
+<<<<<<< HEAD
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cd frontend && npm install && npm run build && cd ../server && npm install"
+=======
+    "build": "cd frontend && npm install && npm run build && cd && ../server && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> 8b25058e5c6eac98c1edd5cb055abe8f0c8e2fce
   },
   "repository": {
     "type": "git",

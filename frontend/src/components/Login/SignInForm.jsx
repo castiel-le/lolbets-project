@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { Component } from 'react';
 
 import { Link as ReactLink } from 'react-router-dom'
