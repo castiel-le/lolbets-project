@@ -15,9 +15,10 @@ export default class TeamSection extends Component {
         const styleBody = {backgroundColor: "#1e2021"};
 
         return(
-            <Box display="flex" flexDirection="column" style={styleBody}>
+            <Box display="flex" flexDirection="column" style={styleBody} alignSelf="flex-start">
                 <Typography variant="h5" noWrap style={styleHeader}>Cloud9</Typography>
-                <img src="https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png" alt="logo" width={400} height={400}/>
+                    <img src="https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png" 
+                        alt="logo" width={400} height={400}/>
                 <Typography variant="h5" noWrap style={styleHeader}>Team Information</Typography>
                 <Grid container columnSpacing={1}>
                     <Grid item xs={6} justifyContent="flex-end" display="flex">
