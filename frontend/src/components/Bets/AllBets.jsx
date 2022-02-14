@@ -1,9 +1,12 @@
 import { Box } from '@mui/system';
-import {Component} from 'react';
+import { Component } from 'react';
 
 import { getFormattedDate, getGameStartTimeObject, sortMatchesByDate } from './helperFunctions';
 import BetBox from './BetBox'
 import PlaceBetPopup from './PlaceBetPopup';
+import { Typography } from '@mui/material';
+
+import './BetBox.css'
 
 export default class AllBets extends Component {
 
@@ -29,21 +32,21 @@ export default class AllBets extends Component {
      * @returns returns if there was an error in the fetch
      */
     async fetchAllUpcomingMatches() {
-         let response = await fetch("/api/matches");
-         if (!response.ok) {
-             console.error("Error fetching matches: "+ response.status);
-             // TODO: add other error logic
-             return;
-         }
-         let matches = await response.json();
-         this.setState({
-             upcomingMatches: matches,
-             upcomingMatchesByDate: sortMatchesByDate(matches)
-         },
-         () => {
-             console.log(this.state.upcomingMatches);
-             console.log(this.state.upcomingMatchesByDate);
-        });
+        let response = await fetch("/api/matches");
+        if (!response.ok) {
+            console.error("Error fetching matches: " + response.status);
+            // TODO: add other error logic
+            return;
+        }
+        let matches = await response.json();
+        this.setState({
+            upcomingMatches: matches,
+            upcomingMatchesByDate: sortMatchesByDate(matches)
+        },
+            () => {
+                console.log(this.state.upcomingMatches);
+                console.log(this.state.upcomingMatchesByDate);
+            });
     }
 
     /**
@@ -78,36 +81,38 @@ export default class AllBets extends Component {
 
     render() {
         return (
-            <div style={{ backgroundColor: '#0f1519', height: '100%'}}>
+            <div style={{ backgroundColor: '#0f1519', height: '100%' }}>
                 {this.state.upcomingMatchesByDate
 
-                // if upcoming matches are set, render this
-                ? 
+                    // if upcoming matches are set, render this
+                    ?
 
-                this.state.upcomingMatchesByDate.map( date => {
-                    let matchDate = new Date(date[0].match_start_time);
-                    let formattedDate = getFormattedDate(matchDate);
-                    return( 
-                        <Box key={date}>
-                            <h1>{formattedDate}</h1>
-                            {date.map( match => {
-                                return (
-                                    <BetBox 
-                                        key={match.match_id}
-                                        time={getGameStartTimeObject(new Date(match.match_start_time))} 
-                                        team1ID={match.team1_id}
-                                        team2ID={match.team2_id}
-                                        selectBet={this.selectBet}
-                                    />
-                                )
-                            })}
-                        </Box>
-                    );
-                })
-                
+                    this.state.upcomingMatchesByDate.map(date => {
+                        let matchDate = new Date(date[0].match_start_time);
+                        let formattedDate = getFormattedDate(matchDate);
+                        return (
+                            <Box key={date}>
+                                <Typography fontFamily={'Lemon-Milk-Bold'}>
+                                    {formattedDate}
+                                </Typography >
+                                {date.map(match => {
+                                    return (
+                                        <BetBox
+                                            key={match.match_id}
+                                            time={getGameStartTimeObject(new Date(match.match_start_time))}
+                                            team1ID={match.team1_id}
+                                            team2ID={match.team2_id}
+                                            selectBet={this.selectBet}
+                                        />
+                                    )
+                                })}
+                            </Box>
+                        );
+                    })
 
-                // if the upcoming matches are not set do not display anything
-                : null
+
+                    // if the upcoming matches are not set do not display anything
+                    : null
                 }
                 {/*this.state.betOpen
                 ? <PlaceBetPopup 
@@ -117,7 +122,7 @@ export default class AllBets extends Component {
                 />
                 : null
                 */}
-                
+
             </div>
         );
     }
