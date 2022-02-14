@@ -98,11 +98,12 @@ export default class MatchHistory extends Component {
                             </TableCell>
                             <TableCell align="center" style={{ borderBottom: 0}}>
                             <Box display="flex" flexDirection="row" columnGap={1} justifyContent="center">
-                                <img src="https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png" alt="logo" width={30} height={30 }/>
+                                <img src="https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"
+                                 alt="logo" width={30} height={30} loading="lazy"/>
                                     <Typography variant="h6" style={styleInfo}>C9</Typography>
                                     <Typography variant="h6" style={styleInfo}>VS</Typography>
                                     <Typography variant="h6"  style={styleInfo}>{column["opponent"]}</Typography>
-                                    <img src={column["logo"]} alt="logo" width={30} height={30}/>
+                                    <img src={column["logo"]} alt="logo" width={30} height={30} loading="lazy"/>
                                 </Box>
                             </TableCell>
                         </TableRow>
