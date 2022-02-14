@@ -95,6 +95,9 @@ router.get("/user/:id", async (req, res) => {
     res.json((await dbFetch.getUserById(req.params.id))[0]);
 })
 
+router.get("/teams/history/:id", async (req, res) => {
+    res.json(await dbFetch.getMatchHistory(req.params.id));
+})
 module.exports = [
     router,
 ]
