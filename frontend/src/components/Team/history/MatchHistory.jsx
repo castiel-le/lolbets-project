@@ -89,7 +89,7 @@ export default class MatchHistory extends Component {
                 <TableBody>
                     {this.state.testColumns.slice(startRowCount, endRowCount)
                         .map((column) => (
-                        <TableRow id = {column["date"]}
+                        <TableRow id = {column["date"]} key = {column["date"]}
                             style = {column.isWin ? 
                                 {backgroundColor:"darkGreen"} 
                                 : {backgroundColor:"darkRed"}}>
@@ -110,7 +110,7 @@ export default class MatchHistory extends Component {
                 </TableBody>
             </Table>
             <TablePagination
-                rowsPerPageOptions={[this.state.rowsPerPage]}
+                rowsPerPageOptions={[15, 50, 100]}
                 component="div"
                 count={this.state.testColumns.length}
                 rowsPerPage={this.state.rowsPerPage}
