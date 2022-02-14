@@ -58,9 +58,9 @@ export default class BetBox extends Component {
           this.state.team1 && this.state.team2
             ?
             <Box
-              sx={{ display: 'flex', p: 1, bgcolor: 'inherit', justifyContent: 'center', width: '85%', mx: 'auto' }}
+              sx={{ display: 'flex', bgcolor: 'inherit', justifyContent: 'center', width: '85%', mx: 'auto' }}
             >
-              <Item sx={{ flexGrow: 1, bgcolor: 'inherit', border: '0px' }}>
+              <Item sx={{ flexGrow: 1, my: '0px', bgcolor: 'inherit', border: '0px' }}>
                 <Accordion expanded={this.state.expanded} onChange={(event) => this.handleExpand(event)} sx={{ flexGrow: 1, backgroundColor: '#223039', color: '#f9f9f9' }}>
                   <AccordionSummary
                     aria-controls="panel1bh-content"

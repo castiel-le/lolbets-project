@@ -4,7 +4,7 @@ import { Component } from 'react';
 import { getFormattedDate, getGameStartTimeObject, sortMatchesByDate } from './helperFunctions';
 import BetBox from './BetBox'
 import PlaceBetPopup from './PlaceBetPopup';
-import { Typography } from '@mui/material';
+import { Divider, ListItem, Typography, List } from '@mui/material';
 
 import './BetBox.css'
 
@@ -91,21 +91,26 @@ export default class AllBets extends Component {
                         let matchDate = new Date(date[0].match_start_time);
                         let formattedDate = getFormattedDate(matchDate);
                         return (
-                            <Box key={date}>
-                                <Typography fontFamily={'Lemon-Milk-Bold'}>
+                            <Box key={date} paddingTop='24px'>
+                                <Typography fontFamily={'Lemon-Milk-Bold'} fontSize="24px" sx={{ color: "#f9f9f9" }} display="flex" flexDirection="row" width="85%" mx="auto">
                                     {formattedDate}
                                 </Typography >
-                                {date.map(match => {
-                                    return (
-                                        <BetBox
-                                            key={match.match_id}
-                                            time={getGameStartTimeObject(new Date(match.match_start_time))}
-                                            team1ID={match.team1_id}
-                                            team2ID={match.team2_id}
-                                            selectBet={this.selectBet}
-                                        />
-                                    )
-                                })}
+                                <Divider variant="fullWidth" orientation='horizontal' flexItem='true' sx={{ borderColor: '#f9f9f9', width: '85%', height: '5px', mx: 'auto' }} />
+                                <List disablePadding="true">
+                                    {date.map(match => {
+                                        return (
+                                            <ListItem >
+                                                <BetBox
+                                                    key={match.match_id}
+                                                    time={getGameStartTimeObject(new Date(match.match_start_time))}
+                                                    team1ID={match.team1_id}
+                                                    team2ID={match.team2_id}
+                                                    selectBet={this.selectBet}
+                                                />
+                                            </ListItem>
+                                        )
+                                    })}
+                                </List>
                             </Box>
                         );
                     })
