@@ -119,11 +119,11 @@ export default class SignInForm extends Component {
                         color="secondary"
                         focused
                       />
+                      <FormControlLabel
+                        control={<Checkbox id="remember" style={{color: "yellow"}} value="remember" color="secondary" />}
+                        label="Remember me"
+                      />
                     </ThemeProvider>
-                    <FormControlLabel
-                      control={<Checkbox id="remember" value="remember" color="primary" />}
-                      label="Remember me"
-                    />
                     <Button
                       type="submit"
                       fullWidth
@@ -135,15 +135,10 @@ export default class SignInForm extends Component {
                     <Grid container>
                       <Grid item xs>
                         <ReactLink to={"/signup"} >
-                            <Link variant="body2">
-                            Forgot password?
-                            </Link>
-                        </ReactLink>
-                      </Grid>
-                      <Grid item xs>
-                        <ReactLink to={"/signup"} >
                             <Link href="/signup" variant="body2">
-                            Create an account
+                              <Typography sx={{color: "#f9f9f9", textAlign: "right", fontSize: "14px", margin: 2}}>
+                                Create an account
+                              </Typography>
                             </Link>
                         </ReactLink>
                       </Grid>
