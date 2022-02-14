@@ -6,7 +6,7 @@ import { TablePagination, TableContainer, Table, TableRow, TableCell, TableBody,
 export default class MatchHistory extends Component {
     constructor(props) {
         super(props);
-        const testColumns = [{date: 1, match: "C9 vs TSM", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png" , isWin: true},
+        const testColumns = [{date: 1, opponent: "A", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png" , isWin: true},
         {date: 2, opponent: "B", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: true},
         {date: 3, opponent: "C", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: true},
         {date: 4, opponent: "D", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
@@ -82,11 +82,11 @@ export default class MatchHistory extends Component {
                             </TableCell>
                             <TableCell align="center">
                             <Box display="flex" flexDirection="row" columnGap={1} justifyContent="center">
-                                <img src="https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png" alt="logo" width={25} height={25 }/>
+                                <img src="https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png" alt="logo" width={30} height={30 }/>
                                     <Typography variant="h6" style={styleInfo}>C9</Typography>
                                     <Typography variant="h6" style={styleInfo}>VS</Typography>
                                     <Typography variant="h6"  style={styleInfo}>{column["opponent"]}</Typography>
-                                    <img src={column["logo"]} alt="logo" width={25} height={25 }/>
+                                    <img src={column["logo"]} alt="logo" width={30} height={30}/>
                                 </Box>
                             </TableCell>
                         </TableRow>
