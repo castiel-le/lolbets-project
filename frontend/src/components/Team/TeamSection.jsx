@@ -7,11 +7,13 @@ import { Box, Typography, Grid } from "@mui/material";
  */
 export default class TeamSection extends Component {
     render() {
+        // Styling
         const textColor = "#d1cdc7";
         const styleHeader = {backgroundColor: "#6d530b", fontWeight: "bold", color: textColor};
         const styleLabel = {fontWeight: "bold", color: textColor};
         const styleInfo = {color: textColor}
         const styleBody = {backgroundColor: "#1e2021"};
+
         return(
             <Box display="flex" flexDirection="column" style={styleBody}>
                 <Typography variant="h5" noWrap style={styleHeader}>Cloud9</Typography>

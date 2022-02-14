@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import TeamSection from "./TeamSection";
 const theme = createTheme();
 
@@ -16,9 +16,9 @@ export default class Team extends Component {
     render() {
         return(
             <ThemeProvider theme={theme}>
-                <Box display="flex" flexDirection="row" justifyContent="center">
+                <Box display="flex" flexDirection="row" justifyContent="center" columnGap={1}>
                     <TeamSection />
-                    
+                    <Box width={800} border={1}><Typography>Match here</Typography></Box>
                 </Box>
             </ThemeProvider>
         );
