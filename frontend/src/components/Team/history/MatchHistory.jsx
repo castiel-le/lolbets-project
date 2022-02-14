@@ -86,7 +86,7 @@ export default class MatchHistory extends Component {
                             </TableCell>
                         </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody size="string">
                     {this.state.testColumns.slice(startRowCount, endRowCount)
                         .map((column) => (
                         <TableRow id = {column["date"]} key = {column["date"]}
@@ -94,15 +94,15 @@ export default class MatchHistory extends Component {
                                 {backgroundColor:"darkGreen"} 
                                 : {backgroundColor:"darkRed"}}>
                             <TableCell align="center" style={{ borderBottom: 0}}>
-                                <Typography variant="h5" style={styleInfo}>{column.date}</Typography>
+                                <Typography variant="p" style={styleInfo}>{column.date}</Typography>
                             </TableCell>
                             <TableCell align="center" style={{ borderBottom: 0}}>
-                            <Box display="flex" flexDirection="row" columnGap={1} justifyContent="center">
+                            <Box display="flex" flexDirection="row" columnGap={1} justifyContent="center" alignItems="center">
                                 <img src="https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"
                                  alt="logo" width={30} height={30} loading="lazy"/>
-                                    <Typography variant="h6" style={styleInfo}>C9</Typography>
-                                    <Typography variant="h6" style={styleInfo}>VS</Typography>
-                                    <Typography variant="h6"  style={styleInfo}>{column["opponent"]}</Typography>
+                                    <Typography variant="p" style={styleInfo}>C9</Typography>
+                                    <Typography variant="p" style={styleInfo}>VS</Typography>
+                                    <Typography variant="p"  style={styleInfo}>{column["opponent"]}</Typography>
                                     <img src={column["logo"]} alt="logo" width={30} height={30} loading="lazy"/>
                                 </Box>
                             </TableCell>
