@@ -1,7 +1,7 @@
 import { Box } from '@mui/system';
 import {Component} from 'react';
 
-import { getFormattedDate, getGameStartTimeObject, getTeamObject, fetchTeamInfo } from './helperFunctions';
+import { getFormattedDate, getGameStartTimeObject } from './helperFunctions';
 import BetBox from './BetBox'
 import PlaceBetPopup from './PlaceBetPopup';
 
@@ -23,25 +23,25 @@ export default class AllBets extends Component {
         this.fetchAllUpcomingMatches();
     }
 
-    fetchAllUpcomingMatches() {
-        fetch("/api/matches")
-        .then(response => {
-            if (!response.ok) {
-                const message = `An error has occured: ${response.status}`;
-                throw new Error(message);
-            }
-            return response.json();
-        })
-        .then(json => {
-            this.setState({
-                upcomingMatches: json
-            })
-        })
-        .catch(error => {
-            console.error(error)
-        });
+    /**
+     * Fetches all the upcoming matches in the database
+     * @returns returns if there was an error in the fetch
+     */
+    async fetchAllUpcomingMatches() {
+         let response = await fetch("/api/matches");
+         if (!response.ok) {
+             console.error("Error fetching matches: "+ response.status);
+             // TODO: add other error logic
+             return;
+         }
+         this.setState({
+             upcomingMatches: await response.json()
+         })
     }
 
+    /**
+     * If the user selects a bet, open the popup
+     */
     toggleOpenBet() {
         if (this.state.betOpen) {
             this.setState({
@@ -55,6 +55,12 @@ export default class AllBets extends Component {
         }
     }
 
+    /**
+     * When the use clicks the bet button, tell them application which bet was selected
+     * @param {*} bet 
+     * @param {*} team1 
+     * @param {*} team2 
+     */
     selectBet(bet, team1, team2) {
         this.setState({
             selectedBet: bet,
@@ -73,16 +79,14 @@ export default class AllBets extends Component {
                 this.state.upcomingMatches.map( match => {
                     let date = new Date(match.match_start_time);
                     let formattedDate = getFormattedDate(date);
-                    let team1Info = fetchTeamInfo(match.team1_id);
-                    let team2Info = fetchTeamInfo(match.team2_id);
 
                     return (
                         <Box key={match.match_id}>
                         <h1>{formattedDate}</h1>
                         <BetBox 
                             time={getGameStartTimeObject(date)} 
-                            team1={team1Info.then(getTeamObject(team1Info), console.error("error"))}
-                            team2={getTeamObject(team2Info)}
+                            team1ID={match.team1_id}
+                            team2ID={match.team2_id}
                             selectBet={this.selectBet}
                         />
                         </Box>
