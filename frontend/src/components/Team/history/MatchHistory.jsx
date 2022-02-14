@@ -50,6 +50,7 @@ export default class MatchHistory extends Component {
         const textColor = "#d1cdc7";
         const styleInfo = {color: textColor}
         const styleHeader = {color: textColor, fontWeight: "bold", backgroundColor: "#6d530b"};
+        const stylePagination = {color: textColor, backgroundColor: "#282c34"};
 
         // Range of rows to be displayed
         const startRowCount = this.state.page 
@@ -59,13 +60,13 @@ export default class MatchHistory extends Component {
         return(
             <TableContainer >
                 <Typography variant="h5" style={styleHeader}>Match History</Typography>
-                <Table style={{backgroundColor: "#1e2021"}}>
+                <Table style={{backgroundColor: "#282c34"}}>
                     <TableHead>
                         <TableRow >
-                            <TableCell align="center">
+                            <TableCell align="center" style={{ borderBottom: 0}}>
                                 <Typography variant="h5" fontWeight="bold" color={textColor}>Date</Typography>
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="center" style={{ borderBottom: 0}}>
                                 <Typography variant="h5" fontWeight="bold" color={textColor}>Match Detail</Typography>
                             </TableCell>
                         </TableRow>
@@ -77,10 +78,10 @@ export default class MatchHistory extends Component {
                             style = {column.isWin ? 
                                 {backgroundColor:"darkGreen"} 
                                 : {backgroundColor:"darkRed"}}>
-                            <TableCell align="center">
+                            <TableCell align="center" style={{ borderBottom: 0}}>
                                 <Typography variant="h5" style={styleInfo}>{column.date}</Typography>
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="center" style={{ borderBottom: 0}}>
                             <Box display="flex" flexDirection="row" columnGap={1} justifyContent="center">
                                 <img src="https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png" alt="logo" width={30} height={30 }/>
                                     <Typography variant="h6" style={styleInfo}>C9</Typography>
@@ -101,7 +102,7 @@ export default class MatchHistory extends Component {
                 page={this.state.page}
                 onPageChange={this.handleChangePage}
                 onRowsPerPageChange={this.handleChangeRowsPerPage}
-                style={styleInfo}
+                style={stylePagination}
             />
             </TableContainer>
         );
