@@ -96,15 +96,15 @@ export default class AllBets extends Component {
                                     {formattedDate}
                                 </Typography >
                                 <Divider variant="fullWidth" orientation='horizontal' flexItem='true' sx={{ borderColor: '#f9f9f9', width: '85%', height: '5px', mx: 'auto' }} />
-                                <List disablePadding="true">
+                                <List >
                                     {date.map(match => {
                                         return (
                                             <ListItem >
                                                 <BetBox
                                                     key={match.match_id}
                                                     time={getGameStartTimeObject(new Date(match.match_start_time))}
-                                                    team1ID={match.team1_id}
-                                                    team2ID={match.team2_id}
+                                                    team1={match.team1_id}
+                                                    team2={match.team2_id}
                                                     selectBet={this.selectBet}
                                                 />
                                             </ListItem>
