@@ -17,10 +17,25 @@ export default class MatchHistory extends Component {
         {date: 10, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
         {date: 11, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
         {date: 12, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 13, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 14, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 15, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 16, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 17, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 18, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 19, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 20, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 21, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 22, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 23, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 24, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 25, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+        {date: 26, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
+
     ];
         this.state = {
             page: 0,
-            rowsPerPage: 10,
+            rowsPerPage: 15,
             testColumns: testColumns,
         }
 
@@ -50,7 +65,7 @@ export default class MatchHistory extends Component {
         const textColor = "#d1cdc7";
         const styleInfo = {color: textColor}
         const styleHeader = {color: textColor, fontWeight: "bold", backgroundColor: "#6d530b"};
-        const stylePagination = {color: textColor, backgroundColor: "#282c34"};
+        const stylePagination = {color: textColor, backgroundColor: "#1e2a32"};
 
         // Range of rows to be displayed
         const startRowCount = this.state.page 
@@ -60,7 +75,7 @@ export default class MatchHistory extends Component {
         return(
             <TableContainer >
                 <Typography variant="h5" style={styleHeader}>Match History</Typography>
-                <Table style={{backgroundColor: "#282c34"}}>
+                <Table style={{backgroundColor: "#282c34"}} size="small">
                     <TableHead>
                         <TableRow >
                             <TableCell align="center" style={{ borderBottom: 0}}>

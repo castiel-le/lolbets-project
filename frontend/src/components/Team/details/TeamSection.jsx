@@ -12,7 +12,7 @@ export default class TeamSection extends Component {
         const styleHeader = {backgroundColor: "#6d530b", fontWeight: "bold", color: textColor};
         const styleLabel = {fontWeight: "bold", color: textColor};
         const styleInfo = {color: textColor}
-        const styleBody = {backgroundColor: "#282c34"};
+        const styleBody = {backgroundColor: "#1e2a32"};
 
         return(
             <Box display="flex" flexDirection="column" style={styleBody} alignSelf="flex-start">
