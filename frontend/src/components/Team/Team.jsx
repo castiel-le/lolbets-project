@@ -17,7 +17,7 @@ export default class Team extends Component {
     render() {
         return(
             <ThemeProvider theme={theme}>
-                <Box display="flex" flexDirection="row" columnGap={2} style={{backgroundColor: "#282c34"}}>
+                <Box display="flex" flexDirection="row" columnGap={2} style={{backgroundColor: "#1e2021"}}>
                     <TeamSection />
                     <MatchHistory />
                 </Box>

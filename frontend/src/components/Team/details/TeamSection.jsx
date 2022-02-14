@@ -12,7 +12,7 @@ export default class TeamSection extends Component {
         const styleHeader = {backgroundColor: "#6d530b", fontWeight: "bold", color: textColor};
         const styleLabel = {fontWeight: "bold", color: textColor};
         const styleInfo = {color: textColor}
-        const styleBody = {backgroundColor: "#1e2021"};
+        const styleBody = {backgroundColor: "#282c34"};
 
         return(
             <Box display="flex" flexDirection="column" style={styleBody} alignSelf="flex-start">
@@ -41,39 +41,6 @@ export default class TeamSection extends Component {
                     </Grid>
                 </Grid>
             </Box>
-            // <Grid container display="flex">
-            //     <Grid item xs={4} alignItems="center" justifyContent="center" display="flex">
-            //             <Avatar sx={{ width: 150, height: 150 }}/>
-            //         </Grid>
-            //     <Grid item xs={8} border={1}>
-            //             <Grid container spacing={1}>
-            //                 <Grid item xs={3}>
-            //                     <Typography variant="h5" align="right" noWrap>Name:</Typography>
-            //                 </Grid>
-            //                 <Grid item xs={8}>
-            //                     <Typography variant="h5" align="left" noWrap style={styleDetail}>Cloud 9</Typography>
-            //                 </Grid>
-            //                 <Grid item xs={3}>
-            //                     <Typography variant="h5" align="right" noWrap>Acronym:</Typography>
-            //                 </Grid>
-            //                 <Grid item xs={8}>
-            //                     <Typography variant="h5" align="left" noWrap style={styleDetail}>C9</Typography>
-            //                 </Grid>
-            //                 <Grid item xs={3}>
-            //                     <Typography variant="h5" align="right" noWrap>Wins:</Typography>
-            //                 </Grid>
-            //                 <Grid item xs={8}>
-            //                     <Typography variant="h5" align="left" noWrap style={styleDetail}>20</Typography>
-            //                 </Grid>
-            //                 <Grid item xs={3}>
-            //                     <Typography variant="h5" align="right" noWrap>Losses:</Typography>
-            //                 </Grid>
-            //                 <Grid item xs={8}>
-            //                     <Typography variant="h5" align="left" noWrap style={styleDetail}>9</Typography>
-            //                 </Grid>
-            //             </Grid>
-            //         </Grid>
-            // </Grid> 
         );
     }
 }
