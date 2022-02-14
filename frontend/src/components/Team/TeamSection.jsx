@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Grid, Avatar, Typography, Container } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 
 
 /**
@@ -7,40 +7,68 @@ import { Grid, Avatar, Typography, Container } from "@mui/material";
  */
 export default class TeamSection extends Component {
     render() {
+        const styleHeader = {backgroundColor: "#f4db96", fontWeight: "bold"};
+        const styleLabel = {fontWeight: "bold"};
+        const styleBody = {backgroundColor: "#f5f5f5"};
         return(
-            <Grid container style={{background: "gray"}} justifyContent="center">
-                <Grid item xs={3} alignItems="center" justifyContent="center" direction="column">
-                        <Avatar sx={{ width: 100, height: 100 }} />
+            <Box display="flex" flexDirection="column" style={styleBody}>
+                <Typography variant="h5" noWrap style={styleHeader}>Cloud9</Typography>
+                <img src="" alt="logo" width={400} height={400}/>
+                <Typography variant="h5" noWrap style={styleHeader}>Team Information</Typography>
+                <Grid container columnSpacing={1}>
+                    <Grid item xs={6} justifyContent="flex-end" display="flex">
+                        <Typography variant="p1" noWrap style={styleLabel}>Abbreviation:</Typography>
                     </Grid>
-                <Grid item xs={9}>
-                        <Grid container spacing={1}>
-                            <Grid item xs={2.5}>
-                                <Typography varaint="p" align="left" style={{fontWeight: "bold"}}>Name:</Typography>
-                            </Grid>
-                            <Grid item xs={9}>
-                                <Typography varaint="p" align="left">Cloud 9</Typography>
-                            </Grid>
-                            <Grid item xs={2.5}>
-                                <Typography varaint="p" align="left"style={{fontWeight: "bold"}}>Acronym:</Typography>
-                            </Grid>
-                            <Grid item xs={9}>
-                                <Typography varaint="p" align="left">C9</Typography>
-                            </Grid>
-                            <Grid item xs={2.5}>
-                                <Typography varaint="p" align="left"style={{fontWeight: "bold"}}>Wins:</Typography>
-                            </Grid>
-                            <Grid item xs={9}>
-                                <Typography varaint="p" align="left">20</Typography>
-                            </Grid>
-                            <Grid item xs={2.5}>
-                                <Typography varaint="p" align="left"style={{fontWeight: "bold"}}>Losses:</Typography>
-                            </Grid>
-                            <Grid item xs={9}>
-                                <Typography varaint="p" align="left">9</Typography>
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={6} justifyContent="flex-start" display="flex">
+                        <Typography variant="p1" noWrap align="left">C9</Typography>
                     </Grid>
-            </Grid> 
+                    <Grid item xs={6} justifyContent="flex-end" display="flex">
+                        <Typography variant="p1" noWrap style={styleLabel}>Wins:</Typography>
+                    </Grid>
+                    <Grid item xs={6} justifyContent="flex-start" display="flex">
+                        <Typography variant="p1" noWrap align="left">13</Typography>
+                    </Grid>
+                    <Grid item xs={6} justifyContent="flex-end" display="flex">
+                        <Typography variant="p1" noWrap style={styleLabel}>Losses:</Typography>
+                    </Grid>
+                    <Grid item xs={6} justifyContent="flex-start" display="flex">
+                        <Typography variant="p1" noWrap align="left">7</Typography>
+                    </Grid>
+                </Grid>
+            </Box>
+            // <Grid container display="flex">
+            //     <Grid item xs={4} alignItems="center" justifyContent="center" display="flex">
+            //             <Avatar sx={{ width: 150, height: 150 }}/>
+            //         </Grid>
+            //     <Grid item xs={8} border={1}>
+            //             <Grid container spacing={1}>
+            //                 <Grid item xs={3}>
+            //                     <Typography variant="h5" align="right" noWrap>Name:</Typography>
+            //                 </Grid>
+            //                 <Grid item xs={8}>
+            //                     <Typography variant="h5" align="left" noWrap style={styleDetail}>Cloud 9</Typography>
+            //                 </Grid>
+            //                 <Grid item xs={3}>
+            //                     <Typography variant="h5" align="right" noWrap>Acronym:</Typography>
+            //                 </Grid>
+            //                 <Grid item xs={8}>
+            //                     <Typography variant="h5" align="left" noWrap style={styleDetail}>C9</Typography>
+            //                 </Grid>
+            //                 <Grid item xs={3}>
+            //                     <Typography variant="h5" align="right" noWrap>Wins:</Typography>
+            //                 </Grid>
+            //                 <Grid item xs={8}>
+            //                     <Typography variant="h5" align="left" noWrap style={styleDetail}>20</Typography>
+            //                 </Grid>
+            //                 <Grid item xs={3}>
+            //                     <Typography variant="h5" align="right" noWrap>Losses:</Typography>
+            //                 </Grid>
+            //                 <Grid item xs={8}>
+            //                     <Typography variant="h5" align="left" noWrap style={styleDetail}>9</Typography>
+            //                 </Grid>
+            //             </Grid>
+            //         </Grid>
+            // </Grid> 
         );
     }
 }
