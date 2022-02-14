@@ -59,7 +59,7 @@ export default class MatchHistory extends Component {
         return(
             <TableContainer >
                 <Typography variant="h5" style={styleHeader}>Match History</Typography>
-                <Table size="medium">
+                <Table style={{backgroundColor: "#1e2021"}}>
                     <TableHead>
                         <TableRow >
                             <TableCell align="center">
