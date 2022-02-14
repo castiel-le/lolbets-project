@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { Component } from 'react';
 
 import { Link as ReactLink } from 'react-router-dom'
@@ -12,9 +13,10 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 
-const theme = createTheme();
+import {theme} from '../NavBar/navbartheme';
+import {bordertheme} from '../Login/logintheme';
 
 export default class CreateAccount extends Component {
 
@@ -77,55 +79,40 @@ export default class CreateAccount extends Component {
             Sign up
           </Typography>
           <Box component="form" noValidate onSubmit={this.handleSubmit} sx={{ mt: 3 }}>
+          <ThemeProvider theme={bordertheme}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
               <Grid item xs={12}>
+                <p>Email Address</p>
                 <TextField
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
                   name="email"
                   autoComplete="email"
+                  color='secondary'
+                  focused
                 />
               </Grid>
               <Grid item xs={12}>
+                <p>Password</p>
                 <TextField
                   required
                   fullWidth
                   name="password"
-                  label="Password"
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  color='secondary'
+                  focused
                 />
               </Grid>
             </Grid>
+            </ThemeProvider>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, backgroundColor: "secondary.main" }}
             >
               Sign Up
             </Button>

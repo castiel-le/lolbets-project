@@ -17,7 +17,7 @@ server.on("listening", onListening);
   */
 async function onListening() {
     try {
-        let db = await sequelize.authenticate()
+        await sequelize.authenticate()
         console.log("Connection established with database")
     } catch (e) {
         console.error("Could not connect to db")
@@ -62,13 +62,15 @@ function onError(error) {
 
     // handle specific listen errors with friendly messages
     switch (error.code) {
-        case "EACCES":
-            console.error(bind + " requires elevated privileges");
-            process.exit(1);
-        case "EADDRINUSE":
-            console.error(bind + " is already in use");
-            process.exit(1);
-        default:
-            throw error;
+    case "EACCES":
+        console.error(bind + " requires elevated privileges");
+        process.exit(1);
+        break;
+    case "EADDRINUSE":
+        console.error(bind + " is already in use");
+        process.exit(1);
+        break;
+    default:
+        throw error;
     }
 }

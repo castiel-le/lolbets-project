@@ -7,7 +7,7 @@ router.get("/helloworld", async (req, res) => {
 });
 
 //Route to get only the fields necessary for logging in, most likely be changed later
-router.get("/login", async (req,res) => {
+router.get("/login", async (req, res) => {
     return res.json({
         "user_id":1,
         "username":"Bob",
@@ -37,8 +37,7 @@ router.get("/bets", async (req, res) => {
             "match_id":2,
             "bet_locked":false
         }]);
-    }
-    catch(error){
+    } catch(error){
         return res.json({"Error":error})
     }
 });
@@ -49,8 +48,7 @@ router.post("/signup", async (req, res) => {
         res.send(req.body);
         console.log("successfully sent!");
         console.log(req.body);
-    }
-    catch(e){
+    } catch(e){
         console.log("error occurred");
     }
 });
