@@ -78,7 +78,7 @@ export default class MatchHistory extends Component {
                                 {backgroundColor:"darkGreen"} 
                                 : {backgroundColor:"darkRed"}}>
                             <TableCell align="center">
-                                <Typography variant="h5" >{column.date}</Typography>
+                                <Typography variant="h5" style={styleInfo}>{column.date}</Typography>
                             </TableCell>
                             <TableCell align="center">
                             <Box display="flex" flexDirection="row" columnGap={1} justifyContent="center">
