@@ -21,19 +21,30 @@ async function getTeamById(id) {
             /* eslint-enable */
         }
     });
+    /*console.log(team[0].dataValues);*/
+    return team;
+}
+
+//Function to get team data by name
+async function getTeamByName(name) {
+    const team = await models.Team.findAll({
+        where: {
+            team_name: name
+        }
+    });
     return team;
 }
 
 //Function to get all matches
 async function getMatches() {
     const matches = await models.Match.findAll();
-    matches.forEach(m => {
-        /* eslint-disable */
-        m.dataValues.match_start_time = new Date(m.dataValues.match_start_time).valueOf();
-        /* eslint-enable */
+    for (let i =0; i < matches.length; i++){
+        matches[i].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
+        let team1string = (await getTeamById(matches[i].dataValues.team1_id))[0];
+        let team2string = (await getTeamById(matches[i].dataValues.team2_id))[0];
+        matches[i].dataValues.team1_id = team1string;
+        matches[i].dataValues.team2_id = team2string;
     }
-    );
-    console.log(matches);
     return matches;
 }
 
@@ -55,4 +66,4 @@ async function getUserById(id) {
     return user;
 }
 
-module.exports = { getBadges, getTeams, getTeamById, getMatches, getUsers, getUserById };
+module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById };
