@@ -1,7 +1,7 @@
 import { Box } from '@mui/system';
 import {Component} from 'react';
 
-import { getFormattedDate, getGameStartTimeObject } from './helperFunctions';
+import { getFormattedDate, getGameStartTimeObject, sortMatchesByDate } from './helperFunctions';
 import BetBox from './BetBox'
 import PlaceBetPopup from './PlaceBetPopup';
 
@@ -12,7 +12,8 @@ export default class AllBets extends Component {
         this.state = {
             betOpen: false,
             selectedBet: null,
-            upcomingMatches: null
+            upcomingMatches: null,
+            upcomingMatchesByDate: null
         };
         this.toggleOpenBet = this.toggleOpenBet.bind(this);
         this.selectBet = this.selectBet.bind(this);
@@ -34,9 +35,15 @@ export default class AllBets extends Component {
              // TODO: add other error logic
              return;
          }
+         let matches = await response.json();
          this.setState({
-             upcomingMatches: await response.json()
-         })
+             upcomingMatches: matches,
+             upcomingMatchesByDate: sortMatchesByDate(matches)
+         },
+         () => {
+             console.log(this.state.upcomingMatches);
+             console.log(this.state.upcomingMatchesByDate);
+        });
     }
 
     /**
@@ -72,26 +79,32 @@ export default class AllBets extends Component {
     render() {
         return (
             <div style={{ backgroundColor: '#0f1519', height: '100%'}}>
-                {this.state.upcomingMatches 
+                {this.state.upcomingMatchesByDate
 
                 // if upcoming matches are set, render this
                 ? 
-                this.state.upcomingMatches.map( match => {
-                    let date = new Date(match.match_start_time);
-                    let formattedDate = getFormattedDate(date);
 
-                    return (
-                        <Box key={match.match_id}>
-                        <h1>{formattedDate}</h1>
-                        <BetBox 
-                            time={getGameStartTimeObject(date)} 
-                            team1ID={match.team1_id}
-                            team2ID={match.team2_id}
-                            selectBet={this.selectBet}
-                        />
+                this.state.upcomingMatchesByDate.map( date => {
+                    let matchDate = new Date(date[0].match_start_time);
+                    let formattedDate = getFormattedDate(matchDate);
+                    return( 
+                        <Box key={date}>
+                            <h1>{formattedDate}</h1>
+                            {date.map( match => {
+                                return (
+                                    <BetBox 
+                                        key={match.match_id}
+                                        time={getGameStartTimeObject(new Date(match.match_start_time))} 
+                                        team1ID={match.team1_id}
+                                        team2ID={match.team2_id}
+                                        selectBet={this.selectBet}
+                                    />
+                                )
+                            })}
                         </Box>
-                    )
+                    );
                 })
+                
 
                 // if the upcoming matches are not set do not display anything
                 : null
