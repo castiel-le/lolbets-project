@@ -42,11 +42,7 @@ export default class AllBets extends Component {
         this.setState({
             upcomingMatches: matches,
             upcomingMatchesByDate: sortMatchesByDate(matches)
-        },
-            () => {
-                console.log(this.state.upcomingMatches);
-                console.log(this.state.upcomingMatchesByDate);
-            });
+        });
     }
 
     /**
