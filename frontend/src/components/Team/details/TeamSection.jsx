@@ -16,28 +16,28 @@ export default class TeamSection extends Component {
 
         return(
             <Box display="flex" flexDirection="column" style={styleBody} alignSelf="flex-start">
-                <Typography variant="h5" noWrap style={styleHeader}>Cloud9</Typography>
-                    <img src="https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png" 
-                        alt="logo" width={400} height={400}/>
+                <Typography variant="h5" noWrap style={styleHeader}>{this.props.team.team_name}</Typography>
+                    <img src={this.props.team.logo} 
+                        alt="logo" width={400} height={400} loading="lazy"/>
                 <Typography variant="h5" noWrap style={styleHeader}>Team Information</Typography>
                 <Grid container columnSpacing={1}>
                     <Grid item xs={6} justifyContent="flex-end" display="flex">
                         <Typography variant="p1" noWrap style={styleLabel}>Abbreviation:</Typography>
                     </Grid>
                     <Grid item xs={6} justifyContent="flex-start" display="flex">
-                        <Typography variant="p1" noWrap align="left" style={styleInfo}>C9</Typography>
+                        <Typography variant="p1" noWrap align="left" style={styleInfo}>{this.props.team.abbreviation}</Typography>
                     </Grid>
                     <Grid item xs={6} justifyContent="flex-end" display="flex">
                         <Typography variant="p1" noWrap style={styleLabel}>Wins:</Typography>
                     </Grid>
                     <Grid item xs={6} justifyContent="flex-start" display="flex">
-                        <Typography variant="p1" noWrap align="left" style={styleInfo}>13</Typography>
+                        <Typography variant="p1" noWrap align="left" style={styleInfo}>{this.props.team.wins}</Typography>
                     </Grid>
                     <Grid item xs={6} justifyContent="flex-end" display="flex">
                         <Typography variant="p1" noWrap style={styleLabel}>Losses:</Typography>
                     </Grid>
                     <Grid item xs={6} justifyContent="flex-start" display="flex">
-                        <Typography variant="p1" noWrap align="left" style={styleInfo}>7</Typography>
+                        <Typography variant="p1" noWrap align="left" style={styleInfo}>{this.props.team.wins}</Typography>
                     </Grid>
                 </Grid>
             </Box>
