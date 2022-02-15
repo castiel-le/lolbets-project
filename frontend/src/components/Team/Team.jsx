@@ -38,7 +38,7 @@ class Team extends Component {
             <ThemeProvider theme={theme}>
                 <Box display="flex" flexDirection="row" columnGap={2} style={{backgroundColor: "#1e2021"}}>
                     <TeamSection team={this.state.team} />
-                    <MatchHistory />
+                    <MatchHistory matches={this.state.matches} id={this.state.team.team_id}/>
                 </Box>
             </ThemeProvider>
         );

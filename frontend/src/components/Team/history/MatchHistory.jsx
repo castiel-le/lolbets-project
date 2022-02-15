@@ -6,37 +6,10 @@ import { TablePagination, TableContainer, Table, TableRow, TableCell, TableBody,
 export default class MatchHistory extends Component {
     constructor(props) {
         super(props);
-        const testColumns = [{date: 1, opponent: "A", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png" , isWin: true},
-        {date: 2, opponent: "B", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: true},
-        {date: 3, opponent: "C", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: true},
-        {date: 4, opponent: "D", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 5, opponent: "E", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: true},
-        {date: 6, opponent: "F", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: true},
-        {date: 8, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 9, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 10, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 11, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 12, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 13, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 14, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 15, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 16, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 17, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 18, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 19, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 20, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 21, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 22, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 23, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 24, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 25, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-        {date: 26, opponent: "G", logo: "https://cdn.pandascore.co/images/team/image/130134/no_teamlogo_square.png", isWin: false},
-
-    ];
+        
         this.state = {
             page: 0,
             rowsPerPage: 15,
-            testColumns: testColumns,
         }
 
         this.handleChangePage = this.handleChangePage.bind(this);
@@ -87,23 +60,24 @@ export default class MatchHistory extends Component {
                         </TableRow>
                 </TableHead>
                 <TableBody size="string">
-                    {this.state.testColumns.slice(startRowCount, endRowCount)
+                    {this.props.matches.slice(startRowCount, endRowCount)
                         .map((column) => (
-                        <TableRow id = {column["date"]} key = {column["date"]}
-                            style = {column.isWin ? 
+                        <TableRow key = {column.match_id}
+                            style = {column.winner_id === this.props.id ? 
                                 {backgroundColor:"darkGreen"} 
-                                : {backgroundColor:"darkRed"}}>
+                                : column.winner_id != null ?
+                                    {backgroundColor:"darkRed"} : {}}>
                             <TableCell align="center" style={{ borderBottom: 0}}>
-                                <Typography variant="p" style={styleInfo}>{column.date}</Typography>
+                                <Typography variant="p" style={styleInfo}>{new Date(column.match_start_time).toLocaleString()}</Typography>
                             </TableCell>
                             <TableCell align="center" style={{ borderBottom: 0}}>
                             <Box display="flex" flexDirection="row" columnGap={1} justifyContent="center" alignItems="center">
-                                <img src="https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"
+                                <img src={column.team1_id.logo}
                                  alt="logo" width={30} height={30} loading="lazy"/>
-                                    <Typography variant="p" style={styleInfo}>C9</Typography>
+                                    <Typography variant="p" style={styleInfo}>{column.team1_id.abbreviation}</Typography>
                                     <Typography variant="p" style={styleInfo}>VS</Typography>
-                                    <Typography variant="p"  style={styleInfo}>{column["opponent"]}</Typography>
-                                    <img src={column["logo"]} alt="logo" width={30} height={30} loading="lazy"/>
+                                    <Typography variant="p"  style={styleInfo}>{column.team2_id.abbreviation}</Typography>
+                                    <img src={column.team2_id.logo} alt="logo" width={30} height={30} loading="lazy"/>
                                 </Box>
                             </TableCell>
                         </TableRow>
@@ -113,7 +87,7 @@ export default class MatchHistory extends Component {
             <TablePagination
                 rowsPerPageOptions={[15, 50, 100]}
                 component="div"
-                count={this.state.testColumns.length}
+                count={this.props.matches.length}
                 rowsPerPage={this.state.rowsPerPage}
                 page={this.state.page}
                 onPageChange={this.handleChangePage}
