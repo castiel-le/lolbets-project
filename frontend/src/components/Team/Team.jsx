@@ -1,7 +1,7 @@
 import { Component } from "react";
-import withRouter from "../../config/withRouter";
+import withRouter from "../withRouter";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import TeamSection from "./details/TeamSection";
 import MatchHistory from "./history/MatchHistory";
 const theme = createTheme();
