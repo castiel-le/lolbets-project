@@ -11,22 +11,25 @@ const theme = createTheme();
 export default class Teams extends Component {
     constructor(props) {
         super(props);
-        this.state = {teams: [
-            {name: "Cloud 1", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-            {name: "Cloud 2", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-            {name: "Cloud 3", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-            {name: "Cloud 4", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-            {name: "Cloud 5", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-            {name: "Cloud 6", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-            {name: "Cloud 7", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-            {name: "Cloud 8", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-            {name: "Cloud 9", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-            {name: "Cloud 10", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-            {name: "Cloud 11", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-            {name: "Cloud 12", logo: "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png"},
-
-        ]};
+        this.state = {teams: []};
     }
+
+    async componentDidMount() {
+      // url
+      const url = "/api/teams";
+
+      try {
+        // fetch from url
+        const response = await fetch(url);
+
+        if (response.ok) {
+          this.setState({teams: await response.json()});
+        }
+      } catch(e) {
+        console.log(e);
+      }
+    }
+
     render() {
         //Styling
         return (
@@ -35,7 +38,7 @@ export default class Teams extends Component {
                 <Typography variant="h4" component="h2">All Teams</Typography>
                     <Grid container spacing={4}>
                     {this.state.teams.map((team) => (
-                        <Grid item xs={12} sm={6} md={4} key={team["name"]}>
+                        <Grid item xs={12} sm={6} md={4} key={team.team_id}>
                             <TeamCard team={team} />
                         </Grid>
                     ))}
