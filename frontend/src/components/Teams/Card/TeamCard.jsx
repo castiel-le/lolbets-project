@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Container, Typography, Grid, CardMedia, Card, CardContent, Button } from "@mui/material";
+import { Typography, CardMedia, Card, CardContent } from "@mui/material";
 
 export default class TeamCard extends Component {
     render() {
