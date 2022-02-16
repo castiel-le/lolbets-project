@@ -27,11 +27,17 @@ class Team extends Component {
         // urls to fetch
         const urlTeam = "/api/teams/";
         const urlHistory = "/api/teams/history/";
-        
-        // fetch data
-        const responseTeam = await fetch(urlTeam + this.props.params.id);
-        const responseMatches = await fetch(urlHistory + this.props.params.id);
-        this.setState({team: await responseTeam.json(), matches: await responseMatches.json()});
+        try {
+            // fetch data
+            const responseTeam = await fetch(urlTeam + this.props.params.id);
+            const responseMatches = await fetch(urlHistory + this.props.params.id);
+
+            if(responseMatches.ok && responseTeam.ok) {
+                this.setState({team: await responseTeam.json(), matches: await responseMatches.json()});
+            }
+        } catch(e) {
+            console.log(e);
+        }
     }
     render() {
         return(
