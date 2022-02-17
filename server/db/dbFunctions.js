@@ -52,7 +52,10 @@ async function getMatchHistory(id, pageNum) {
                 { team1_id: id },
                 { team2_id: id }
             ]
-        }
+        },
+        order: [
+            ['match_start_time', 'DESC']
+        ]
     });
     return swapTeamData(matches);
 }
@@ -78,16 +81,16 @@ async function getMatchesAfter(date, pageNum) {
 async function getMatchesBetween(afterthis, beforethis) {
     const matches = await models.Match.findAll({
         where: {
-            [Op.and]: {
-                [Op.gte]: afterthis.valueOf(),
-                [Op.lte]: beforethis.valueOf()
+            match_start_time: {
+                [Op.gte]: afterthis,
+                [Op.lte]: beforethis
             }
         },
         order: [
             ['match_start_time', 'DESC']
         ]
-    })
-    return matches;
+    });
+    return swapTeamData(matches);
 }
 
 //Function to get all users
