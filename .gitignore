@@ -6,3 +6,4 @@ db.config
 .idea
 pom.xml
 ./src
+.env
