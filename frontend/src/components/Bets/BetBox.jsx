@@ -45,18 +45,30 @@ export default class BetBox extends Component {
           sx={{ bgcolor: 'inherit', width: '82%', mx: 'auto' }}
         >
           <Item sx={{ flexGrow: 1, my: '0px', bgcolor: 'inherit', border: '0px' }}>
-            <BetAccordion expanded={this.state.expanded} onChange={(event) => this.handleExpand(event)} >
+            <BetAccordion 
+              expanded={this.state.expanded} 
+              onChange={(event) => this.handleExpand(event)} 
+            >
               <AccordionSummary
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
-                sx={{ display: 'flex', ":hover": { backgroundColor: this.state.expanded ? 'inherit' : '#1E2A32' } }}
+                sx={{ 
+                  display: 'flex',
+                  ":hover": { backgroundColor: this.state.expanded ? 'inherit' : '#1E2A32' } 
+                }}
               >
                 <FlexBoxRow width='100%'>
 
                   <TimeBox time={this.props.time} />
 
                   <TeamBox left={true} team={this.props.team1} />
-                  <Typography fontFamily={'Lemon-Milk-Light'} fontSize='14px' mx='32px' textAlign={'center'} my='auto' sx={{ display: 'flex', width: '2%', justifyContent: 'center' }}>
+                  <Typography
+                    fontFamily={'Lemon-Milk-Light'}
+                    fontSize='14px'
+                    mx='32px'
+                    textAlign={'center'}
+                    my='auto'
+                    sx={{ display: 'flex', width: '2%', justifyContent: 'center' }}>
                     VS
                   </Typography>
                   <TeamBox left={false} team={this.props.team2} />
