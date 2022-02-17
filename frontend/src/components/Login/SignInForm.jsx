@@ -42,7 +42,6 @@ export default class SignInForm extends Component {
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
-    const remember = data.get('remember');
     // eslint-disable-next-line no-console
     console.log({
       email: email,

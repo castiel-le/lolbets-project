@@ -11,8 +11,8 @@ export default class MatchRow extends Component {
     const styleCell = {borderBottom: 0};
     const styleRow = this.props.column.winner_id === this.props.id ?
       { backgroundColor: "darkGreen" }
-      : this.props.column.winner_id != null ?
-        { backgroundColor: "darkRed" } : {};
+      : this.props.column.winner_id === null ?
+        {} : { backgroundColor: "darkRed" };
     return (
       <TableRow
         style={styleRow}>

@@ -1,5 +1,6 @@
 import { Component } from "react";
-import { TablePagination, TableContainer, Table, TableRow, TableCell, TableBody, TableHead, Typography } from "@mui/material";
+import { TablePagination, TableContainer, Table, TableRow, 
+  TableCell, TableBody, TableHead, Typography } from "@mui/material";
 import MatchRow from "./MatchRow";
 /**
  * Component for displaying team's match histories.
@@ -58,13 +59,13 @@ export default class MatchHistory extends Component {
             </TableRow>
           </TableHead>
           <TableBody size="string">
-            {this.props.matches.map((column) => (
+            {this.props.matches.map(column => 
               <MatchRow column={column} id={this.props.id} key={column.match_id} />
-            ))}
+            )}
           </TableBody>
         </Table>
         <TablePagination
-          rowsPerPageOptions={[15,]}
+          rowsPerPageOptions={[15]}
           rowsPerPage={15}
           component="div"
           count={200}

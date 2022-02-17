@@ -1,6 +1,8 @@
 import { Component, Fragment, forwardRef } from "react";
 
-import { Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Divider, Slide, Avatar, Typography, FormControl, InputLabel, OutlinedInput, InputAdornment } from '@mui/material';
+import { Box, Button, Dialog, DialogTitle, DialogContent, 
+  DialogActions, Divider, Slide, Avatar, 
+  FormControl, InputLabel, OutlinedInput, InputAdornment } from '@mui/material';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -17,8 +19,12 @@ export default class PlaceBetDrawer extends Component {
 
   render() {
     let defaultStyle = { height: '64px', width: '64px'}
-    let styleButton1 = { height: '64px', width: '64px', transform: this.state.selectedTeam === 1 ? 'scale(1.1)' : 'scale(0.7)', filter: this.state.selectedTeam === 1 ? 'grayscale(0)' : 'grayscale(1)'}
-    let styleButton2 = { height: '64px', width: '64px', transform: this.state.selectedTeam === 2 ? 'scale(1.1)' : 'scale(0.7)', filter: this.state.selectedTeam === 2 ? 'grayscale(0)' : 'grayscale(1)'}
+    let styleButton1 = { height: '64px', width: '64px', 
+      transform: this.state.selectedTeam === 1 ? 'scale(1.1)' : 'scale(0.7)', 
+      filter: this.state.selectedTeam === 1 ? 'grayscale(0)' : 'grayscale(1)'}
+    let styleButton2 = { height: '64px', width: '64px', 
+      transform: this.state.selectedTeam === 2 ? 'scale(1.1)' : 'scale(0.7)', 
+      filter: this.state.selectedTeam === 2 ? 'grayscale(0)' : 'grayscale(1)'}
     return(
       <Fragment>
         <Dialog
@@ -39,18 +45,22 @@ export default class PlaceBetDrawer extends Component {
 
               <Button 
                 onClick={() => this.setState({selectedTeam: 1})}
-                sx={{width: '100%', backgroundColor: this.state.selectedTeam === 1 ? '#1E2A32' : 'inherit', mx: 'auto'}}
+                sx={{width: '100%', backgroundColor: this.state.selectedTeam === 1 
+                  ? '#1E2A32' : 'inherit', mx: 'auto'}}
               >
-                <Avatar src={this.props.bet.team1.image} sx={this.state.selectedTeam === null ? defaultStyle : styleButton1} />
+                <Avatar src={this.props.bet.team1.image} 
+                  sx={this.state.selectedTeam === null ? defaultStyle : styleButton1} />
               </Button>
                         
               <Divider orientation="vertical" flexItem />
 
               <Button
                 onClick={() => this.setState({selectedTeam: 2})} 
-                sx={{width: '100%', backgroundColor: this.state.selectedTeam === 2 ? '#1E2A32' : 'inherit', mx: 'auto'}}
+                sx={{width: '100%', backgroundColor: this.state.selectedTeam === 2 
+                  ? '#1E2A32' : 'inherit', mx: 'auto'}}
               >
-                <Avatar src={this.props.bet.team2.image} sx={this.state.selectedTeam === null ? defaultStyle : styleButton2} />
+                <Avatar src={this.props.bet.team2.image} sx={this.state.selectedTeam === null 
+                  ? defaultStyle : styleButton2} />
               </Button>
 
             </Box>

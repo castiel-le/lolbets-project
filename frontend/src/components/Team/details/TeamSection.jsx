@@ -25,19 +25,25 @@ export default class TeamSection extends Component {
             <Typography variant="p1" noWrap style={styleLabel}>Abbreviation:</Typography>
           </Grid>
           <Grid item xs={6} justifyContent="flex-start" display="flex">
-            <Typography variant="p1" noWrap align="left" style={styleInfo}>{this.props.team.abbreviation}</Typography>
+            <Typography variant="p1" noWrap align="left" style={styleInfo}>
+              {this.props.team.abbreviation}
+            </Typography>
           </Grid>
           <Grid item xs={6} justifyContent="flex-end" display="flex">
             <Typography variant="p1" noWrap style={styleLabel}>Wins:</Typography>
           </Grid>
           <Grid item xs={6} justifyContent="flex-start" display="flex">
-            <Typography variant="p1" noWrap align="left" style={styleInfo}>{this.props.team.wins}</Typography>
+            <Typography variant="p1" noWrap align="left" style={styleInfo}>
+              {this.props.team.wins}
+            </Typography>
           </Grid>
           <Grid item xs={6} justifyContent="flex-end" display="flex">
             <Typography variant="p1" noWrap style={styleLabel}>Losses:</Typography>
           </Grid>
           <Grid item xs={6} justifyContent="flex-start" display="flex">
-            <Typography variant="p1" noWrap align="left" style={styleInfo}>{this.props.team.wins}</Typography>
+            <Typography variant="p1" noWrap align="left" style={styleInfo}>
+              {this.props.team.wins}
+            </Typography>
           </Grid>
         </Grid>
       </Box>
