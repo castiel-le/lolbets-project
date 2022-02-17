@@ -34,21 +34,23 @@ export default class MatchHistory extends Component {
         const textColor = "#d1cdc7";
         const styleHeader = {color: textColor, fontWeight: "bold", backgroundColor: "#6d530b"};
         const stylePagination = {color: textColor, backgroundColor: "#1e2a32"};
+        const styleCell = {borderBottom: 0};
+        const styleTable= {backgroundColor: "#1e2a32"};
         
         return(
             <TableContainer >
                 <Typography variant="h5" style={styleHeader}>
                     Match History
                 </Typography>
-                <Table style={{backgroundColor: "#1e2a32"}} size="small">
+                <Table style={styleTable} size="small">
                     <TableHead>
                         <TableRow >
-                            <TableCell align="center" style={{ borderBottom: 0}}>
+                            <TableCell align="center" style={styleCell}>
                                 <Typography variant="h5" fontWeight="bold" color={textColor}>
                                     Date
                                 </Typography>
                             </TableCell>
-                            <TableCell align="center" style={{ borderBottom: 0}}>
+                            <TableCell align="center" style={styleCell}>
                                 <Typography variant="h5" fontWeight="bold" color={textColor}>
                                     Match Detail
                                 </Typography>
