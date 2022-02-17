@@ -7,8 +7,9 @@ import { useParams } from "react-router-dom";
  * @returns 
  */
 export default function withRouter( Child ) {
-    return ( props ) => {
-      const params = useParams();
-      return <Child { ...props } params ={ params } />;
-    }
+  // eslint-disable-next-line react/display-name
+  return ( props ) => {
+    const params = useParams();
+    return <Child { ...props } params ={ params } />;
   }
+}
