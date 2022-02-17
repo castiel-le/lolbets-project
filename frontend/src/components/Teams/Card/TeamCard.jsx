@@ -12,6 +12,8 @@ export default class TeamCard extends Component {
                 <Card sx={stylingCard}>
                     <CardMedia
                         component="img"
+                        width={400}
+                        height={350}
                         image={this.props.team.logo}
                         loading="lazy"
                         alt="no logo" />
