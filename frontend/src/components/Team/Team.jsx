@@ -27,8 +27,24 @@ class Team extends Component {
         };
         this.changePage = this.changePage.bind(this);
     }
+
+    /**
+     * Fetches match data on specified page from API.
+     * @param {Number} page - page number
+     */
     async changePage(page) {
-        this.setState({page: page});
+        // urls to fetch
+        const urlHistory = "/api/teams/history/";
+        try {
+            // fetch data
+            const responseMatches = await fetch(urlHistory + this.props.params.id + "?page=" + page);
+
+            if (responseMatches.ok) {
+                this.setState({ matches: await responseMatches.json() });
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     async componentDidMount() {
@@ -38,7 +54,7 @@ class Team extends Component {
         try {
             // fetch data
             const responseTeam = await fetch(urlTeam + this.props.params.id);
-            const responseMatches = await fetch(urlHistory + this.props.params.id);
+            const responseMatches = await fetch(urlHistory + this.props.params.id + "?page=1");
 
             if (responseMatches.ok && responseTeam.ok) {
                 this.setState({ team: await responseTeam.json(), matches: await responseMatches.json() });

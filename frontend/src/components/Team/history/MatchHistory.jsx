@@ -6,11 +6,6 @@ import { TablePagination, TableContainer, Table, TableRow, TableCell, TableBody,
 export default class MatchHistory extends Component {
     constructor(props) {
         super(props);
-        
-        this.state = {
-            page: 0,
-            rowsPerPage: 15,
-        }
 
         this.handleChangePage = this.handleChangePage.bind(this);
         this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
@@ -21,8 +16,9 @@ export default class MatchHistory extends Component {
      * @param {*} event 
      * @param {*} page 
      */
-    handleChangePage(event, page) {
-        this.setState({ page });
+    async handleChangePage(event, page) {
+        console.log(event);
+        await this.props.changePage(page);
       };
     
       /**
@@ -39,12 +35,7 @@ export default class MatchHistory extends Component {
         const styleInfo = {color: textColor}
         const styleHeader = {color: textColor, fontWeight: "bold", backgroundColor: "#6d530b"};
         const stylePagination = {color: textColor, backgroundColor: "#1e2a32"};
-
-        // Range of rows to be displayed
-        const startRowCount = this.state.page 
-            * this.state.rowsPerPage;
-        const endRowCount =  this.state.page * this.state.rowsPerPage + this.state.rowsPerPage; 
-
+        
         return(
             <TableContainer >
                 <Typography variant="h5" style={styleHeader}>Match History</Typography>
@@ -60,8 +51,7 @@ export default class MatchHistory extends Component {
                         </TableRow>
                 </TableHead>
                 <TableBody size="string">
-                    {this.props.matches.slice(startRowCount, endRowCount)
-                        .map((column) => (
+                    {this.props.matches.map((column) => (
                         <TableRow key = {column.match_id}
                             style = {column.winner_id === this.props.id ? 
                                 {backgroundColor:"darkGreen"} 
@@ -85,11 +75,9 @@ export default class MatchHistory extends Component {
                 </TableBody>
             </Table>
             <TablePagination
-                rowsPerPageOptions={[15, 50, 100]}
+                rowsPerPageOptions={[15,]}
                 component="div"
-                count={this.props.matches.length}
-                rowsPerPage={this.state.rowsPerPage}
-                page={this.state.page}
+                page={this.props.page}
                 onPageChange={this.handleChangePage}
                 onRowsPerPageChange={this.handleChangeRowsPerPage}
                 style={stylePagination}
