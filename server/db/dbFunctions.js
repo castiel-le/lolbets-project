@@ -1,4 +1,5 @@
 const models = require("./sqlmodels");
+const { Op } = require("sequelize");
 
 //Function to get all badges
 async function getBadges() {
@@ -38,14 +39,55 @@ async function getTeamByName(name) {
 //Function to get all matches
 async function getMatches() {
     const matches = await models.Match.findAll();
-    for (let i =0; i < matches.length; i++){
-        matches[i].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
-        let team1string = (await getTeamById(matches[i].dataValues.team1_id))[0];
-        let team2string = (await getTeamById(matches[i].dataValues.team2_id))[0];
-        matches[i].dataValues.team1_id = team1string;
-        matches[i].dataValues.team2_id = team2string;
-    }
-    return matches;
+    return swapTeamData(matches);
+}
+
+//Function to get match history from a specific team
+async function getMatchHistory(id, pageNum) {
+    const matches = await models.Match.findAll({
+        offset: 15*(pageNum-1),
+        limit: 15,
+        where: {
+            [Op.or]: [
+                { team1_id: id },
+                { team2_id: id }
+            ]
+        }
+    });
+    return swapTeamData(matches);
+}
+
+//Function to get all matches after a certain date
+async function getMatchesAfter(date, pageNum) {
+    const matches = await models.Match.findAll({
+        offset: 15*(pageNum-1),
+        limit: 15,
+        where: {
+            match_start_time: {
+                [Op.gte]: date.valueOf()
+            }
+        },
+        order: [
+            ['match_start_time', 'DESC']
+        ]
+    });
+    return swapTeamData(matches);
+}
+
+//Function to get all matches between two dates
+async function getMatchesBetween(afterthis, beforethis) {
+    const matches = await models.Match.findAll({
+        where: {
+            match_start_time: {
+                [Op.gte]: afterthis,
+                [Op.lte]: beforethis
+            }
+        },
+        order: [
+            ['match_start_time', 'DESC']
+        ]
+    });
+    return swapTeamData(matches);
 }
 
 //Function to get all users
@@ -66,4 +108,16 @@ async function getUserById(id) {
     return user;
 }
 
-module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById };
+//Helper function to put team data inside of matches
+async function swapTeamData(matches){
+    for (let i =0; i < matches.length; i++){
+        matches[i].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
+        let team1string = (await getTeamById(matches[i].dataValues.team1_id))[0];
+        let team2string = (await getTeamById(matches[i].dataValues.team2_id))[0];
+        matches[i].dataValues.team1_id = team1string;
+        matches[i].dataValues.team2_id = team2string;
+    }
+    return matches;
+}
+
+module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween};

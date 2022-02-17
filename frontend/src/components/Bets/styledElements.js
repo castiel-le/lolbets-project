@@ -14,7 +14,8 @@ export const HorizontalDivider = styled(Divider)({
   orientation: 'horizontal',
   borderColor: '#f9f9f9',
   height: '5px', 
-  margin: 'inherit auto'
+  marginLeft: 'auto',
+  marginRight: 'auto'
 });
 
 export const DateText = styled(Typography)({
