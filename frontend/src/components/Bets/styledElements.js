@@ -162,6 +162,25 @@ export function BetButton(props) {
   }
 }
 
+export function BetComparisonBar(props) {
+  
+  return (
+    <FlexBoxRow width='100%' >
+      <FlexBoxRow backgroundColor='red' width={props.team1Percent + '%'} >
+        <Typography >
+          {props.team1Percent}
+        </Typography>
+      </FlexBoxRow>
+      <FlexBoxRow backgroundColor='blue' flexGrow={1} >
+        <Typography >
+          {100 - props.team1Percent}
+        </Typography>
+      </FlexBoxRow>
+    </FlexBoxRow>
+  );
+
+}
+
 export function Item(props) {
   const { sx, ...other } = props;
   return (
