@@ -28,11 +28,20 @@ class Team extends Component {
         this.changePage = this.changePage.bind(this);
     }
 
+    async changePage(page) {
+        try {
+            const newMatches =  await this.getMatches(page)
+            this.setState({page: page, matches:newMatches})
+        } catch (e){
+            console.log("no matches for page " + page);
+        }
+    }
+
     /**
      * Fetches match data on specified page from API.
      * @param {Number} page - page number
      */
-    async changePage(page) {
+    async getMatches(page) {
         // urls to fetch
         const urlHistory = "/api/teams/history/";
         try {
@@ -40,7 +49,7 @@ class Team extends Component {
             const responseMatches = await fetch(urlHistory + this.props.params.id + "?page=" + page);
 
             if (responseMatches.ok) {
-                this.setState({ matches: await responseMatches.json() });
+                return await responseMatches.json();
             }
         } catch (e) {
             console.log(e);
@@ -50,14 +59,12 @@ class Team extends Component {
     async componentDidMount() {
         // urls to fetch
         const urlTeam = "/api/teams/";
-        const urlHistory = "/api/teams/history/";
         try {
             // fetch data
             const responseTeam = await fetch(urlTeam + this.props.params.id);
-            const responseMatches = await fetch(urlHistory + this.props.params.id + "?page=1");
 
-            if (responseMatches.ok && responseTeam.ok) {
-                this.setState({ team: await responseTeam.json(), matches: await responseMatches.json() });
+            if (responseTeam.ok) {
+                this.setState({ team: await responseTeam.json(), matches: await this.getMatches(1) });
             }
         } catch (e) {
             console.log(e);

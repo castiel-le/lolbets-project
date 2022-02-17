@@ -17,7 +17,7 @@ export default class MatchHistory extends Component {
      * @param {*} page 
      */
     async handleChangePage(event, page) {
-        console.log(event);
+        console.log(page);
         await this.props.changePage(page);
       };
     
@@ -76,7 +76,9 @@ export default class MatchHistory extends Component {
             </Table>
             <TablePagination
                 rowsPerPageOptions={[15,]}
+                rowsPerPage={15}
                 component="div"
+                count={200}
                 page={this.props.page}
                 onPageChange={this.handleChangePage}
                 onRowsPerPageChange={this.handleChangeRowsPerPage}
