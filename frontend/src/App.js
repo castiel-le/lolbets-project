@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import logo from './logo.svg';
-=======
 import logo from './testlogo.svg';
->>>>>>> bc40c4f (create landing page)
 import './App.css';
 
 import SignInForm from './components/Login/SignInForm'
