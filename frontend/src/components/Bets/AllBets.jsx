@@ -16,8 +16,8 @@ export default class AllBets extends Component {
     this.state = {
       betOpen: false,
       selectedBet: null,
-      upcomingMatches: null,
-      upcomingMatchesByDate: null
+      upcomingMatches: [],
+      upcomingMatchesByDate: []
     };
     this.toggleOpenBet = this.toggleOpenBet.bind(this);
     this.selectBet = this.selectBet.bind(this);
@@ -25,15 +25,17 @@ export default class AllBets extends Component {
   }
 
   componentDidMount() {
-    this.fetchAllUpcomingMatches();
+    // fetch all matches starting from today
+    this.fetchAllUpcomingMatches(new Date().setHours(0, 0, 0, 0));
   }
 
   /**
      * Fetches all the upcoming matches in the database
      * @returns returns if there was an error in the fetch
      */
-  async fetchAllUpcomingMatches() {
-    let response = await fetch("/api/matches");
+  async fetchAllUpcomingMatches(beginningDate) {
+    let in3Days = beginningDate + 3 * 86400 * 1000; 
+    let response = await fetch(`/api/matches?afterthis=${beginningDate - 10 * 86400 * 1000}&beforethis=${in3Days}`);
     if (!response.ok) {
       console.error("Error fetching matches: " + response.status);
       // TODO: add other error logic
@@ -41,8 +43,8 @@ export default class AllBets extends Component {
     }
     let matches = await response.json();
     this.setState({
-      upcomingMatches: matches,
-      upcomingMatchesByDate: sortMatchesByDate(matches)
+      upcomingMatches: [...this.state.upcomingMatches, ...matches],
+      upcomingMatchesByDate: [...this.state.upcomingMatchesByDate, ...sortMatchesByDate(matches)]
     });
   }
 
@@ -88,11 +90,11 @@ export default class AllBets extends Component {
             let matchDate = new Date(date[0].match_start_time);
             let formattedDate = getFormattedDate(matchDate);
             return (
-              <Box key={date} paddingTop='24px'>
-                <DateText width='85%'>
+              <Box key={date} paddingTop='24px' >
+                <DateText width='85%' mx='auto' >
                   {formattedDate}
                 </DateText >
-                <HorizontalDivider width='85%' flexItem />
+                <HorizontalDivider width='85%' />
                 <List >
                   {date.map(match => {
                     return (
