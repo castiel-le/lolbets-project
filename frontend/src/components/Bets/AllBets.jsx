@@ -98,6 +98,7 @@ export default class AllBets extends Component {
                     return (
                       <ListItem key={match.match_id}>
                         <BetBox
+                          date={matchDate}
                           time={getGameStartTimeObject(new Date(match.match_start_time))}
                           team1={match.team1_id}
                           team2={match.team2_id}

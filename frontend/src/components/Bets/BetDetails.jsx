@@ -6,16 +6,19 @@ import { BetComparisonBar, FlexBoxColumn, FlexBoxRow } from './styledElements';
 export default class BetDetails extends Component {
 
   render() {
-    console.log(this.props.date);
+    const matchDate = new Date(this.props.date);
 
     return (
 
       <Fragment>
         <FlexBoxRow width='100%'>
           <FlexBoxColumn alignItems='center' width='15%'>
-            <Countdown date={Date.now() + new Date(this.props.date.get)} />
+            <Countdown date={Date.now() + matchDate.getTime()} sx={{backgroundColor: 'red'}} />
             <Typography >
-            Close Time: 123
+            Close Time
+            </Typography>
+            <Typography >
+              {matchDate.toLocaleString()}
             </Typography>
           </FlexBoxColumn>
           
