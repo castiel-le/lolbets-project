@@ -79,7 +79,7 @@ class Team extends Component {
         render() {
             return (
                 <ThemeProvider theme={theme}>
-                    <Box display="flex" flexDirection="row" columnGap={2} style={{ backgroundColor: "#1e2021" }}>
+                    <Box display="flex" flexDirection="row" columnGap={2}>
                         <TeamSection team={this.state.team} />
                         <MatchHistory matches={this.state.matches} id={this.state.team.team_id}
                             changePage={this.changePage}
