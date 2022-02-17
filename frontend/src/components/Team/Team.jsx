@@ -13,17 +13,25 @@ const theme = createTheme();
 class Team extends Component {
     constructor(props) {
         super(props);
-        this.state = {team: {
-            team_id: null,
-            team_name: "",
-            logo: "",
-            abbreviation: "",
-            wins: null,
-            losses: null,
-        }, matches: []};
-        
+        this.state = {
+            team: {
+                team_id: null,
+                team_name: "",
+                logo: "",
+                abbreviation: "",
+                wins: null,
+                losses: null,
+            },
+            matches: [],
+            page: 1,
+        };
+        this.changePage = this.changePage.bind(this);
     }
-    async componentDidMount(){
+    async changePage(page) {
+        this.setState({page: page});
+    }
+
+    async componentDidMount() {
         // urls to fetch
         const urlTeam = "/api/teams/";
         const urlHistory = "/api/teams/history/";
@@ -32,19 +40,21 @@ class Team extends Component {
             const responseTeam = await fetch(urlTeam + this.props.params.id);
             const responseMatches = await fetch(urlHistory + this.props.params.id);
 
-            if(responseMatches.ok && responseTeam.ok) {
-                this.setState({team: await responseTeam.json(), matches: await responseMatches.json()});
+            if (responseMatches.ok && responseTeam.ok) {
+                this.setState({ team: await responseTeam.json(), matches: await responseMatches.json() });
             }
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
     render() {
-        return(
+        return (
             <ThemeProvider theme={theme}>
-                <Box display="flex" flexDirection="row" columnGap={2} style={{backgroundColor: "#1e2021"}}>
+                <Box display="flex" flexDirection="row" columnGap={2} style={{ backgroundColor: "#1e2021" }}>
                     <TeamSection team={this.state.team} />
-                    <MatchHistory matches={this.state.matches} id={this.state.team.team_id}/>
+                    <MatchHistory matches={this.state.matches} id={this.state.team.team_id} 
+                        changePage={this.changePage}
+                        page={this.state.page}/>
                 </Box>
             </ThemeProvider>
         );
