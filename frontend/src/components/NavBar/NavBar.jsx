@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // Imports from modules
 import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -21,7 +22,7 @@ import { Login, Menu as MenuIcon } from '@mui/icons-material';
 // Custom components imports
 import SideDrawer from "./SideDrawer"
 import './NavBar.css';
-import { theme } from './theme';
+import { theme } from './navbartheme';
 
 import { pages, pageLinks } from '../../config/pages'
 import { settings, settingLink } from '../../config/userDropDown'
@@ -38,7 +39,7 @@ const Hamburger = (props) => {
                     onClick={props.toggleDrawer}
                     color="inherit"
                 >
-                <MenuIcon fontSize='large'/>
+                    <MenuIcon fontSize='large'/>
                 </IconButton>
             </Box>
         </ThemeProvider>
@@ -51,7 +52,7 @@ const UserAvatar = (props) => {
             <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                     <IconButton onClick={props.handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" sx={{height: 32, width: 32,}}/>
+                        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" sx={{height: 32, width: 32}}/>
                     </IconButton>
                 </Tooltip>
                 <Menu
@@ -71,13 +72,13 @@ const UserAvatar = (props) => {
                     onClose={props.handleCloseUserMenu}
                     color='inherit'
                 >
-                    {settings.map((setting, index) => (
-                        <NavLink to={settingLink[index]} >
-                            <MenuItem key={setting} onClick={props.handleCloseUserMenu}>
+                    {settings.map((setting, index) => 
+                        <NavLink key={setting} to={settingLink[index]} >
+                            <MenuItem onClick={props.handleCloseUserMenu}>
                                 <Typography textAlign="center">{setting}</Typography>
                             </MenuItem>
                         </NavLink>
-                    ))}
+                    )}
                 </Menu>
             </Box>
         </ThemeProvider>
@@ -153,21 +154,22 @@ export default class NavBar extends Component {
                             </Typography>
 
                             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                                    {pages.map((page, index) => (
+                                {pages.map((page, index) => 
                                     <Button
                                         key={page}
                                         onClick={this.handleCloseNavMenu}
-                                        sx={{ py: 2, color: 'inherit', display: 'block', px: '2',
+                                        sx={{
+                                            py: 2, color: 'inherit', display: 'block', px: '2',
                                             '&:hover': {
                                                 backgroundColor: "rgba(128,128,128,.3);",
-                                            }}
-                                        }
+                                            }
+                                        }}
                                     >
-                                        <NavLink to={pageLinks[index]} style={{textDecoration: "none", color: "inherit"}}>
+                                        <NavLink to={pageLinks[index]} style={{ textDecoration: "none", color: "inherit" }}>
                                             {page}
                                         </NavLink>
                                     </Button>
-                                    ))}
+                                )}
                             </Box>
 
                             {this.props.user
@@ -195,15 +197,15 @@ export default class NavBar extends Component {
                                     </NavLink>
                                     <NavLink to={"/login"} style={{all: "inherit", cursor: "pointer"}}>
                                         <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        sx={{
-                                            color: "#0f1519", 
-                                            display: {xs: "inherit", md: "none"},
-                                            padding: "3px",
-                                            '&:hover': {
-                                                backgroundColor: "rgb(0, 200, 200)",
-                                            }}}
+                                            variant="contained"
+                                            color="secondary"
+                                            sx={{
+                                                color: "#0f1519", 
+                                                display: {xs: "inherit", md: "none"},
+                                                padding: "3px",
+                                                '&:hover': {
+                                                    backgroundColor: "rgb(0, 200, 200)",
+                                                }}}
                                         >
                                             <Login />
                                         </Button>
