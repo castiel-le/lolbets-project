@@ -28,11 +28,15 @@ class Team extends Component {
         this.changePage = this.changePage.bind(this);
     }
 
+    /**
+     * Changes the page state, and the matches based on the new page.
+     * @param {Number} page page number
+     */
     async changePage(page) {
         try {
-            const newMatches =  await this.getMatches(page)
-            this.setState({page: page, matches:newMatches})
-        } catch (e){
+            const newMatches = await this.getMatches(page)
+            this.setState({ page: page, matches: newMatches })
+        } catch (e) {
             console.log("no matches for page " + page);
         }
     }
@@ -44,43 +48,45 @@ class Team extends Component {
     async getMatches(page) {
         // urls to fetch
         const urlHistory = "/api/teams/history/";
-        try {
-            // fetch data
-            const responseMatches = await fetch(urlHistory + this.props.params.id + "?page=" + page);
 
-            if (responseMatches.ok) {
-                return await responseMatches.json();
-            }
-        } catch (e) {
-            console.log(e);
+        // fetch data
+        const responseMatches = await fetch(urlHistory + this.props.params.id + "?page=" + page);
+
+        if (responseMatches.ok) {
+            return await responseMatches.json();
+        } else {
+            throw new Error("No match found for page " + page);
         }
     }
 
+    /**
+     * Fetches team information and first page of match history.
+     */
     async componentDidMount() {
-        // urls to fetch
-        const urlTeam = "/api/teams/";
-        try {
-            // fetch data
-            const responseTeam = await fetch(urlTeam + this.props.params.id);
+            // urls to fetch
+            const urlTeam = "/api/teams/";
+            try {
+                // fetch data
+                const responseTeam = await fetch(urlTeam + this.props.params.id);
 
-            if (responseTeam.ok) {
-                this.setState({ team: await responseTeam.json(), matches: await this.getMatches(1) });
+                if (responseTeam.ok) {
+                    this.setState({ team: await responseTeam.json(), matches: await this.getMatches(1) });
+                }
+            } catch (e) {
+                console.log(e);
             }
-        } catch (e) {
-            console.log(e);
+        }
+        render() {
+            return (
+                <ThemeProvider theme={theme}>
+                    <Box display="flex" flexDirection="row" columnGap={2} style={{ backgroundColor: "#1e2021" }}>
+                        <TeamSection team={this.state.team} />
+                        <MatchHistory matches={this.state.matches} id={this.state.team.team_id}
+                            changePage={this.changePage}
+                            page={this.state.page} />
+                    </Box>
+                </ThemeProvider>
+            );
         }
     }
-    render() {
-        return (
-            <ThemeProvider theme={theme}>
-                <Box display="flex" flexDirection="row" columnGap={2} style={{ backgroundColor: "#1e2021" }}>
-                    <TeamSection team={this.state.team} />
-                    <MatchHistory matches={this.state.matches} id={this.state.team.team_id} 
-                        changePage={this.changePage}
-                        page={this.state.page}/>
-                </Box>
-            </ThemeProvider>
-        );
-    }
-}
 export default withRouter(Team);
