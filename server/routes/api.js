@@ -128,6 +128,15 @@ router.get("/user/:id", async (req, res) => {
     }
 })
 
+router.get("/matches/total/:id", async (req, res) => {
+    try {
+        res.json(await dbFetch.getWins(req.params.id));
+    }
+    catch(e){
+        res.sendStatus(404);
+    }
+})
+
 router.get("/teams/history/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getMatchHistory(req.params.id, req.query.page));

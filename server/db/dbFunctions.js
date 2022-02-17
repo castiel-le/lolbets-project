@@ -93,6 +93,29 @@ async function getMatchesBetween(afterthis, beforethis) {
     return swapTeamData(matches);
 }
 
+//Function to get total number of matches played for a specific team
+async function getTotalMatches(id){
+    const numOfMatches = await models.Match.count({
+        where: {
+            [Op.or]: [
+                { team1_id: id },
+                { team2_id: id }
+            ]
+        }
+    })
+    return numOfMatches;
+}
+
+//Function to get total number of wins
+async function getWins(id){
+    const wins = await models.Match.count({
+        where: {
+            winner_id: id
+        }
+    });
+    return wins;
+}
+
 //Function to get all users
 async function getUsers() {
     const users = await models.User.findAll();
@@ -111,6 +134,7 @@ async function getUserById(id) {
     return user;
 }
 
+
 //Helper function to put team data inside of matches
 async function swapTeamData(matches){
     for (let i =0; i < matches.length; i++){
@@ -123,4 +147,4 @@ async function swapTeamData(matches){
     return matches;
 }
 
-module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween};
+module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins};
