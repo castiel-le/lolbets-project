@@ -1,6 +1,6 @@
-const days_week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-const month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const daysWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+const monthNamesShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 /**
  * Formats the date in the way desired for the bets page
@@ -8,8 +8,8 @@ const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug
  * @returns the date formatted as follows: Monday - February 13
  */
 export function getFormattedDate(epoch) {
-    let date = new Date(epoch);
-    return `${days_week[date.getDay()]} - ${month_names[date.getMonth()]} ${date.getDate()}`
+  let date = new Date(epoch);
+  return `${daysWeek[date.getDay()]} - ${monthNames[date.getMonth()]} ${date.getDate()}`
 }
 
 /**
@@ -18,11 +18,13 @@ export function getFormattedDate(epoch) {
  * @returns 
  */
 export function getGameStartTimeObject(date) {
-    return {
-        'hour': (date.getHours() % 12).toString(),
-        'min': date.getMinutes() < 10 ? '0' + date.getMinutes().toString() : date.getMinutes().toString(),
-        'period': date.getHours() < 12 ? 'AM' : 'PM'
-    };
+  return {
+    'hour': (date.getHours() % 12).toString(),
+    'min': date.getMinutes() < 10 
+      ? '0' + date.getMinutes().toString() 
+      : date.getMinutes().toString(),
+    'period': date.getHours() < 12 ? 'AM' : 'PM'
+  };
 }
 
 /**
@@ -31,13 +33,13 @@ export function getGameStartTimeObject(date) {
  * @returns JSON of team details
  */
 export function getTeamObject(team) {
-    return {
-        name: team.team_name,
-        image: team.logo,
-        abbreviation: team.abbreviation,
-        wins: team.wins,
-        losses: team.losses
-    }
+  return {
+    name: team.team_name,
+    image: team.logo,
+    abbreviation: team.abbreviation,
+    wins: team.wins,
+    losses: team.losses
+  }
 }
 
 /**
@@ -46,12 +48,12 @@ export function getTeamObject(team) {
  * @returns JSON promise
  */
 export async function fetchTeamInfo(teamID) {
-    const response = await fetch(`/api/teams/${teamID}`);
-    if (!response.ok) {
-        throw new Error("Error retrieving data");
-    }
-    let team = await response.json();
-    return team;
+  const response = await fetch(`/api/teams/${teamID}`);
+  if (!response.ok) {
+    throw new Error("Error retrieving data");
+  }
+  let team = await response.json();
+  return team;
 }
 
 /**
@@ -60,19 +62,22 @@ export async function fetchTeamInfo(teamID) {
  * @returns array of matches by date
  */
 export function sortMatchesByDate(matches) {
-    let matchesCurrentDate = [];
-    let allDates = [];
+  let matchesCurrentDate = [];
+  let allDates = [];
 
-    matches.forEach(element => {
-        if (matchesCurrentDate.length === 0 || new Date(matchesCurrentDate[0].match_start_time).getDate() === new Date(element.match_start_time).getDate()) {
-            matchesCurrentDate.push(element);
-        } else {
-            allDates.push(matchesCurrentDate);
-            matchesCurrentDate = [];
-        }
-    });
-    if (matchesCurrentDate.length > 0) {
-        allDates.push(matchesCurrentDate);
+  matches.forEach(element => {
+    if (matchesCurrentDate.length === 0 
+        || new Date(matchesCurrentDate[0].match_start_time).getDate() 
+        === new Date(element.match_start_time).getDate()
+    ) {
+      matchesCurrentDate.push(element);
+    } else {
+      allDates.push(matchesCurrentDate);
+      matchesCurrentDate = [];
     }
-    return allDates;
+  });
+  if (matchesCurrentDate.length > 0) {
+    allDates.push(matchesCurrentDate);
+  }
+  return allDates;
 }
