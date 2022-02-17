@@ -52,7 +52,10 @@ async function getMatchHistory(id, pageNum) {
                 { team1_id: id },
                 { team2_id: id }
             ]
-        }
+        },
+        order: [
+            ['match_start_time', 'DESC']
+        ]
     });
     return swapTeamData(matches);
 }
