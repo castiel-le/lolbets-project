@@ -1,4 +1,5 @@
 import { Component } from "react";
+import {Link} from "react-router-dom";
 import { Typography, CardMedia, Card, CardContent } from "@mui/material";
 
 export default class TeamCard extends Component {
@@ -8,7 +9,7 @@ export default class TeamCard extends Component {
 
         const teamPage = "/teams/" + this.props.team.team_id; //team's team page url
         return (
-            <a href={teamPage}>
+            <Link to={teamPage}>
                 <Card sx={stylingCard}>
                     <CardMedia
                         component="img"
@@ -24,7 +25,7 @@ export default class TeamCard extends Component {
                         </Typography>
                     </CardContent>
                 </Card>
-            </a>
+            </Link>
         );
     }
 }
