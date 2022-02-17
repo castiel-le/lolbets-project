@@ -43,8 +43,10 @@ async function getMatches() {
 }
 
 //Function to get match history from a specific team
-async function getMatchHistory(id) {
+async function getMatchHistory(id, pageNum) {
     const matches = await models.Match.findAll({
+        offset: 15*(pageNum-1),
+        limit: 15,
         where: {
             [Op.or]: [
                 { team1_id: id },
@@ -52,8 +54,40 @@ async function getMatchHistory(id) {
             ]
         }
     });
-    
     return swapTeamData(matches);
+}
+
+//Function to get all matches after a certain date
+async function getMatchesAfter(date, pageNum) {
+    const matches = await models.Match.findAll({
+        offset: 15*(pageNum-1),
+        limit: 15,
+        where: {
+            match_start_time: {
+                [Op.gte]: date.valueOf()
+            }
+        },
+        order: [
+            ['match_start_time', 'DESC']
+        ]
+    });
+    return swapTeamData(matches);
+}
+
+//Function to get all matches between two dates
+async function getMatchesBetween(afterthis, beforethis) {
+    const matches = await models.Match.findAll({
+        where: {
+            [Op.and]: {
+                [Op.gte]: afterthis.valueOf(),
+                [Op.lte]: beforethis.valueOf()
+            }
+        },
+        order: [
+            ['match_start_time', 'DESC']
+        ]
+    })
+    return matches;
 }
 
 //Function to get all users
@@ -86,4 +120,4 @@ async function swapTeamData(matches){
     return matches;
 }
 
-module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory};
+module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween};

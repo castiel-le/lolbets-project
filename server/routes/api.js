@@ -56,17 +56,17 @@ router.post("/signup", async (req, res) => {
 
 //Route to get match information
 router.get("/matches", async (req, res) => {
-    /*res.json({
-        "match_id": 9,
-        "team1_id": 181,
-        "team2_id": 183,
-        "winner_id": 183,
-        "match_start_time": 1644037200,
-        "in_progress": false,
-        "game_length": 2932,
-        "pandascore_id": 620600
-        });*/
-    res.json(await dbFetch.getMatches());
+    if (req.query.after){
+        //console.log(req.query.after);
+        //res.json({"date": parseInt(req.query.after)});
+        res.json(await dbFetch.getMatchesAfter(parseInt(req.query.after), parseInt(req.query.page)));
+    }
+    else if (req.query.afterthis && req.query.beforethis){
+        res.json(await dbFetch.getMatchesBetween(parseInt(req.query.afterthis), parseInt(req.query.beforethis)));
+    }
+    else {
+        res.json(await dbFetch.getMatches());
+    }
 });
 
 
@@ -96,7 +96,12 @@ router.get("/user/:id", async (req, res) => {
 })
 
 router.get("/teams/history/:id", async (req, res) => {
-    res.json(await dbFetch.getMatchHistory(req.params.id));
+    try {
+        res.json(await dbFetch.getMatchHistory(req.params.id, req.query.page));
+    }
+    catch(e){
+        res.sendStatus(404);
+    }
 })
 module.exports = [
     router,
