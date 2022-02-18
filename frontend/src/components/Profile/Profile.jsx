@@ -9,7 +9,7 @@ export default class Profile extends Component {
   render() {
     return (
       <Fragment >
-        <FlexBoxColumn width='82%' mx='auto' backgroundColor='#223039'>
+        <FlexBoxColumn width='82%' mx='auto' backgroundColor='#1E2A32'>
           <Paper variant="outlined">
             <img 
               src="https://img.rankedboost.com/wp-content/uploads/2016/06/League-of-Legends-Profile-Banner-Trim-Season-Rewards.png" 
@@ -50,7 +50,7 @@ export default class Profile extends Component {
             <HorizontalDivider width='100%' />
           </FlexBoxColumn>
           <FlexBoxRow justifyContent={'center'} >
-            <FlexBoxColumn marginRight={32}>
+            <FlexBoxColumn width='45%'>
               <Typography fontFamily={'Lemon=Milk-Light'} marginBottom='16px' color='#f9f9f9'>
                     Account Age: 10 days
               </Typography>
@@ -58,7 +58,8 @@ export default class Profile extends Component {
                     Overall Rank: 1001
               </Typography>
             </FlexBoxColumn>
-            <FlexBoxColumn >
+            <FlexBoxRow width='10%' />
+            <FlexBoxColumn width='45%'>
               <Typography fontFamily={'Lemon=Milk-Light'} marginBottom='16px' color='#f9f9f9'>
                     Bets Placed: 12
               </Typography>
