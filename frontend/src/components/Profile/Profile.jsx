@@ -1,4 +1,4 @@
-import { Avatar, ButtonGroup, Paper, Button, Typography, TabPanelUnstyled, Collapse } from "@mui/material";
+import { Avatar, ButtonGroup, Paper, Button, Typography, TabPanelUnstyled, Collapse, Tooltip } from "@mui/material";
 import { Component, Fragment } from "react";
 import { FlexBoxColumn, FlexBoxRow, HorizontalDivider } from "../Bets/styledElements";
 import AddReactionIcon from '@mui/icons-material/AddReaction';
@@ -17,7 +17,7 @@ export default class Profile extends Component {
             />
           </Paper>
           <FlexBoxRow height='128px'>
-            <FlexBoxRow width='50%' my="24px" marginLeft='24px' sx={{borderColor: '#f9f9f9', borderWidth: '5px'}}>
+            <FlexBoxRow my="24px" marginLeft='24px' sx={{borderColor: '#f9f9f9', borderWidth: '5px', display: {xs: 'none', md: 'inherit'}, width: {xs: '10%', md: '50%'}}}>
               <img src="https://www.unrankedsmurfs.com/storage/YMoeDoxu3dKunABYwywDC05hf11tbWr6NQScWoWS.png" width='72px' height='72px' />
               <img src="https://www.unrankedsmurfs.com/storage/YMoeDoxu3dKunABYwywDC05hf11tbWr6NQScWoWS.png" width='72px' height='72px' />
               <img src="https://www.unrankedsmurfs.com/storage/YMoeDoxu3dKunABYwywDC05hf11tbWr6NQScWoWS.png" width='72px' height='72px' />
@@ -26,19 +26,26 @@ export default class Profile extends Component {
             </FlexBoxRow>
             <Avatar 
               src="https://images.gnwcdn.com/2021/articles/2021-11-04-22-11/league-of-legends-jinx-joins-fortnite-ahead-of-netflixs-animated-tv-series-1636063903187.jpg/EG11/thumbnail/732x412/format/jpg/quality/50" 
-              sx={{width: '256px', height: '256px', mx: 'auto', transform: 'translateY(-128px)'}}
+              sx={{width: '256px', height: '256px', mx: 'auto', transform: 'translate(1px, -128px)'}}
             />
-            <FlexBoxRow width='50%' my="auto" marginRight='24px' sx={{justifyContent:'flex-end'}}>
-              <ButtonGroup sx={{height: '36px', }}>
-                <Button variant='contained' startIcon={<BookmarkAddIcon />} sx={{backgroundColor: '#c79a43'}}>
+            <FlexBoxRow my="auto" marginRight='24px' sx={{justifyContent:'flex-end', width: {xs: '10%', md: '50%'}}}>
+              <ButtonGroup sx={{height: '36px' }}>
+                
+                <Button variant='contained' startIcon={<BookmarkAddIcon />} sx={{backgroundColor: '#c79a43', display: {xs: 'none', md: 'inherit'}}}>
                   <Typography fontFamily='Lemon-Milk-Light' >
                     Bookmark
                   </Typography>
                 </Button>
-                <Button variant='contained' startIcon={<AddReactionIcon />} sx={{backgroundColor: 'rgb(0,100,100)', ':hover': {backgroundColor: 'rgb(0,200,200)'}}}>
+                <Button variant='contained' sx={{backgroundColor: '#c79a43', display: {xs: 'inherit', md: 'none'}}}>
+                  <BookmarkAddIcon />
+                </Button>
+                <Button variant='contained' startIcon={<AddReactionIcon />} sx={{backgroundColor: 'rgb(0,100,100)', ':hover': {backgroundColor: 'rgb(0,200,200)'}, display: {xs: 'none', md: 'inherit'}}}>
                   <Typography fontFamily='Lemon-Milk-Light' >
                     Add Friend
                   </Typography>
+                </Button>
+                <Button variant='contained' sx={{backgroundColor: 'rgb(0,100,100)', display: {xs: 'inherit', md: 'none'}}}>
+                  <AddReactionIcon />
                 </Button>
               </ButtonGroup>
             </FlexBoxRow>
