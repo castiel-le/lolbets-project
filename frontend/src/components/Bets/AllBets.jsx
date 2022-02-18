@@ -1,10 +1,10 @@
 import { Box } from '@mui/system';
-import { Component } from 'react';
+import { Component, Fragment } from 'react';
 
 import { getFormattedDate, getGameStartTimeObject, sortMatchesByDate } from './helperFunctions';
 import BetBox from './BetBox'
 import PlaceBetPopup from './PlaceBetPopup';
-import { ListItem, List } from '@mui/material';
+import { ListItem, List, CircularProgress } from '@mui/material';
 
 import './BetBox.css'
 import { DateText, HorizontalDivider } from './styledElements';
@@ -14,6 +14,7 @@ export default class AllBets extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       betOpen: false,
       selectedBet: null,
       upcomingMatches: [],
@@ -43,6 +44,7 @@ export default class AllBets extends Component {
     }
     let matches = await response.json();
     this.setState({
+      loading: false,
       upcomingMatches: [...this.state.upcomingMatches, ...matches],
       upcomingMatchesByDate: [...this.state.upcomingMatchesByDate, ...sortMatchesByDate(matches)]
     });
@@ -80,8 +82,8 @@ export default class AllBets extends Component {
 
   render() {
     return (
-      <div style={{ backgroundColor: '#0f1519', height: '100%' }}>
-        {this.state.upcomingMatchesByDate
+      <Fragment >
+        {!this.state.loading
 
         // if upcoming matches are set, render this
           ?
@@ -116,7 +118,16 @@ export default class AllBets extends Component {
 
 
         // if the upcoming matches are not set do not display anything
-          : null
+          : 
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            height:'90vh', 
+            my: 'auto', 
+            alignItems: 'center'}} 
+          >
+            <CircularProgress />
+          </Box>
         }
         {/*this.state.betOpen
                 ? <PlaceBetPopup 
@@ -126,8 +137,7 @@ export default class AllBets extends Component {
                 />
                 : null
                 */}
-
-      </div>
+      </Fragment>
     );
   }
 }
