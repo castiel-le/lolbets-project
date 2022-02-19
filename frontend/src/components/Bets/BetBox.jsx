@@ -1,9 +1,10 @@
 import { Component, Fragment } from 'react';
 
-import { Box, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Box, AccordionDetails, AccordionSummary } from '@mui/material';
 import { getTeamObject, fetchTeamInfo } from './helperFunctions';
-import { FlexBoxRow, BetButton, BetAccordion, Item, TimeBox, TeamBox } from './styledElements';
+import { BetButton, BetAccordion, Item, TimeBox, TeamBox } from './styledElements';
 import BetDetails from './BetDetails';
+import { FlexBoxRow, TypographyLight } from '../customUIComponents';
 
 export default class BetBox extends Component {
 
@@ -62,15 +63,14 @@ export default class BetBox extends Component {
                   <TimeBox time={this.props.time} />
 
                   <TeamBox left={true} team={this.props.team1} />
-                  <Typography
-                    fontFamily={'Lemon-Milk-Light'}
+                  <TypographyLight
                     fontSize='14px'
                     mx='32px'
                     textAlign={'center'}
                     my='auto'
                     sx={{ display: 'flex', width: '2%', justifyContent: 'center' }}>
                     VS
-                  </Typography>
+                  </TypographyLight>
                   <TeamBox left={false} team={this.props.team2} />
 
                   <BetButton expanded={this.state.expanded} selectBet={this.props.selectBet} />

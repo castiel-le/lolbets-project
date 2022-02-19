@@ -4,10 +4,11 @@ import { Component, Fragment } from 'react';
 import { getFormattedDate, getGameStartTimeObject, sortMatchesByDate } from './helperFunctions';
 import BetBox from './BetBox'
 import PlaceBetPopup from './PlaceBetPopup';
-import { ListItem, List, CircularProgress } from '@mui/material';
+import { ListItem, List } from '@mui/material';
 
 import './BetBox.css'
-import { DateText, HorizontalDivider } from './styledElements';
+import { DateText } from './styledElements';
+import { HorizontalDivider, Loading } from '../customUIComponents';
 
 export default class AllBets extends Component {
 
@@ -119,15 +120,7 @@ export default class AllBets extends Component {
 
         // if the upcoming matches are not set do not display anything
           : 
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            height:'90vh', 
-            my: 'auto', 
-            alignItems: 'center'}} 
-          >
-            <CircularProgress />
-          </Box>
+          <Loading />
         }
         {/*this.state.betOpen
                 ? <PlaceBetPopup 

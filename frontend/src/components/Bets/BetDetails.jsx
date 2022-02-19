@@ -1,7 +1,8 @@
 import { Typography } from '@mui/material';
 import {Component, Fragment} from 'react';
 import Countdown from 'react-countdown';
-import { BetComparisonBar, FlexBoxColumn, FlexBoxRow } from './styledElements';
+import { BetComparisonBar } from './styledElements';
+import { FlexBoxRow, FlexBoxColumn } from '../customUIComponents';
 
 export default class BetDetails extends Component {
 

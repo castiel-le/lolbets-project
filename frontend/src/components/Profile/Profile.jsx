@@ -1,8 +1,15 @@
-import { Avatar, ButtonGroup, Paper, Button, Typography, TabPanelUnstyled, Collapse, Tooltip } from "@mui/material";
+import { Avatar, ButtonGroup, Paper, Button } from "@mui/material";
 import { Component, Fragment } from "react";
-import { FlexBoxColumn, FlexBoxRow, HorizontalDivider } from "../Bets/styledElements";
 import AddReactionIcon from '@mui/icons-material/AddReaction';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
+import { 
+  FlexBoxColumn, 
+  FlexBoxRow, 
+  TypographyBold, 
+  TypographyLight, 
+  TypographyMedium, 
+  HorizontalDivider 
+} from "../customUIComponents";
 
 export default class Profile extends Component {
 
@@ -32,17 +39,17 @@ export default class Profile extends Component {
               <ButtonGroup sx={{height: '36px' }}>
                 
                 <Button variant='contained' startIcon={<BookmarkAddIcon />} sx={{backgroundColor: '#c79a43', display: {xs: 'none', md: 'inherit'}}}>
-                  <Typography fontFamily='Lemon-Milk-Light' >
+                  <TypographyLight >
                     Bookmark
-                  </Typography>
+                  </TypographyLight>
                 </Button>
                 <Button variant='contained' sx={{backgroundColor: '#c79a43', display: {xs: 'inherit', md: 'none'}}}>
                   <BookmarkAddIcon />
                 </Button>
                 <Button variant='contained' startIcon={<AddReactionIcon />} sx={{backgroundColor: 'rgb(0,100,100)', ':hover': {backgroundColor: 'rgb(0,200,200)'}, display: {xs: 'none', md: 'inherit'}}}>
-                  <Typography fontFamily='Lemon-Milk-Light' >
+                  <TypographyLight >
                     Add Friend
-                  </Typography>
+                  </TypographyLight>
                 </Button>
                 <Button variant='contained' sx={{backgroundColor: 'rgb(0,100,100)', display: {xs: 'inherit', md: 'none'}}}>
                   <AddReactionIcon />
@@ -51,34 +58,34 @@ export default class Profile extends Component {
             </FlexBoxRow>
           </FlexBoxRow>
           <FlexBoxColumn justifyContent={'center'} my='24px' width={'fit-content'} mx='auto'>
-            <Typography fontFamily={'Lemon-Milk-Bold'} color="#f9f9f9" fontSize={'32px'}>
+            <TypographyBold fontSize='32px'>
                   littlett98
-            </Typography>
+            </TypographyBold>
             <HorizontalDivider width='100%' />
           </FlexBoxColumn>
           <FlexBoxRow justifyContent={'center'} >
             <FlexBoxColumn width='45%'>
-              <Typography fontFamily={'Lemon=Milk-Light'} marginBottom='16px' color='#f9f9f9'>
+              <TypographyLight marginBottom='16px'>
                     Account Age: 10 days
-              </Typography>
-              <Typography fontFamily={'Lemon=Milk-Light'} marginTop='16px' color='#f9f9f9'>
+              </TypographyLight>
+              <TypographyLight marginTop='16px'>
                     Overall Rank: 1001
-              </Typography>
+              </TypographyLight>
             </FlexBoxColumn>
             <FlexBoxRow width='10%' />
             <FlexBoxColumn width='45%'>
-              <Typography fontFamily={'Lemon=Milk-Light'} marginBottom='16px' color='#f9f9f9'>
+              <TypographyLight marginBottom='16px'>
                     Bets Placed: 12
-              </Typography>
-              <Typography fontFamily={'Lemon=Milk-Light'} marginTop='16px' color='#f9f9f9'>
+              </TypographyLight>
+              <TypographyLight marginTop='16px'>
                     Bets Won: 2
-              </Typography>
+              </TypographyLight>
             </FlexBoxColumn>
           </FlexBoxRow>
           <FlexBoxRow justifyContent={'center'} my='16px'>
-            <Typography fontFamily={'Lemon-Milk-Medium'} fontSize='24px' color='#f9f9f9'>
+            <TypographyMedium fontSize='24px'>
                 Bet History
-            </Typography>
+            </TypographyMedium>
           </FlexBoxRow>
           <HorizontalDivider width='100%' />
           <h1>History stuff</h1>
