@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Container, Typography, Grid, CardMedia, Card, CardContent, Button } from "@mui/material";
+import { Container, Typography, Grid } from "@mui/material";
 import TeamCard from "./Card/TeamCard";
 const theme = createTheme();
 
@@ -37,11 +37,11 @@ export default class Teams extends Component {
         <Container>
           <Typography variant="h4" component="h2">All Teams</Typography>
           <Grid container spacing={4}>
-            {this.state.teams.map((team) => (
+            {this.state.teams.map((team) => 
               <Grid item xs={12} sm={6} md={4} key={team.team_id}>
                 <TeamCard team={team} />
               </Grid>
-            ))}
+            )}
             {/* {cards.map((card) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
                 <Card
