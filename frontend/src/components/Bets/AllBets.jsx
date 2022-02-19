@@ -37,7 +37,7 @@ export default class AllBets extends Component {
      */
   async fetchAllUpcomingMatches(beginningDate) {
     let in3Days = beginningDate + 3 * 86400 * 1000; 
-    let response = await fetch(`/api/matches?afterthis=${beginningDate - 10 * 86400 * 1000}&beforethis=${in3Days}`);
+    let response = await fetch(`/api/matches?afterthis=${beginningDate}&beforethis=${in3Days}`);
     if (!response.ok) {
       console.error("Error fetching matches: " + response.status);
       // TODO: add other error logic
