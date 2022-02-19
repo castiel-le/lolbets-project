@@ -8,14 +8,15 @@ import NavBar from "./components/NavBar/NavBar"
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Team from "./components/Team/Team"
 import { Suspense } from 'react'
-import { CircularProgress } from '@mui/material';
+import Profile from './components/Profile/Profile';
+import { Loading } from './components/customUIComponents';
 
 function App() {
   return (
     <div className="App">
       <Router >
         <NavBar user={false} />
-        <Suspense fallback={<CircularProgress />}>
+        <Suspense fallback={<Loading />}>
           <Routes >
             <Route path='/' element={
               <header className="App-header">
@@ -32,9 +33,9 @@ function App() {
             <Route path='/bets/:id' element={<h1> Bet Number </h1>} />
             <Route path='/bets/create' element={<h1> Create Bet </h1>} />
             <Route path='/bets/edit/:id' element={<h1> Edit Bet Number </h1>} />
-            <Route path='/profile' element={<h1> My Profile </h1>} />
-            <Route path='/user/:id' element={<h1> User Number </h1>} />
-            <Route path='/user/:id/history' element={<h1> User Number History </h1>} />
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/user/:id' element={<Profile />} />
+            <Route path='/user/:id/history' element={<Profile />} />
             <Route path='/leaderboard' element={<h1> Leaderboard </h1>} />
             <Route path='/teams' element={<h1> Teams </h1>} />
             <Route path='/teams/:id' element={<Team />} />

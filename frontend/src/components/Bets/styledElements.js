@@ -1,5 +1,6 @@
 import { styled } from '@mui/system';
-import { Box, Button, Accordion, Typography, Avatar, Divider } from '@mui/material';
+import { Box, Button, Accordion, Typography, Avatar} from '@mui/material';
+import { FlexBoxRow, FlexBoxColumn } from '../customUIComponents';
 
 import PropTypes from 'prop-types';
 
@@ -9,15 +10,6 @@ export const BetAccordion = styled(Accordion)({
   color: '#f9f9f9'
 });
 
-export const HorizontalDivider = styled(Divider)({
-  variant: "fullWidth",
-  orientation: 'horizontal',
-  borderColor: '#f9f9f9',
-  height: '5px', 
-  marginLeft: 'auto',
-  marginRight: 'auto'
-});
-
 export const DateText = styled(Typography)({
   fontFamily: 'Lemon-Milk-Bold',
   fontSize: "24px",
@@ -25,16 +17,6 @@ export const DateText = styled(Typography)({
   display: "flex",
   flexDirection: "row",
   margin: 'inherit auto'
-});
-
-export const FlexBoxRow = styled(Box)({
-  display: 'flex',
-  flexDirection: 'row'
-});
-
-export const FlexBoxColumn = styled(Box)({
-  display: 'flex',
-  flexDirection: 'column'
 });
 
 export const TeamLogo = styled(Avatar)({
@@ -161,6 +143,25 @@ export function BetButton(props) {
       </FlexBoxRow>
     );
   }
+}
+
+export function BetComparisonBar(props) {
+  
+  return (
+    <FlexBoxRow width='100%' >
+      <FlexBoxRow backgroundColor='red' width={props.team1Percent + '%'} >
+        <Typography >
+          {props.team1Percent}
+        </Typography>
+      </FlexBoxRow>
+      <FlexBoxRow backgroundColor='blue' flexGrow={1} >
+        <Typography >
+          {100 - props.team1Percent}
+        </Typography>
+      </FlexBoxRow>
+    </FlexBoxRow>
+  );
+
 }
 
 export function Item(props) {
