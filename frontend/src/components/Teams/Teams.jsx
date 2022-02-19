@@ -9,40 +9,40 @@ const theme = createTheme();
  * a specific team's information
  */
 export default class Teams extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {teams: []};
-    }
+  constructor(props) {
+    super(props);
+    this.state = {teams: []};
+  }
 
-    async componentDidMount() {
-      // url
-      const url = "/api/teams";
+  async componentDidMount() {
+    // url
+    const url = "/api/teams";
 
-      try {
-        // fetch from url
-        const response = await fetch(url);
+    try {
+      // fetch from url
+      const response = await fetch(url);
 
-        if (response.ok) {
-          this.setState({teams: await response.json()});
-        }
-      } catch(e) {
-        console.log(e);
+      if (response.ok) {
+        this.setState({teams: await response.json()});
       }
+    } catch(e) {
+      console.log(e);
     }
+  }
 
-    render() {
-        //Styling
-        return (
-            <ThemeProvider theme={theme}>
-                <Container>
-                <Typography variant="h4" component="h2">All Teams</Typography>
-                    <Grid container spacing={4}>
-                    {this.state.teams.map((team) => (
-                        <Grid item xs={12} sm={6} md={4} key={team.team_id}>
-                            <TeamCard team={team} />
-                        </Grid>
-                    ))}
-                        {/* {cards.map((card) => (
+  render() {
+    //Styling
+    return (
+      <ThemeProvider theme={theme}>
+        <Container>
+          <Typography variant="h4" component="h2">All Teams</Typography>
+          <Grid container spacing={4}>
+            {this.state.teams.map((team) => (
+              <Grid item xs={12} sm={6} md={4} key={team.team_id}>
+                <TeamCard team={team} />
+              </Grid>
+            ))}
+            {/* {cards.map((card) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
@@ -72,9 +72,9 @@ export default class Teams extends Component {
                 </Card>
               </Grid>
             ))} */}
-                    </Grid>
-                </Container>
-            </ThemeProvider>
-        );
-    }
+          </Grid>
+        </Container>
+      </ThemeProvider>
+    );
+  }
 }

@@ -45,7 +45,7 @@ async function getMatches() {
 //Function to get match history from a specific team
 async function getMatchHistory(id, pageNum) {
     const matches = await models.Match.findAll({
-        offset: 15*(pageNum-1),
+        offset: 15 * (pageNum - 1),
         limit: 15,
         where: {
             [Op.or]: [
@@ -63,7 +63,7 @@ async function getMatchHistory(id, pageNum) {
 //Function to get all matches after a certain date
 async function getMatchesAfter(date, pageNum) {
     const matches = await models.Match.findAll({
-        offset: 15*(pageNum-1),
+        offset: 15 * (pageNum - 1),
         limit: 15,
         where: {
             match_start_time: {
@@ -71,7 +71,7 @@ async function getMatchesAfter(date, pageNum) {
             }
         },
         order: [
-            ['match_start_time', 'DESC']
+            ["match_start_time", "DESC"]
         ]
     });
     return swapTeamData(matches);
@@ -87,7 +87,7 @@ async function getMatchesBetween(afterthis, beforethis) {
             }
         },
         order: [
-            ['match_start_time', 'DESC']
+            ["match_start_time", "ASC"]
         ]
     });
     return swapTeamData(matches);
@@ -113,7 +113,7 @@ async function getUserById(id) {
 
 //Helper function to put team data inside of matches
 async function swapTeamData(matches){
-    for (let i =0; i < matches.length; i++){
+    for (let i = 0; i < matches.length; i++){
         matches[i].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
         let team1string = (await getTeamById(matches[i].dataValues.team1_id))[0];
         let team2string = (await getTeamById(matches[i].dataValues.team2_id))[0];

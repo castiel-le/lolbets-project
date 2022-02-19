@@ -1,5 +1,5 @@
 import { Box } from '@mui/system';
-import { Component } from 'react';
+import { Component, Fragment } from 'react';
 
 import { getFormattedDate, getGameStartTimeObject, sortMatchesByDate } from './helperFunctions';
 import BetBox from './BetBox'
@@ -7,13 +7,15 @@ import PlaceBetPopup from './PlaceBetPopup';
 import { ListItem, List } from '@mui/material';
 
 import './BetBox.css'
-import { DateText, HorizontalDivider } from './styledElements';
+import { DateText } from './styledElements';
+import { HorizontalDivider, Loading } from '../customUIComponents';
 
 export default class AllBets extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       betOpen: false,
       selectedBet: null,
       upcomingMatches: [],
@@ -35,7 +37,7 @@ export default class AllBets extends Component {
      */
   async fetchAllUpcomingMatches(beginningDate) {
     let in3Days = beginningDate + 3 * 86400 * 1000; 
-    let response = await fetch(`/api/matches?afterthis=${beginningDate - 10 * 86400 * 1000}&beforethis=${in3Days}`);
+    let response = await fetch(`/api/matches?afterthis=${beginningDate}&beforethis=${in3Days}`);
     if (!response.ok) {
       console.error("Error fetching matches: " + response.status);
       // TODO: add other error logic
@@ -43,6 +45,7 @@ export default class AllBets extends Component {
     }
     let matches = await response.json();
     this.setState({
+      loading: false,
       upcomingMatches: [...this.state.upcomingMatches, ...matches],
       upcomingMatchesByDate: [...this.state.upcomingMatchesByDate, ...sortMatchesByDate(matches)]
     });
@@ -80,8 +83,8 @@ export default class AllBets extends Component {
 
   render() {
     return (
-      <div style={{ backgroundColor: '#0f1519', height: '100%' }}>
-        {this.state.upcomingMatchesByDate
+      <Fragment >
+        {!this.state.loading
 
         // if upcoming matches are set, render this
           ?
@@ -100,6 +103,7 @@ export default class AllBets extends Component {
                     return (
                       <ListItem key={match.match_id}>
                         <BetBox
+                          date={matchDate}
                           time={getGameStartTimeObject(new Date(match.match_start_time))}
                           team1={match.team1_id}
                           team2={match.team2_id}
@@ -115,7 +119,8 @@ export default class AllBets extends Component {
 
 
         // if the upcoming matches are not set do not display anything
-          : null
+          : 
+          <Loading />
         }
         {/*this.state.betOpen
                 ? <PlaceBetPopup 
@@ -125,8 +130,7 @@ export default class AllBets extends Component {
                 />
                 : null
                 */}
-
-      </div>
+      </Fragment>
     );
   }
 }
