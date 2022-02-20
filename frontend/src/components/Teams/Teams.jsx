@@ -2,6 +2,7 @@ import { Component } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Container, Typography, Grid } from "@mui/material";
 import TeamCard from "./Card/TeamCard";
+import DynamicAutoSearchBar from "./Search/DynamicAutoSearchBar";
 const theme = createTheme();
 
 /**
@@ -11,9 +12,13 @@ const theme = createTheme();
 export default class Teams extends Component {
   constructor(props) {
     super(props);
-    this.state = {teams: []};
+    this.state = { teams: [], filterName: "" };
+    this.onSearch = this.onSearch.bind(this);
   }
 
+  /**
+   * Fetches teams from API
+   */
   async componentDidMount() {
     // url
     const url = "/api/teams";
@@ -23,55 +28,33 @@ export default class Teams extends Component {
       const response = await fetch(url);
 
       if (response.ok) {
-        this.setState({teams: await response.json()});
+        this.setState({ teams: await response.json() });
       }
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
+  }
+
+  onSearch(searchedName) {
+    console.log(searchedName)
+    this.setState({filterName: searchedName});
   }
 
   render() {
     //Styling
     return (
       <ThemeProvider theme={theme}>
-        <Container>
+        <Container>     
           <Typography variant="h4" component="h2">All Teams</Typography>
+          <DynamicAutoSearchBar onSearch={this.onSearch} teams={this.state.teams} />
           <Grid container spacing={4}>
-            {this.state.teams.map((team) => 
-              <Grid item xs={12} sm={6} md={4} key={team.team_id}>
-                <TeamCard team={team} />
-              </Grid>
-            )}
-            {/* {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                >
-                  <CardMedia
-                    component="img"
-                    sx={{
-                      // 16:9
-                      pt: '56.25%',
-                    }}
-                    image="https://source.unsplash.com/random"
-                    alt="random"
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Heading
-                    </Typography>
-                    <Typography>
-                      This is a media card. You can use this section to describe the
-                      content.
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">View</Button>
-                    <Button size="small">Edit</Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))} */}
+            {this.state.teams.filter(team => team.team_name.toLowerCase().
+              includes(this.state.filterName.toLowerCase())).
+              map((team) =>
+                <Grid item xs={12} sm={6} md={4} key={team.team_id}>
+                  <TeamCard team={team} />
+                </Grid>
+              )}
           </Grid>
         </Container>
       </ThemeProvider>
