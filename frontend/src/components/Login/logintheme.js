@@ -1,14 +1,14 @@
 import { createTheme } from "@mui/material/styles";
 
-export const theme = createTheme({
+export const bordertheme = createTheme({
     
     palette: {
         type: 'dark',
         primary: {
-            main: '#111111',
+            main: '#0f1519',
         },
         secondary: {
-            main: 'rgb(0, 100, 100)',
+            main: '#ffff00',
         },
         text: {
             primary: '#f9f9f9',
@@ -17,6 +17,10 @@ export const theme = createTheme({
             default: '#0f1519',
         },
     },
+    shape: {
+        borderRadius: 15,
+    },
+
     components: {
         // Name of the component
         MuiButton: {
