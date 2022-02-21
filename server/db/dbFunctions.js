@@ -142,8 +142,8 @@ async function getUserById(id) {
 async function swapTeamData(matches){
     for (let i =0; i < matches.length; i++){
         matches[i].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
-        let team1string = (await getTeamById(matches[i].dataValues.team1_id))[0];
-        let team2string = (await getTeamById(matches[i].dataValues.team2_id))[0];
+        let team1string = (await getTeamById(matches[i].dataValues.team1_id));
+        let team2string = (await getTeamById(matches[i].dataValues.team2_id));
         matches[i].dataValues.team1_id = team1string;
         matches[i].dataValues.team2_id = team2string;
     }
