@@ -4,6 +4,8 @@ const { Op } = require("sequelize");
 //Function to get all badges
 async function getBadges() {
     const badges = await models.Badge.findAll();
+    badges[0].dataValues.randomnewvalue = "hello";
+    console.log(badges[0]);
     return badges;
 }
 
@@ -22,8 +24,8 @@ async function getTeamById(id) {
             /* eslint-enable */
         }
     });
-    /*console.log(team[0].dataValues);*/
-    return team;
+    team[0].dataValues.winrate = Math.round(((await getWins(id))/(await getTotalMatches(id)))*10000)/100;
+    return team[0];
 }
 
 //Function to get team data by name

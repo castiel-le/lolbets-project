@@ -101,7 +101,7 @@ router.get("/teams", async (req, res) => {
 //Route to get a specific team
 router.get("/teams/:id", async (req, res) => {
     try {
-        res.json((await dbFetch.getTeamById(req.params.id))[0]);
+        res.json((await dbFetch.getTeamById(req.params.id)));
     }
     catch(e) {
         res.sendStatus(404);
@@ -124,16 +124,6 @@ router.get("/user/:id", async (req, res) => {
        res.json((await dbFetch.getUserById(req.params.id))[0]); 
     }
     catch(e) {
-        res.sendStatus(404);
-    }
-})
-
-//Route to get win rate of a specific team
-router.get("/matches/total/:id", async (req, res) => {
-    try {
-        res.json({"winrate" : Math.round(((await dbFetch.getWins(req.params.id))/(await dbFetch.getTotalMatches(req.params.id)))*10000)/100});
-    } 
-    catch(e){
         res.sendStatus(404);
     }
 })
