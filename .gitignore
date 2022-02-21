@@ -5,4 +5,5 @@ db.config
 /src/lolbets-project.iml
 .idea
 pom.xml
-
+./src
+.env

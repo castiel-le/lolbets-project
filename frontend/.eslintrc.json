@@ -18,20 +18,26 @@
     "sourceType": "module",
     "allowImportExportEverywhere": true
   },
-
-  "plugins": ["react"],
-
+  "plugins": [
+    "react"
+  ],
   "rules": {
     ////////// Possible Errors //////////
     "no-console": "off",
     "no-unused-vars": "warn",
     "no-undef": "off",
     "no-extra-parens": "warn",
-    "indent": ["error", 4],
+    "indent": [
+      "error",
+      4
+    ],
     "block-scoped-var": "warn",
     "curly": "warn",
     "default-case": "warn",
-    "dot-location": ["warn", "object"],
+    "dot-location": [
+      "warn",
+      "object"
+    ],
     "eqeqeq": "warn",
     "no-alert": "warn",
     "no-eq-null": "warn",
@@ -41,16 +47,39 @@
     "no-loop-func": "warn",
     "no-multi-str": "warn",
     "no-self-compare": "warn",
-    "strict": ["warn", "global"],
+    "strict": [
+      "warn",
+      "global"
+    ],
     "no-lonely-if": "warn",
     ////////// Style //////////
-    "array-bracket-spacing": ["warn", "never"],
-    "array-bracket-newline": ["warn", "consistent"],
+    "array-bracket-spacing": [
+      "warn",
+      "never"
+    ],
+    "array-bracket-newline": [
+      "warn",
+      "consistent"
+    ],
     "camelcase": "error",
-    "comma-spacing": ["warn", { "before": false, "after": true }],
-    "comma-style": ["warn", "last"],
-    "brace-style": ["warn"],
-    "max-len": ["warn", 100],
+    "comma-spacing": [
+      "warn",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "comma-style": [
+      "warn",
+      "last"
+    ],
+    "brace-style": [
+      "warn"
+    ],
+    "max-len": [
+      "warn",
+      100
+    ],
     "no-inline-comments": "error",
     "no-tabs": "error",
     "space-infix-ops": "warn",
