@@ -125,11 +125,13 @@ export default class AllBets extends Component {
                 <HorizontalDivider width='85%' />
                 <List >
                   {date.map(match => {
+                    let gameTime = new Date(match.match_start_time);
                     return (
                       <ListItem key={match.match_id}>
                         <BetBox
-                          date={matchDate}
-                          time={getGameStartTimeObject(new Date(match.match_start_time))}
+                          key={match.match_id}
+                          date={gameTime}
+                          time={getGameStartTimeObject(gameTime)}
                           team1={match.team1_id}
                           team2={match.team2_id}
                           selectBet={this.selectBet}
