@@ -52,8 +52,9 @@ async function getMatchHistory(id, pageNum) {
         where: {
             [Op.or]: [
                 { team1_id: id },
-                { team2_id: id }
-            ]
+                { team2_id: id },
+            ],
+            in_progress: false
         },
         order: [
             ['match_start_time', 'DESC']
