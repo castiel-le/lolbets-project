@@ -8,7 +8,7 @@ import { ListItem, List } from '@mui/material';
 
 import './BetBox.css'
 import { DateText } from './styledElements';
-import { HorizontalDivider, Loading } from '../customUIComponents';
+import { HorizontalDivider, Loading, TypographyBold } from '../customUIComponents';
 
 export default class AllBets extends Component {
 
@@ -19,7 +19,8 @@ export default class AllBets extends Component {
       betOpen: false,
       selectedBet: null,
       upcomingMatches: [],
-      upcomingMatchesByDate: []
+      upcomingMatchesByDate: [],
+      noUpcomingGames: false
     };
     this.toggleOpenBet = this.toggleOpenBet.bind(this);
     this.selectBet = this.selectBet.bind(this);
@@ -44,11 +45,27 @@ export default class AllBets extends Component {
       return;
     }
     let matches = await response.json();
-    this.setState({
-      loading: false,
-      upcomingMatches: [...this.state.upcomingMatches, ...matches],
-      upcomingMatchesByDate: [...this.state.upcomingMatchesByDate, ...sortMatchesByDate(matches)]
-    });
+    // If the result set of the fetch is 0 data, fetch the next 3 days
+    if (Object.keys(matches).length === 0) {
+      let today = new Date().setHours(0, 0, 0, 0);
+      // If we have tried fetching for over 2 weeks of data, 
+      // and nothing has returned, 
+      // display that their are no upcoming games
+      if (in3Days - today < 15 * 86400 * 1000) {
+        this.fetchAllUpcomingMatches(in3Days)
+      } else {
+        this.setState({
+          loading: false,
+          noUpcomingGames: true,
+        });
+      }
+    } else {
+      this.setState({
+        loading: false,
+        upcomingMatches: [...this.state.upcomingMatches, ...matches],
+        upcomingMatchesByDate: [...this.state.upcomingMatchesByDate, ...sortMatchesByDate(matches)]
+      });
+    }
   }
 
   /**
@@ -82,6 +99,14 @@ export default class AllBets extends Component {
   }
 
   render() {
+    // return that there are no upcoming games if none were fetched
+    if (this.state.noUpcomingGames) {
+      return (
+        <TypographyBold sx={{marginTop: '10%'}}>
+          No Upcoming Games in the next 2 weeks
+        </TypographyBold>
+      );
+    }
     return (
       <Fragment >
         {!this.state.loading
@@ -116,7 +141,6 @@ export default class AllBets extends Component {
               </Box>
             );
           })
-
 
         // if the upcoming matches are not set do not display anything
           : 
