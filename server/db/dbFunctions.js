@@ -113,6 +113,7 @@ async function getWins(id){
             winner_id: id
         }
     });
+    console.log(wins);
     return wins;
 }
 

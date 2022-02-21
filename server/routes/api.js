@@ -128,10 +128,11 @@ router.get("/user/:id", async (req, res) => {
     }
 })
 
+//Route to get win rate of a specific team
 router.get("/matches/total/:id", async (req, res) => {
     try {
-        res.json(await dbFetch.getWins(req.params.id));
-    }
+        res.json({"winrate" : Math.round(((await dbFetch.getWins(req.params.id))/(await dbFetch.getTotalMatches(req.params.id)))*10000)/100});
+    } 
     catch(e){
         res.sendStatus(404);
     }
