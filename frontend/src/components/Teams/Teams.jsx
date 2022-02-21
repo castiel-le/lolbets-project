@@ -41,12 +41,15 @@ export default class Teams extends Component {
 
   render() {
     //Styling
+    const textColor = "#d1cdc7";
+    const styleLabel = {fontWeight: "bold", color: textColor, marginBottom: 1};
+    
     return (
       <ThemeProvider theme={theme}>
         <Container>     
-          <Typography variant="h4" component="h2">All Teams</Typography>
+          <Typography variant="h4" component="h2" style={styleLabel}>All Teams</Typography>
           <DynamicAutoSearchBar onSearch={this.onSearch} teams={this.state.teams} />
-          <Grid container spacing={4}>
+          <Grid container spacing={4} marginTop={2}>
             {this.state.teams.filter(team => team.team_name.toLowerCase().
               includes(this.state.filterName.toLowerCase())).
               map((team) =>
