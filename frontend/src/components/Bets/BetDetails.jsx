@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Typography } from '@mui/material';
 import {Component, Fragment} from 'react';
 import Countdown from 'react-countdown';

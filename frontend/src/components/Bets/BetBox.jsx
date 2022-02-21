@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Component, Fragment } from 'react';
 
 import { Box, AccordionDetails, AccordionSummary } from '@mui/material';

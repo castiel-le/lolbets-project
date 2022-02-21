@@ -22,7 +22,7 @@ export const bordertheme = createTheme({
     },
 
     components: {
-    // Name of the component
+        // Name of the component
         MuiButton: {
             styleOverrides: {
                 // Name of the slot

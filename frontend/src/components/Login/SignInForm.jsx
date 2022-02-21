@@ -42,6 +42,7 @@ export default class SignInForm extends Component {
         const data = new FormData(event.currentTarget);
         const email = data.get('email');
         const password = data.get('password');
+        const remember = data.get('remember');
         // eslint-disable-next-line no-console
         console.log({
             email: email,
@@ -86,7 +87,7 @@ export default class SignInForm extends Component {
                             <LockOutlinedIcon />
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                    Sign in
+                            Sign in
                         </Typography>
                         <Box component="form" onSubmit={this.handleSubmit} noValidate sx={{ mt: 1 }}>
                             <ThemeProvider theme={bordertheme}>
@@ -131,14 +132,14 @@ export default class SignInForm extends Component {
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2, backgroundColor: 'secondary.main' }}
                             >
-                      Sign In
+                                Sign In
                             </Button>
                             <Grid container>
                                 <Grid item xs>
                                     <ReactLink to={"/signup"} >
                                         <Link href="/signup" variant="body2">
                                             <Typography sx={{color: "#f9f9f9", textAlign: "right", fontSize: "14px", margin: 2}}>
-                                Create an account
+                                                Create an account
                                             </Typography>
                                         </Link>
                                     </ReactLink>
