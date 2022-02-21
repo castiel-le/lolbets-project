@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 import { Box, Button, Accordion, Typography, Avatar} from '@mui/material';
 import { FlexBoxRow, FlexBoxColumn } from '../customUIComponents';
-
+import Countdown from 'react-countdown';
 import PropTypes from 'prop-types';
 
 export const BetAccordion = styled(Accordion)({
@@ -64,6 +64,11 @@ export const BetButtonStyleExpanded = styled(BetButtonStyle)({
     backgroundColor: 'gray',
   }
 });
+
+export const CustomCountdown = styled(Countdown)({
+  fontFamily: 'Lemon-Milk-Bold',
+  fontSize: 20
+})
 
 export function TeamBox(props) {
   if (props.left) {

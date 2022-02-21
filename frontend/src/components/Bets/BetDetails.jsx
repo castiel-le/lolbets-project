@@ -1,8 +1,7 @@
-import { Typography } from '@mui/material';
 import {Component, Fragment} from 'react';
-import Countdown from 'react-countdown';
-import { BetComparisonBar } from './styledElements';
-import { FlexBoxRow, FlexBoxColumn } from '../customUIComponents';
+import SavingsIcon from '@mui/icons-material/Savings';
+import { BetComparisonBar, CustomCountdown } from './styledElements';
+import { FlexBoxRow, FlexBoxColumn, TypographyLight, TypographyBold, TypographyMedium } from '../customUIComponents';
 
 export default class BetDetails extends Component {
 
@@ -14,26 +13,41 @@ export default class BetDetails extends Component {
       <Fragment>
         <FlexBoxRow width='100%'>
           <FlexBoxColumn alignItems='center' width='15%'>
-            <Countdown date={Date.now() + matchDate.getTime()} sx={{backgroundColor: 'red'}} />
-            <Typography >
+            <CustomCountdown date={matchDate.getTime()} />
+            <TypographyLight fontSize={10}>
             Close Time
-            </Typography>
-            <Typography >
+            </TypographyLight>
+            <TypographyLight fontSize={10}>
               {matchDate.toLocaleString()}
-            </Typography>
+            </TypographyLight>
           </FlexBoxColumn>
           
           <FlexBoxRow width='70%' justifyContent='center'>
-            <Typography >
-            Win Rate team 1
-            </Typography>
-            <Typography >
-            Win Rate team 2
-            </Typography>
+            <FlexBoxColumn >
+              <TypographyBold fontSize={24} marginBottom='12px'>
+                Winning Odds
+              </TypographyBold>
+              <FlexBoxRow width='100%'>
+                <TypographyMedium fontSize={16} mx='auto'>
+                1.35x
+                </TypographyMedium>
+                <TypographyMedium fontSize={16} mx='auto'>
+                2.45x
+                </TypographyMedium>
+              </FlexBoxRow>
+            </FlexBoxColumn>
           </FlexBoxRow>
           
           <FlexBoxRow width='15%' >
-            <BetComparisonBar team1Percent={60}/>
+            <FlexBoxColumn width='100%' >
+              <BetComparisonBar team1Percent={60} width='100%'/>
+              <TypographyLight fontSize={10}>
+                Current Pool:
+              </TypographyLight>
+              <TypographyLight fontSize={10}>
+                <SavingsIcon /> 1000
+              </TypographyLight>
+            </FlexBoxColumn>
           </FlexBoxRow>
           
         </FlexBoxRow>
