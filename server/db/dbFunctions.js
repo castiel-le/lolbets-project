@@ -4,6 +4,8 @@ const { Op } = require("sequelize");
 //Function to get all badges
 async function getBadges() {
     const badges = await models.Badge.findAll();
+    badges[0].dataValues.randomnewvalue = "hello";
+    console.log(badges[0]);
     return badges;
 }
 
@@ -22,8 +24,8 @@ async function getTeamById(id) {
             /* eslint-enable */
         }
     });
-    /*console.log(team[0].dataValues);*/
-    return team;
+    team[0].dataValues.winrate = Math.round(((await getWins(id))/(await getTotalMatches(id)))*10000)/100;
+    return team[0];
 }
 
 //Function to get team data by name
@@ -93,6 +95,30 @@ async function getMatchesBetween(afterthis, beforethis) {
     return swapTeamData(matches);
 }
 
+//Function to get total number of matches played for a specific team
+async function getTotalMatches(id){
+    const numOfMatches = await models.Match.count({
+        where: {
+            [Op.or]: [
+                { team1_id: id },
+                { team2_id: id }
+            ]
+        }
+    })
+    return numOfMatches;
+}
+
+//Function to get total number of wins
+async function getWins(id){
+    const wins = await models.Match.count({
+        where: {
+            winner_id: id
+        }
+    });
+    console.log(wins);
+    return wins;
+}
+
 //Function to get all users
 async function getUsers() {
     const users = await models.User.findAll();
@@ -111,16 +137,17 @@ async function getUserById(id) {
     return user;
 }
 
+
 //Helper function to put team data inside of matches
 async function swapTeamData(matches){
     for (let i = 0; i < matches.length; i++){
         matches[i].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
-        let team1string = (await getTeamById(matches[i].dataValues.team1_id))[0];
-        let team2string = (await getTeamById(matches[i].dataValues.team2_id))[0];
+        let team1string = (await getTeamById(matches[i].dataValues.team1_id));
+        let team2string = (await getTeamById(matches[i].dataValues.team2_id));
         matches[i].dataValues.team1_id = team1string;
         matches[i].dataValues.team2_id = team2string;
     }
     return matches;
 }
 
-module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween};
+module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins};

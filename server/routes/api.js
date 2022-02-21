@@ -101,7 +101,7 @@ router.get("/teams", async (req, res) => {
 //Route to get a specific team
 router.get("/teams/:id", async (req, res) => {
     try {
-        res.json((await dbFetch.getTeamById(req.params.id))[0]);
+        res.json((await dbFetch.getTeamById(req.params.id)));
     }
     catch(e) {
         res.sendStatus(404);
