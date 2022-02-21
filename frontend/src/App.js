@@ -10,6 +10,7 @@ import Team from "./components/Team/Team"
 import { Suspense } from 'react'
 import Profile from './components/Profile/Profile';
 import { Loading } from './components/customUIComponents';
+import Leaderboard from "./components/Leaderboard/Leaderboard"
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
             <Route path='/profile' element={<Profile />} />
             <Route path='/user/:id' element={<Profile />} />
             <Route path='/user/:id/history' element={<Profile />} />
-            <Route path='/leaderboard' element={<h1> Leaderboard </h1>} />
+            <Route path='/leaderboard' element={<Leaderboard />} />
             <Route path='/teams' element={<h1> Teams </h1>} />
             <Route path='/teams/:id' element={<Team />} />
             <Route path='/user/search/:username' element={<h1> Search User </h1>} />
