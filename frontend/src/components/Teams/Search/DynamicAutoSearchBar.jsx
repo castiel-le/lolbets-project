@@ -14,11 +14,11 @@ export default class DynamicAutoSearchBar extends Component {
         sx={styleAutocomplete}
         freeSolo
         disableClearable
-        onInputChange={(e) => this.props.onSearch(e.target.value)}
+        onInputChange={(element, event) => this.props.onSearch(event)}
         options={this.props.teams.map((team) => team.team_name)}
-        PaperComponent={({ children }) => (
+        PaperComponent={({ children }) => 
           <Paper sx={styleDropdown}>{children}</Paper>
-        )}
+        }
         renderInput={(params) => 
           <TextField
             sx={styleTextfield}

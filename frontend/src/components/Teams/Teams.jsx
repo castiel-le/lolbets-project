@@ -35,6 +35,10 @@ export default class Teams extends Component {
     }
   }
 
+  /**
+   * Sets Team's filterName state to search name.
+   * @param {String} searchedName 
+   */
   onSearch(searchedName) {
     this.setState({filterName: searchedName});
   }
