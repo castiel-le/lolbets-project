@@ -10,18 +10,17 @@ export default class MatchRow extends Component {
     const styleInfo = { color: textColor };
     const styleCell = {borderBottom: 0};
     const styleRow = this.props.column.winner_id === this.props.id ?
-      { backgroundColor: "darkGreen" }
+      {borderColor: "darkGreen" }
       : this.props.column.winner_id === null ?
-        {} : { backgroundColor: "darkRed" };
+        {border: 0} : {borderColor: "darkRed" };
     return (
-      <TableRow
-        style={styleRow}>
+      <TableRow>
         <TableCell align="center" style={styleCell}>
           <Typography variant="p" style={styleInfo}>
             {new Date(this.props.column.match_start_time).toLocaleString()}
           </Typography>
         </TableCell>
-        <TableCell align="center" style={styleCell}>
+        <TableCell align="center" sx={styleRow}>
           <Box display="flex" flexDirection="row" columnGap={1}
             justifyContent="center" alignItems="center">
             <img src={this.props.column.team1_id.logo}

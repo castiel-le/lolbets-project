@@ -36,7 +36,6 @@ export default class Teams extends Component {
   }
 
   onSearch(searchedName) {
-    console.log(searchedName)
     this.setState({filterName: searchedName});
   }
 

@@ -29,7 +29,7 @@ export default class TeamSection extends Component {
               {this.props.team.abbreviation}
             </Typography>
           </Grid>
-          <Grid item xs={6} justifyContent="flex-end" display="flex">
+          {/* <Grid item xs={6} justifyContent="flex-end" display="flex">
             <Typography variant="p1" noWrap style={styleLabel}>Wins:</Typography>
           </Grid>
           <Grid item xs={6} justifyContent="flex-start" display="flex">
@@ -44,7 +44,7 @@ export default class TeamSection extends Component {
             <Typography variant="p1" noWrap align="left" style={styleInfo}>
               {this.props.team.wins}
             </Typography>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
     );

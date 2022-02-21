@@ -13,6 +13,10 @@ export default class MatchHistory extends Component {
     this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
   }
 
+  async componentDidMount() {
+    await this.props.setMatches(this.props.page);
+  }
+
   /**
      * Handles changing pages on the table.
      * @param {*} event 
