@@ -8,7 +8,7 @@ import PlaceBetPopup from './PlaceBetPopup';
 import { ListItem, List } from '@mui/material';
 
 import './BetBox.css'
-import { DateText } from './styledElements';
+import { DateText, TeamName } from './styledElements';
 import { HorizontalDivider, Loading, TypographyBold } from '../customUIComponents';
 
 export default class AllBets extends Component {
@@ -22,17 +22,23 @@ export default class AllBets extends Component {
       upcomingMatches: [],
       upcomingMatchesByDate: [],
       noUpcomingGames: false,
+      allFetchedDates: [0],
       lastFetchedDate: new Date().setHours(0, 0, 0, 0),
+      fetching: false,
       mounted: true
     };
     this.toggleOpenBet = this.toggleOpenBet.bind(this);
     this.selectBet = this.selectBet.bind(this);
-    this.fetchAllUpcomingMatches = this.fetchAllUpcomingMatches.bind(this);
+    this.fetchUpcomingMatches = this.fetchUpcomingMatches.bind(this);
   }
 
   componentDidMount() {
+    this.fetchUpcomingMatches(1);
     // fetch all matches starting from today
-    this.fetchAllUpcomingMatches(new Date().setHours(0, 0, 0, 0));
+    this.setState({
+      allFetchedDates: [this.state.lastFetchedDate]
+    },
+    )
   }
 
   componentWillUnmount() {
@@ -51,47 +57,61 @@ export default class AllBets extends Component {
   }
 
   /**
-     * Fetches all the upcoming matches in the database
+     * This fetches fetch a certain number of days worth of games from the database
+     * Default start day is today
+     * If there is no result from the initial fetch,
+     * then the fetch will try for the next set of days
+     * Will stop trying to fetch if the fetch for 2 weeks from now has not returned anything
+     * @param {number} days The number of days you want to fetch data for.
      * @returns returns if there was an error in the fetch
      */
-  async fetchAllUpcomingMatches(beginningDate) {
-    let nextDay = beginningDate + 1 * 86400 * 1000; 
-    let response = await fetch(`/api/matches?afterthis=${beginningDate}&beforethis=${nextDay}`);
+  async fetchUpcomingMatches(days) {
+    if (this.state.allFetchedDates.includes(this.state.lastFetchedDate)) {
+      return;
+    }
+    let nextDay = this.state.lastFetchedDate + days * 86400 * 1000;
+    let response = await fetch(`/api/matches?afterthis=${this.state.lastFetchedDate}&beforethis=${nextDay}`);
     if (!response.ok) {
       console.error("Error fetching matches: " + response.status);
       // TODO: add other error logic
       return;
     }
-    // This was added to solve a memory leak
-    // If you delete it, the application will freeze
-    if (this.state.mounted) {
-      let matches = await response.json();
-      // If the result set of the fetch is 0 data, fetch the next 3 days
-      if (Object.keys(matches).length === 0) {
-        let today = new Date().setHours(0, 0, 0, 0);
-        // If we have tried fetching for over 2 weeks of data, 
-        // and nothing has returned, 
-        // display that their are no upcoming games
-        if (nextDay - today < 14 * 86400 * 1000) {
-          this.fetchAllUpcomingMatches(nextDay)
-          this.setState({
-            lastFetchedDate: nextDay
-          })
+    this.setState({
+      allFetchedDates: [...this.state.allFetchedDates, this.state.lastFetchedDate]
+    },
+    async () => {
+      // This was added to solve a memory leak
+      // If you delete it, the application will freeze
+      if (this.state.mounted) {
+        let matches = await response.json();
+        // If the result set of the fetch is 0 data, fetch the next n days
+        if (Object.keys(matches).length === 0) {
+          let today = new Date().setHours(0, 0, 0, 0);
+          // If we have tried fetching for over 2 weeks of data, 
+          // and nothing has returned, 
+          // display that their are no upcoming games
+          if (nextDay - today < 14 * 86400 * 1000) {
+            this.setState({
+              lastFetchedDate: nextDay
+            },
+            () => this.fetchUpcomingMatches(1));
+          } else {
+            this.setState({
+              loading: false,
+              noUpcomingGames: true,
+            });
+          }
         } else {
           this.setState({
             loading: false,
-            noUpcomingGames: true,
+            upcomingMatches: [...this.state.upcomingMatches, ...matches],
+            upcomingMatchesByDate: [...this.state.upcomingMatchesByDate, ...sortMatchesByDate(matches)],
+            lastFetchedDate: nextDay,
+            fetching: false,
           });
         }
-      } else {
-        this.setState({
-          loading: false,
-          upcomingMatches: [...this.state.upcomingMatches, ...matches],
-          upcomingMatchesByDate: [...this.state.upcomingMatchesByDate, ...sortMatchesByDate(matches)],
-          lastFetchedDate: nextDay
-        });
       }
-    }
+    });
   }
 
   /**
@@ -128,7 +148,7 @@ export default class AllBets extends Component {
     // return that there are no upcoming games if none were fetched
     if (this.state.noUpcomingGames && this.state.upcomingMatchesByDate === []) {
       return (
-        <TypographyBold sx={{marginTop: '10%'}}>
+        <TypographyBold sx={{ marginTop: '10%' }}>
           No Upcoming Games in the next 2 weeks
         </TypographyBold>
       );
@@ -137,7 +157,7 @@ export default class AllBets extends Component {
       <Fragment >
         {!this.state.loading
 
-        // if upcoming matches are set, render this
+          // if upcoming matches are set, render this
           ?
 
           this.state.upcomingMatchesByDate.map(date => {
@@ -150,7 +170,7 @@ export default class AllBets extends Component {
                     {formattedDate}
                   </DateText >
                   <HorizontalDivider width='85%' />
-                  
+
                   <List >
                     {date.map(match => {
                       let gameTime = new Date(match.match_start_time);
@@ -173,25 +193,25 @@ export default class AllBets extends Component {
             );
           })
 
-        // if the upcoming matches are not set do not display anything
-          : 
+          // if the upcoming matches are not set do not display anything
+          :
           <Loading />
         }
         <InView 
           as={'div'}
-          delay={1000}
+          delay={500}
           initialInView={true}
           onChange={() => {
-            let matchDate = new Date(this.state.upcomingMatchesByDate[this.state.upcomingMatchesByDate.length - 1][0].match_start_time);
-            console.log(matchDate.getDate())
-            console.log(new Date(this.state.lastFetchedDate).getDate())
-            // Remove accidental fetch of data for the same date twice
-            if (matchDate.getDate() !== new Date(this.state.lastFetchedDate).getDate()) {
-              this.fetchAllUpcomingMatches(this.state.lastFetchedDate)
+            if (this.state.fetching === false) {
+              this.setState({
+                fetching: true
+              },
+              () => this.fetchUpcomingMatches(1)
+              );
             }
           }}
         />
-        
+
         {/*this.state.betOpen
                 ? <PlaceBetPopup 
                     open={this.state.betOpen} 
