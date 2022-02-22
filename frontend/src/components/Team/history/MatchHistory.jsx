@@ -13,6 +13,10 @@ export default class MatchHistory extends Component {
         this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
     }
 
+    async componentDidMount() {
+        await this.props.setMatches(this.props.page);
+    }
+
     /**
      * Handles changing pages on the table.
      * @param {*} event 
@@ -34,10 +38,10 @@ export default class MatchHistory extends Component {
     // Styling
         const textColor = "#d1cdc7";
         const styleHeader = {color: textColor, fontWeight: "bold", backgroundColor: "#6d530b"};
-        const stylePagination = {color: textColor, backgroundColor: "#1e2a32"};
+        const stylePagination = {color: textColor, backgroundColor: "#223039"};
         const styleCell = {borderBottom: 0};
-        const styleTable = {backgroundColor: "#1e2a32"};
-        
+        const styleTable = {backgroundColor: "#223039"};
+        const styleBody = {backgroundColor: "#1e2a32"};
         return(
             <TableContainer >
                 <Typography variant="h5" style={styleHeader}>
@@ -58,7 +62,7 @@ export default class MatchHistory extends Component {
                             </TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody size="string">
+                    <TableBody size="string" style={styleBody}>
                         {this.props.matches.map(column => 
                             <MatchRow column={column} id={this.props.id} key={column.match_id} />
                         )}

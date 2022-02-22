@@ -27,6 +27,7 @@ class Team extends Component {
             page: 1,
         };
         this.changePage = this.changePage.bind(this);
+        this.setMatches = this.setMatches.bind(this);
     }
 
     /**
@@ -61,7 +62,19 @@ class Team extends Component {
     }
 
     /**
-     * Fetches team information and first page of match history.
+   * Sets Team's matches state to new matches based on page number
+   * @param {Number} page page number 
+   */
+    async setMatches(page) {
+        try {
+            this.setState({matches: await this.getMatches(page)});
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    /**
+     * Fetches team information.
      */
     async componentDidMount() {
     // urls to fetch
@@ -71,7 +84,7 @@ class Team extends Component {
             const responseTeam = await fetch(urlTeam + this.props.params.id);
 
             if (responseTeam.ok) {
-                this.setState({ team: await responseTeam.json(), matches: await this.getMatches(1) });
+                this.setState({ team: await responseTeam.json()});
             }
         } catch (e) {
             console.log(e);
@@ -84,7 +97,8 @@ class Team extends Component {
                     <TeamSection team={this.state.team} />
                     <MatchHistory matches={this.state.matches} id={this.state.team.team_id}
                         changePage={this.changePage}
-                        page={this.state.page} />
+                        page={this.state.page}
+                        setMatches={this.setMatches} />
                 </Box>
             </ThemeProvider>
         );
