@@ -67,7 +67,7 @@ export const BetButtonStyleExpanded = styled(BetButtonStyle)({
 
 export const CustomCountdown = styled(Countdown)({
   fontFamily: 'Lemon-Milk-Bold',
-  fontSize: 20
+  fontSize: 24
 })
 
 export function TeamBox(props) {
