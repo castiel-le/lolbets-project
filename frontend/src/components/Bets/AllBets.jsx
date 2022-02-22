@@ -1,5 +1,6 @@
 import { Box } from '@mui/system';
 import { Component, Fragment } from 'react';
+import { InView } from 'react-intersection-observer'
 
 import { getFormattedDate, getGameStartTimeObject, sortMatchesByDate } from './helperFunctions';
 import BetBox from './BetBox'
@@ -20,7 +21,9 @@ export default class AllBets extends Component {
       selectedBet: null,
       upcomingMatches: [],
       upcomingMatchesByDate: [],
-      noUpcomingGames: false
+      noUpcomingGames: false,
+      lastFetchedDate: null,
+      mounted: true
     };
     this.toggleOpenBet = this.toggleOpenBet.bind(this);
     this.selectBet = this.selectBet.bind(this);
@@ -31,13 +34,18 @@ export default class AllBets extends Component {
     // fetch all matches starting from today
     this.fetchAllUpcomingMatches(new Date().setHours(0, 0, 0, 0));
   }
+  componentWillUnmount() {
+    this.setState({
+      mounted: false
+    })
+  }
 
   /**
      * Fetches all the upcoming matches in the database
      * @returns returns if there was an error in the fetch
      */
   async fetchAllUpcomingMatches(beginningDate) {
-    let in3Days = beginningDate + 3 * 86400 * 1000; 
+    let in3Days = beginningDate + 1 * 86400 * 1000; 
     let response = await fetch(`/api/matches?afterthis=${beginningDate}&beforethis=${in3Days}`);
     if (!response.ok) {
       console.error("Error fetching matches: " + response.status);
@@ -45,26 +53,31 @@ export default class AllBets extends Component {
       return;
     }
     let matches = await response.json();
+    // This was added to solve a memory leak
+    // If you delete it, the application will freeze
+    if (this.state.mounted) {
     // If the result set of the fetch is 0 data, fetch the next 3 days
-    if (Object.keys(matches).length === 0) {
-      let today = new Date().setHours(0, 0, 0, 0);
-      // If we have tried fetching for over 2 weeks of data, 
-      // and nothing has returned, 
-      // display that their are no upcoming games
-      if (in3Days - today < 15 * 86400 * 1000) {
-        this.fetchAllUpcomingMatches(in3Days)
+      if (Object.keys(matches).length === 0) {
+        let today = new Date().setHours(0, 0, 0, 0);
+        // If we have tried fetching for over 2 weeks of data, 
+        // and nothing has returned, 
+        // display that their are no upcoming games
+        if (in3Days - today < 14 * 86400 * 1000) {
+          this.fetchAllUpcomingMatches(in3Days)
+        } else {
+          this.setState({
+            loading: false,
+            noUpcomingGames: true,
+          });
+        }
       } else {
         this.setState({
           loading: false,
-          noUpcomingGames: true,
+          upcomingMatches: [...this.state.upcomingMatches, ...matches],
+          upcomingMatchesByDate: [...this.state.upcomingMatchesByDate, ...sortMatchesByDate(matches)],
+          lastFetchedDate: in3Days
         });
       }
-    } else {
-      this.setState({
-        loading: false,
-        upcomingMatches: [...this.state.upcomingMatches, ...matches],
-        upcomingMatchesByDate: [...this.state.upcomingMatchesByDate, ...sortMatchesByDate(matches)]
-      });
     }
   }
 
@@ -100,7 +113,7 @@ export default class AllBets extends Component {
 
   render() {
     // return that there are no upcoming games if none were fetched
-    if (this.state.noUpcomingGames) {
+    if (this.state.noUpcomingGames && this.state.upcomingMatchesByDate === []) {
       return (
         <TypographyBold sx={{marginTop: '10%'}}>
           No Upcoming Games in the next 2 weeks
@@ -127,16 +140,25 @@ export default class AllBets extends Component {
                   {date.map(match => {
                     let gameTime = new Date(match.match_start_time);
                     return (
-                      <ListItem key={match.match_id}>
-                        <BetBox
-                          key={match.match_id}
-                          date={gameTime}
-                          time={getGameStartTimeObject(gameTime)}
-                          team1={match.team1_id}
-                          team2={match.team2_id}
-                          selectBet={this.selectBet}
-                        />
-                      </ListItem>
+                      <InView 
+                        key={match.match_id} 
+                        as="div" 
+                        threshold={0.5} 
+                        triggerOnce={true}
+                        delay={1000}
+                        onChange={() => this.fetchAllUpcomingMatches(this.state.lastFetchedDate)}
+                      >
+                        <ListItem key={match.match_id}>
+                          <BetBox
+                            key={match.match_id}
+                            date={gameTime}
+                            time={getGameStartTimeObject(gameTime)}
+                            team1={match.team1_id}
+                            team2={match.team2_id}
+                            selectBet={this.selectBet}
+                          />
+                        </ListItem>
+                      </InView>
                     )
                   })}
                 </List>
@@ -148,6 +170,7 @@ export default class AllBets extends Component {
           : 
           <Loading />
         }
+        
         {/*this.state.betOpen
                 ? <PlaceBetPopup 
                     open={this.state.betOpen} 
