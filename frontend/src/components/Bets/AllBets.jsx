@@ -45,25 +45,25 @@ export default class AllBets extends Component {
      * @returns returns if there was an error in the fetch
      */
   async fetchAllUpcomingMatches(beginningDate) {
-    let in3Days = beginningDate + 1 * 86400 * 1000; 
-    let response = await fetch(`/api/matches?afterthis=${beginningDate}&beforethis=${in3Days}`);
+    let nextDay = beginningDate + 1 * 86400 * 1000; 
+    let response = await fetch(`/api/matches?afterthis=${beginningDate}&beforethis=${nextDay}`);
     if (!response.ok) {
       console.error("Error fetching matches: " + response.status);
       // TODO: add other error logic
       return;
     }
-    let matches = await response.json();
     // This was added to solve a memory leak
     // If you delete it, the application will freeze
     if (this.state.mounted) {
-    // If the result set of the fetch is 0 data, fetch the next 3 days
+      let matches = await response.json();
+      // If the result set of the fetch is 0 data, fetch the next 3 days
       if (Object.keys(matches).length === 0) {
         let today = new Date().setHours(0, 0, 0, 0);
         // If we have tried fetching for over 2 weeks of data, 
         // and nothing has returned, 
         // display that their are no upcoming games
-        if (in3Days - today < 14 * 86400 * 1000) {
-          this.fetchAllUpcomingMatches(in3Days)
+        if (nextDay - today < 14 * 86400 * 1000) {
+          this.fetchAllUpcomingMatches(nextDay)
         } else {
           this.setState({
             loading: false,
@@ -75,7 +75,7 @@ export default class AllBets extends Component {
           loading: false,
           upcomingMatches: [...this.state.upcomingMatches, ...matches],
           upcomingMatchesByDate: [...this.state.upcomingMatchesByDate, ...sortMatchesByDate(matches)],
-          lastFetchedDate: in3Days
+          lastFetchedDate: nextDay
         });
       }
     }
@@ -136,18 +136,24 @@ export default class AllBets extends Component {
                   {formattedDate}
                 </DateText >
                 <HorizontalDivider width='85%' />
-                <List >
-                  {date.map(match => {
-                    let gameTime = new Date(match.match_start_time);
-                    return (
-                      <InView 
-                        key={match.match_id} 
-                        as="div" 
-                        threshold={0.5} 
-                        triggerOnce={true}
-                        delay={1000}
-                        onChange={() => this.fetchAllUpcomingMatches(this.state.lastFetchedDate)}
-                      >
+                <InView 
+                  key={date} 
+                  threshold={0.7} 
+                  triggerOnce={true}
+                  delay={1000}
+                  onChange={() => {
+                    let matchDate = new Date(date[0].match_start_time);
+                    
+                    // Remove accidental fetch of data for the same date twice
+                    if (matchDate.getDate() !== new Date(this.state.lastFetchedDate).getDate()) {
+                      this.fetchAllUpcomingMatches(this.state.lastFetchedDate)
+                    }
+                  }}
+                >
+                  <List >
+                    {date.map(match => {
+                      let gameTime = new Date(match.match_start_time);
+                      return (
                         <ListItem key={match.match_id}>
                           <BetBox
                             key={match.match_id}
@@ -158,10 +164,10 @@ export default class AllBets extends Component {
                             selectBet={this.selectBet}
                           />
                         </ListItem>
-                      </InView>
-                    )
-                  })}
-                </List>
+                      )
+                    })}
+                  </List>
+                </InView>
               </Box>
             );
           })
