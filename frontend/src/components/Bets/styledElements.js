@@ -1,6 +1,6 @@
 import { styled } from '@mui/system';
 import { Box, Button, Accordion, Typography, Avatar} from '@mui/material';
-import { FlexBoxRow, FlexBoxColumn } from '../customUIComponents';
+import { FlexBoxRow, FlexBoxColumn, TypographyLight } from '../customUIComponents';
 import Countdown from 'react-countdown';
 import PropTypes from 'prop-types';
 
@@ -153,16 +153,33 @@ export function BetButton(props) {
 export function BetComparisonBar(props) {
   
   return (
-    <FlexBoxRow width='100%' >
-      <FlexBoxRow backgroundColor='red' width={props.team1Percent + '%'} >
-        <Typography >
+    <FlexBoxRow width='100%' height={26}>
+      <FlexBoxRow 
+        backgroundColor='#900A22' 
+        width={props.team1Percent + '%'}
+        sx={{
+          borderTopLeftRadius: '25px', 
+          borderBottomLeftRadius: '25px', 
+          justifyContent: 'center', 
+          alignItems: 'center',
+        }}
+      >
+        <TypographyLight fontSize={14}>
           {props.team1Percent}
-        </Typography>
+        </TypographyLight>
       </FlexBoxRow>
-      <FlexBoxRow backgroundColor='blue' flexGrow={1} >
-        <Typography >
+      <FlexBoxRow 
+        backgroundColor='#445BC1' 
+        flexGrow={1} 
+        sx={{
+          borderTopRightRadius: '25px', 
+          borderBottomRightRadius: '25px', 
+          justifyContent: 'center', 
+          alignItems: 'center'
+        }}>
+        <TypographyLight fontSize={14}>
           {100 - props.team1Percent}
-        </Typography>
+        </TypographyLight>
       </FlexBoxRow>
     </FlexBoxRow>
   );

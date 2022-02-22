@@ -8,7 +8,7 @@ import PlaceBetPopup from './PlaceBetPopup';
 import { ListItem, List } from '@mui/material';
 
 import './BetBox.css'
-import { DateText, TeamName } from './styledElements';
+import { DateText } from './styledElements';
 import { HorizontalDivider, Loading, TypographyBold } from '../customUIComponents';
 
 export default class AllBets extends Component {

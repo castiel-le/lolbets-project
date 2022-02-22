@@ -40,7 +40,10 @@ export default class BetDetails extends Component {
           
           <FlexBoxRow width='20%' >
             <FlexBoxColumn width='100%' justifyContent='center' alignItems='center'>
-              <BetComparisonBar team1Percent={60} width='100%' />
+              <BetComparisonBar 
+                team1Percent={60} 
+                width='100%' 
+              />
               <TypographyLight fontSize={10} marginTop='12px'>
                 Current Pool:
               </TypographyLight>

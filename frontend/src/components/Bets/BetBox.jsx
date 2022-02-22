@@ -79,7 +79,11 @@ export default class BetBox extends Component {
               </AccordionSummary>
 
               <AccordionDetails>
-                <BetDetails date={this.props.date} team1={this.props.team1} team2={this.props.team2}/>
+                <BetDetails 
+                  date={this.props.date} 
+                  team1={this.props.team1} 
+                  team2={this.props.team2}
+                />
               </AccordionDetails>
 
             </BetAccordion>
