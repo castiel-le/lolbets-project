@@ -74,6 +74,9 @@ export default class AllBets extends Component {
         // display that their are no upcoming games
         if (nextDay - today < 14 * 86400 * 1000) {
           this.fetchAllUpcomingMatches(nextDay)
+          this.setState({
+            lastFetchedDate: nextDay
+          })
         } else {
           this.setState({
             loading: false,
@@ -165,21 +168,6 @@ export default class AllBets extends Component {
                       )
                     })}
                   </List>
-                  <InView 
-                    as={'div'}
-                    triggerOnce={true}
-                    delay={1000}
-                    initialInView={true}
-                    threshold={1}
-                    onChange={() => {
-                      let matchDate = new Date(date[0].match_start_time);
-                      console.log('fetching')
-                      // Remove accidental fetch of data for the same date twice
-                      if (matchDate.getDate() !== new Date(this.state.lastFetchedDate).getDate()) {
-                        this.fetchAllUpcomingMatches(this.state.lastFetchedDate)
-                      }
-                    }}
-                  />
                 </Box>
               </Fragment>
             );
@@ -189,6 +177,20 @@ export default class AllBets extends Component {
           : 
           <Loading />
         }
+        <InView 
+          as={'div'}
+          delay={1000}
+          initialInView={true}
+          onChange={() => {
+            let matchDate = new Date(this.state.upcomingMatchesByDate[this.state.upcomingMatchesByDate.length - 1][0].match_start_time);
+            console.log(matchDate.getDate())
+            console.log(new Date(this.state.lastFetchedDate).getDate())
+            // Remove accidental fetch of data for the same date twice
+            if (matchDate.getDate() !== new Date(this.state.lastFetchedDate).getDate()) {
+              this.fetchAllUpcomingMatches(this.state.lastFetchedDate)
+            }
+          }}
+        />
         
         {/*this.state.betOpen
                 ? <PlaceBetPopup 
