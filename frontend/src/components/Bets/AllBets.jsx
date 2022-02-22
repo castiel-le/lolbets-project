@@ -170,24 +170,39 @@ export default class AllBets extends Component {
                     {formattedDate}
                   </DateText >
                   <HorizontalDivider width='85%' />
-
-                  <List >
-                    {date.map(match => {
-                      let gameTime = new Date(match.match_start_time);
-                      return (
-                        <ListItem key={match.match_id}>
-                          <BetBox
-                            key={match.match_id}
-                            date={gameTime}
-                            time={getGameStartTimeObject(gameTime)}
-                            team1={match.team1_id}
-                            team2={match.team2_id}
-                            selectBet={this.selectBet}
-                          />
-                        </ListItem>
-                      )
-                    })}
-                  </List>
+                  <InView 
+                    as={'div'}
+                    delay={500}
+                    initialInView={true}
+                    threshold={0.6}
+                    onChange={() => {
+                      if (this.state.fetching === false) {
+                        this.setState({
+                          fetching: true
+                        },
+                        () => this.fetchUpcomingMatches(1)
+                        );
+                      }
+                    }}
+                  >
+                    <List >
+                      {date.map(match => {
+                        let gameTime = new Date(match.match_start_time);
+                        return (
+                          <ListItem key={match.match_id}>
+                            <BetBox
+                              key={match.match_id}
+                              date={gameTime}
+                              time={getGameStartTimeObject(gameTime)}
+                              team1={match.team1_id}
+                              team2={match.team2_id}
+                              selectBet={this.selectBet}
+                            />
+                          </ListItem>
+                        )
+                      })}
+                    </List>
+                  </InView>
                 </Box>
               </Fragment>
             );
@@ -197,20 +212,6 @@ export default class AllBets extends Component {
           :
           <Loading />
         }
-        <InView 
-          as={'div'}
-          delay={500}
-          initialInView={true}
-          onChange={() => {
-            if (this.state.fetching === false) {
-              this.setState({
-                fetching: true
-              },
-              () => this.fetchUpcomingMatches(1)
-              );
-            }
-          }}
-        />
 
         {/*this.state.betOpen
                 ? <PlaceBetPopup 
