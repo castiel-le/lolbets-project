@@ -22,7 +22,7 @@ export default class AllBets extends Component {
       upcomingMatches: [],
       upcomingMatchesByDate: [],
       noUpcomingGames: false,
-      lastFetchedDate: null,
+      lastFetchedDate: new Date().setHours(0, 0, 0, 0),
       mounted: true
     };
     this.toggleOpenBet = this.toggleOpenBet.bind(this);
@@ -34,10 +34,20 @@ export default class AllBets extends Component {
     // fetch all matches starting from today
     this.fetchAllUpcomingMatches(new Date().setHours(0, 0, 0, 0));
   }
+
   componentWillUnmount() {
     this.setState({
       mounted: false
     })
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.loading === true && nextState.loading === false) {
+      return true;
+    } else if (this.state.upcomingMatchesByDate !== nextState.upcomingMatchesByDate) {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -131,25 +141,13 @@ export default class AllBets extends Component {
             let matchDate = new Date(date[0].match_start_time);
             let formattedDate = getFormattedDate(matchDate);
             return (
-              <Box key={date} paddingTop='24px' >
-                <DateText width='85%' mx='auto' >
-                  {formattedDate}
-                </DateText >
-                <HorizontalDivider width='85%' />
-                <InView 
-                  key={date} 
-                  threshold={0.7} 
-                  triggerOnce={true}
-                  delay={1000}
-                  onChange={() => {
-                    let matchDate = new Date(date[0].match_start_time);
-                    
-                    // Remove accidental fetch of data for the same date twice
-                    if (matchDate.getDate() !== new Date(this.state.lastFetchedDate).getDate()) {
-                      this.fetchAllUpcomingMatches(this.state.lastFetchedDate)
-                    }
-                  }}
-                >
+              <Fragment key={matchDate}>
+                <Box paddingTop='24px' >
+                  <DateText width='85%' mx='auto' >
+                    {formattedDate}
+                  </DateText >
+                  <HorizontalDivider width='85%' />
+                  
                   <List >
                     {date.map(match => {
                       let gameTime = new Date(match.match_start_time);
@@ -167,8 +165,23 @@ export default class AllBets extends Component {
                       )
                     })}
                   </List>
-                </InView>
-              </Box>
+                  <InView 
+                    as={'div'}
+                    triggerOnce={true}
+                    delay={1000}
+                    initialInView={true}
+                    threshold={1}
+                    onChange={() => {
+                      let matchDate = new Date(date[0].match_start_time);
+                      console.log('fetching')
+                      // Remove accidental fetch of data for the same date twice
+                      if (matchDate.getDate() !== new Date(this.state.lastFetchedDate).getDate()) {
+                        this.fetchAllUpcomingMatches(this.state.lastFetchedDate)
+                      }
+                    }}
+                  />
+                </Box>
+              </Fragment>
             );
           })
 
