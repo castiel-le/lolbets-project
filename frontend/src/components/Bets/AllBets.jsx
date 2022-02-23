@@ -160,11 +160,11 @@ export default class AllBets extends Component {
           // if upcoming matches are set, render this
           ?
 
-          this.state.upcomingMatchesByDate.map(date => {
+          this.state.upcomingMatchesByDate.map((date, index, {length}) => {
             let matchDate = new Date(date[0].match_start_time);
             let formattedDate = getFormattedDate(matchDate);
             return (
-              <Fragment key={matchDate}>
+              <Fragment key={matchDate} >
                 <Box paddingTop='24px' >
                   <DateText width='85%' mx='auto' >
                     {formattedDate}
@@ -172,11 +172,12 @@ export default class AllBets extends Component {
                   <HorizontalDivider width='85%' />
                   <InView 
                     as={'div'}
-                    delay={500}
                     initialInView={true}
-                    threshold={0.6}
-                    onChange={() => {
-                      if (this.state.fetching === false) {
+                    threshold={0.2}
+                    onChange={(inView, entry) => {
+                      // if you are currently looking at the last date on the current page
+                      // fetch the next date
+                      if ( inView && !this.state.fetching && index + 1 === length) {
                         this.setState({
                           fetching: true
                         },
