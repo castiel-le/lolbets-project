@@ -172,7 +172,6 @@ export default class AllBets extends Component {
                                     <InView 
                                         as={'div'}
                                         initialInView={true}
-                                        threshold={0.2}
                                         onChange={(inView, entry) => {
                                             // if you are currently looking at the last date on the current page
                                             // fetch the next date
