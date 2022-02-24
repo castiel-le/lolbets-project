@@ -1,55 +1,38 @@
 /* eslint-disable max-len */
 import { Component } from "react";
 import { Box } from "@mui/material";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Card, CardContent } from "@mui/material";
-import { Android } from '@mui/icons-material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress} from "@mui/material";
+import { Android, Icecream } from '@mui/icons-material';
 import customUIComponents, { FlexBoxColumn, FlexBoxRow, HorizontalDivider, TypographyBold, TypographyLight, TypographyMedium } from "../customUIComponents";
 
 class Leaderboard extends Component {
   constructor(props){
     super(props);
     this.state = {
-      user: {
-        // eslint-disable-next-line camelcase
-        user_id: null,
-        username: "",
-        // eslint-disable-next-line camelcase
-        date_created: null,
-        coins: 0
-      },
+      users: [],
       page: 1
     }
   }
 
-  render(){
-    const testData = [
-      {
-        "rank": 6,
-        "username": "Rachid",
-        "coins": 10000
-      },
-      {
-        "rank": 7,
-        "username": "Angelica",
-        "coins": 5000
-      },
-      {
-        "rank": 8,
-        "username": "tom193",
-        "coins": 3000
-      },
-      {
-        "rank": 9,
-        "username": "billy0956",
-        "coins": 200
-      },
-      {
-        "rank": 10,
-        "username": "xxEpicKillerxx",
-        "coins": 1
+  async componentDidMount(){
+    const urlUsers = "/api/user";
+    try {
+      const top5 = await fetch(urlUsers);
+      if (top5.ok){
+        this.setState({
+          users: await top5.json()
+        });
       }
-    ];
-    return (
+    // eslint-disable-next-line brace-style
+    }
+    catch (e){
+      console.error(e);
+    }
+  }
+
+  render(){
+    // eslint-disable-next-line no-extra-parens
+    return this.state.users.length !== 0 ? (
       <FlexBoxColumn width="80%" sx={{mx:'auto', alignItems: 'center'}}>
         <FlexBoxRow>
           <TypographyBold sx={{mx:'auto'}}>Leaderboard</TypographyBold>
@@ -57,14 +40,14 @@ class Leaderboard extends Component {
         {/* 1st rank */}
         <FlexBoxRow sx={{ width: '100%', height:'100px'}} style={{backgroundColor: 'grey', borderRadius: '5px', padding: '10px', margin: '10px 0', width: '60%'}}>
           <FlexBoxRow>
-            <FlexBoxColumn sx={{ width: '50%', mx: 'auto', alignItems: 'center', borderRadius: '10px'}} style={{backgroundColor: 'rgba(255, 155, 0, 0.3)'}}>
+            <FlexBoxColumn sx={{ width: '75px', mx: 'auto', alignItems: 'center', borderRadius: '10px'}} style={{backgroundColor: 'rgba(255, 155, 0, 0.3)'}}>
               <TypographyMedium sx={{ my:'auto', color: '#ff9b00', fontSize: '40px', borderBottom: '2px #ff9b00 solid', width: '40%'}}>1</TypographyMedium>
             </FlexBoxColumn>
             <FlexBoxColumn>
-              <TypographyLight sx={{ my: 'auto' }}>Profile icon</TypographyLight>
+              <TypographyLight sx={{ my: 'auto' }}>{this.state.users[0].username}</TypographyLight>
             </FlexBoxColumn>
             <FlexBoxColumn>
-              <TypographyLight sx={{ my: 'auto' }}>Username, coins</TypographyLight>
+              <TypographyLight sx={{ my:'auto', ml: '10px'}}>{this.state.users[0].coins}</TypographyLight>
             </FlexBoxColumn>
           </FlexBoxRow>
         </FlexBoxRow>
@@ -75,10 +58,10 @@ class Leaderboard extends Component {
               <TypographyLight sx={{ my: 'auto'}}>2</TypographyLight>
             </FlexBoxColumn>
             <FlexBoxColumn>
-              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>Username2</TypographyLight>
+              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>{this.state.users[1].username}</TypographyLight>
             </FlexBoxColumn>
             <FlexBoxColumn>
-              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>Coins2</TypographyLight>
+              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>{this.state.users[1].coins}</TypographyLight>
             </FlexBoxColumn>
           </FlexBoxRow>
           {/* 3rd rank */}
@@ -87,10 +70,10 @@ class Leaderboard extends Component {
               <TypographyLight sx={{ my: 'auto'}}>3</TypographyLight>
             </FlexBoxColumn>
             <FlexBoxColumn>
-              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>Username3</TypographyLight>
+              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>{this.state.users[2].username}</TypographyLight>
             </FlexBoxColumn>
             <FlexBoxColumn>
-              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>Coins3</TypographyLight>
+              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>{this.state.users[2].coins}</TypographyLight>
             </FlexBoxColumn>
           </FlexBoxRow>
           {/* 4th rank */}
@@ -99,10 +82,10 @@ class Leaderboard extends Component {
               <TypographyLight sx={{ my: 'auto' }}>4</TypographyLight>
             </FlexBoxColumn>
             <FlexBoxColumn>
-              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>Username4</TypographyLight>
+              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>{this.state.users[3].username}</TypographyLight>
             </FlexBoxColumn>
             <FlexBoxColumn>
-              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>Coins4</TypographyLight>
+              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>{this.state.users[3].coins}</TypographyLight>
             </FlexBoxColumn>
           </FlexBoxRow>
           {/* 5th rank */}
@@ -111,16 +94,16 @@ class Leaderboard extends Component {
               <TypographyLight sx={{ my: 'auto' }}>5</TypographyLight>
             </FlexBoxColumn>
             <FlexBoxColumn>
-              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>Username5</TypographyLight>
+              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>{this.state.users[4].username}</TypographyLight>
             </FlexBoxColumn>
             <FlexBoxColumn>
-              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>Coins5</TypographyLight>
+              <TypographyLight sx={{ my: 'auto', mx: '10px'}}>{this.state.users[4].coins}</TypographyLight>
             </FlexBoxColumn>
           </FlexBoxRow>
         </FlexBoxRow>
 
         {/* Table for ranks 6+ */}
-        <TableContainer sx= {{ width: '60%' }}>
+        <TableContainer sx= {{ width: '80%'}} style={{ backgroundColor: 'grey', borderRadius: '5px', padding: '10px', margin: '10px'}}>
           <Table>
             <TableHead>
               <TableRow>
@@ -137,10 +120,10 @@ class Leaderboard extends Component {
             </TableHead>
             <TableBody>
               {
-                testData.map(testerrr =>
+                this.state.users.map(testerrr =>
                   <TableRow key={testerrr.username}>
                     <TableCell sx={{ width:'30%' }}>
-                      <TypographyLight>{testerrr.rank}</TypographyLight>
+                      <TypographyLight>10</TypographyLight>
                     </TableCell>
                     <TableCell>
                       <Box sx={{ display: 'flex', flexDirection: 'row'}}>
@@ -158,7 +141,7 @@ class Leaderboard extends Component {
           </Table>
         </TableContainer>
       </FlexBoxColumn>
-    );
+    ) : <CircularProgress />;
   }
 }
 
