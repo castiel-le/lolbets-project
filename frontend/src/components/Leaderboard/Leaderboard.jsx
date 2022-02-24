@@ -22,7 +22,7 @@ class Leaderboard extends Component {
 
   render(){
     return (
-      <FlexBoxColumn width="80%" sx={{mx:'auto'}}>
+      <FlexBoxColumn width="80%" sx={{mx:'auto', alignItems: 'center'}}>
         <FlexBoxRow>
           <TypographyBold sx={{mx:'auto'}}>Leaderboard</TypographyBold>
         </FlexBoxRow>
@@ -44,7 +44,7 @@ class Leaderboard extends Component {
           {/* 2nd rank */}
           <FlexBoxRow sx={{ display: 'flex', width: '20%', backgroundColor: '#5c5749', padding: '10px'}}>
             <FlexBoxColumn sx={{ width: '15%', backgroundColor: 'blue'}}>
-              <TypographyLight sx={{ my: 'auto' }}>2</TypographyLight>
+              <TypographyLight sx={{ my: 'auto'}}>2</TypographyLight>
             </FlexBoxColumn>
             <FlexBoxColumn>
               <TypographyLight sx={{ my: 'auto', mx: '10px'}}>Username2</TypographyLight>
