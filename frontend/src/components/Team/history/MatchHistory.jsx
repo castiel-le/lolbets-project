@@ -14,7 +14,7 @@ export default class MatchHistory extends Component {
     }
 
     async componentDidMount() {
-        await this.props.setMatches(this.props.page);
+        await this.props.setMatches(this.props.page + 1);
     }
 
     /**
@@ -42,6 +42,11 @@ export default class MatchHistory extends Component {
         const styleCell = {borderBottom: 0};
         const styleTable = {backgroundColor: "#223039"};
         const styleBody = {backgroundColor: "#1e2a32"};
+        
+        // slice indexes for matches
+        const tablePage = this.props.page - 1;
+        const start = tablePage * this.props.rowsPerPage;
+        const end = tablePage * this.props.rowsPerPage + this.props.rowsPerPage;
         return(
             <TableContainer >
                 <Typography variant="h5" style={styleHeader}>
@@ -63,17 +68,19 @@ export default class MatchHistory extends Component {
                         </TableRow>
                     </TableHead>
                     <TableBody size="string" style={styleBody}>
-                        {this.props.matches.map(column => 
-                            <MatchRow column={column} id={this.props.id} key={column.match_id} />
-                        )}
+                        {this.props.matches.slice(start, end).
+                            map(column => 
+                                <MatchRow column={column} 
+                                    id={this.props.id} key={column.match_id} />
+                            )}
                     </TableBody>
                 </Table>
                 <TablePagination
-                    rowsPerPageOptions={[15]}
-                    rowsPerPage={15}
+                    rowsPerPageOptions={[this.props.rowsPerPage]}
+                    rowsPerPage={this.props.rowsPerPage}
                     component="div"
                     count={200}
-                    page={this.props.page - 1}
+                    page={tablePage}
                     onPageChange={this.handleChangePage}
                     onRowsPerPageChange={this.handleChangeRowsPerPage}
                     style={stylePagination}

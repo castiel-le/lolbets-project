@@ -25,6 +25,7 @@ class Team extends Component {
             },
             matches: [],
             page: 1,
+            rowsPerPage: 15
         };
         this.changePage = this.changePage.bind(this);
         this.setMatches = this.setMatches.bind(this);
@@ -35,17 +36,25 @@ class Team extends Component {
      * @param {Number} page page number
      */
     async changePage(page) {
-        try {
-            const newMatches = await this.getMatches(page)
-            this.setState({ page: page, matches: newMatches })
-        } catch (e) {
-            console.log("no matches for page " + page);
+        const tablePage = page - 1;
+        // Check if new page exceeds current matches in the state
+        if (tablePage * this.state.rowsPerPage < this.state.matches.length) {
+            this.setState({page: page});
+        } else {
+            // fetch new matches
+            try {
+                const newMatches = await this.getMatches(page + 1);
+                this.setState({ page: page, matches: this.state.matches.concat(newMatches) })
+            } catch (e) {
+                console.log("no matches for page " + page);
+            }
         }
     }
 
     /**
      * Fetches match data on specified page from API.
      * @param {Number} page - page number
+     * @returns array of matches(in json)
      */
     async getMatches(page) {
     // urls to fetch
@@ -98,7 +107,8 @@ class Team extends Component {
                     <MatchHistory matches={this.state.matches} id={this.state.team.team_id}
                         changePage={this.changePage}
                         page={this.state.page}
-                        setMatches={this.setMatches} />
+                        setMatches={this.setMatches}
+                        rowsPerPage={this.state.rowsPerPage} />
                 </Box>
             </ThemeProvider>
         );
