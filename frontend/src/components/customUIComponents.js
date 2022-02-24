@@ -69,4 +69,22 @@ export function Loading(){
             <CircularProgress />
         </Box>
     );
+}  
+
+/**
+ * A function that returns a ABSOLUTELY centered loading circle
+ * on the parent component.
+ * @returns A loading circle
+ */
+export function LoadingOverTop(){
+    return (
+        <Box sx={{ 
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+        }} 
+        >
+            <CircularProgress />
+        </Box>
+    );
 }   

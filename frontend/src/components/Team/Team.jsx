@@ -5,6 +5,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Box } from "@mui/material";
 import TeamSection from "./details/TeamSection";
 import MatchHistory from "./history/MatchHistory";
+import { Loading } from '../customUIComponents';
+
 const theme = createTheme();
 
 /**
@@ -23,11 +25,23 @@ class Team extends Component {
                 wins: null,
                 losses: null,
             },
+            teamNotLoaded: true,
+            matchNotLoaded: true,
             matches: [],
             page: 1,
+            rowsPerPage: 15
         };
         this.changePage = this.changePage.bind(this);
         this.setMatches = this.setMatches.bind(this);
+        this.changeMatchNotLoaded = this.changeMatchNotLoaded.bind(this);
+    }
+
+    /**
+     * Changes the matchNotLoaded state to value
+     * @param {Boolean} value matchNotLoaded's new value
+     */
+    changeMatchNotLoaded(value) {
+        this.setState({matchNotLoaded: value})
     }
 
     /**
@@ -35,17 +49,26 @@ class Team extends Component {
      * @param {Number} page page number
      */
     async changePage(page) {
-        try {
-            const newMatches = await this.getMatches(page)
-            this.setState({ page: page, matches: newMatches })
-        } catch (e) {
-            console.log("no matches for page " + page);
+        const tablePage = page - 1;
+        // Check if new page exceeds current matches in the state
+        if (tablePage * this.state.rowsPerPage < this.state.matches.length) {
+            this.setState({page: page, matchNotLoaded: false});
+        } else {
+            // fetch new matches
+            try {
+                const newMatches = await this.getMatches(page + 1);
+                this.setState({ page: page, matches: this.state.matches.concat(newMatches), 
+                    matchNotLoaded: false })
+            } catch (e) {
+                console.log("no matches for page " + page);
+            }
         }
     }
 
     /**
      * Fetches match data on specified page from API.
      * @param {Number} page - page number
+     * @returns array of matches(in json)
      */
     async getMatches(page) {
     // urls to fetch
@@ -67,7 +90,7 @@ class Team extends Component {
    */
     async setMatches(page) {
         try {
-            this.setState({matches: await this.getMatches(page)});
+            this.setState({matches: await this.getMatches(page), matchNotLoaded: false});
         } catch (e) {
             console.log(e);
         }
@@ -84,7 +107,7 @@ class Team extends Component {
             const responseTeam = await fetch(urlTeam + this.props.params.id);
 
             if (responseTeam.ok) {
-                this.setState({ team: await responseTeam.json()});
+                this.setState({ team: await responseTeam.json(), teamNotLoaded: false});
             }
         } catch (e) {
             console.log(e);
@@ -93,13 +116,22 @@ class Team extends Component {
     render() {
         return (
             <ThemeProvider theme={theme}>
-                <Box display="flex" flexDirection="row" columnGap={2}>
-                    <TeamSection team={this.state.team} />
-                    <MatchHistory matches={this.state.matches} id={this.state.team.team_id}
-                        changePage={this.changePage}
-                        page={this.state.page}
-                        setMatches={this.setMatches} />
-                </Box>
+                
+                {this.state.isTeamNotLoaded ?
+                    <Loading />
+                    :
+                    <Box display="flex" flexDirection="row" columnGap={2}>
+                        <TeamSection team={this.state.team} />
+                        <MatchHistory matches={this.state.matches} id={this.state.team.team_id}
+                            changePage={this.changePage}
+                            page={this.state.page}
+                            setMatches={this.setMatches}
+                            rowsPerPage={this.state.rowsPerPage}
+                            matchNotLoaded={this.state.matchNotLoaded}
+                            changeMatchNotLoaded={this.changeMatchNotLoaded} />
+                    </Box>
+                }
+                
             </ThemeProvider>
         );
     }
