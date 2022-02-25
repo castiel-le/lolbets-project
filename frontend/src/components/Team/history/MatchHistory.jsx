@@ -2,7 +2,7 @@ import { Component } from "react";
 import { TablePagination, TableContainer, Table, TableRow, 
     TableCell, TableBody, TableHead, Typography } from "@mui/material";
 import MatchRow from "./MatchRow";
-import { LoadingOverTop, Loading } from "../../customUIComponents";
+import { LoadingOverTop } from "../../customUIComponents";
 
 /**
  * Component for displaying team's match histories.
@@ -61,11 +61,11 @@ export default class MatchHistory extends Component {
                     Match History
                 </Typography>
                 { this.props.matches.length === 0 ?
-                    <Table style={styleTable} size="small">
-                        <Loading />
+                    <Table style={styleTable} size="small" sx={{height: "85vh"}}>
+                        <LoadingOverTop /> 
                     </Table>
                     :
-                    <Table style={styleTable} size="small" >
+                    <Table style={styleTable} size="small" sx={{height: "85vh"}}>
                         {this.props.matchNotLoaded ?
                             <LoadingOverTop /> : <></>
                         }
