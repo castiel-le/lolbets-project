@@ -125,6 +125,16 @@ async function getUsers() {
     return users;
 }
 
+async function getTop5Users() {
+    const users = await models.User.findAll({
+        limit: 5,
+        order: [
+            ['coins', 'DESC']
+        ]
+    });
+    return users;
+}
+
 //Function to get user by id
 async function getUserById(id) {
     const user = await models.User.findAll({
@@ -150,4 +160,4 @@ async function swapTeamData(matches){
     return matches;
 }
 
-module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins};
+module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users};

@@ -111,7 +111,7 @@ router.get("/teams/:id", async (req, res) => {
 //Route to get all users
 router.get("/user", async (req, res) => {
     try {
-        res.json(await dbFetch.getUsers());
+        res.json(await dbFetch.getTop5Users());
     }
     catch(e){
         res.sendStatus(404);
