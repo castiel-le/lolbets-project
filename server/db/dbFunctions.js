@@ -24,7 +24,8 @@ async function getTeamById(id) {
             /* eslint-enable */
         }
     });
-    team[0].dataValues.winrate = Math.round(((await getWins(id))/(await getTotalMatches(id)))*10000)/100;
+    // eslint-disable-next-line max-len
+    team[0].dataValues.winrate = Math.round(await getWins(id) / await getTotalMatches(id) * 10000) / 100;
     return team[0];
 }
 
@@ -32,6 +33,7 @@ async function getTeamById(id) {
 async function getTeamByName(name) {
     const team = await models.Team.findAll({
         where: {
+            // eslint-disable-next-line camelcase
             team_name: name
         }
     });
@@ -51,12 +53,14 @@ async function getMatchHistory(id, pageNum) {
         limit: 15,
         where: {
             [Op.or]: [
+                // eslint-disable-next-line camelcase
                 { team1_id: id },
+                // eslint-disable-next-line camelcase
                 { team2_id: id }
             ]
         },
         order: [
-            ['match_start_time', 'DESC']
+            ["match_start_time", "DESC"]
         ]
     });
     return swapTeamData(matches);
@@ -68,6 +72,7 @@ async function getMatchesAfter(date, pageNum) {
         offset: 15 * (pageNum - 1),
         limit: 15,
         where: {
+            // eslint-disable-next-line camelcase
             match_start_time: {
                 [Op.gte]: date.valueOf()
             }
@@ -83,6 +88,7 @@ async function getMatchesAfter(date, pageNum) {
 async function getMatchesBetween(afterthis, beforethis) {
     const matches = await models.Match.findAll({
         where: {
+            // eslint-disable-next-line camelcase
             match_start_time: {
                 [Op.gte]: afterthis,
                 [Op.lte]: beforethis
@@ -100,7 +106,9 @@ async function getTotalMatches(id){
     const numOfMatches = await models.Match.count({
         where: {
             [Op.or]: [
+                // eslint-disable-next-line camelcase
                 { team1_id: id },
+                // eslint-disable-next-line camelcase
                 { team2_id: id }
             ]
         }
@@ -112,6 +120,7 @@ async function getTotalMatches(id){
 async function getWins(id){
     const wins = await models.Match.count({
         where: {
+            // eslint-disable-next-line camelcase
             winner_id: id
         }
     });
@@ -125,11 +134,23 @@ async function getUsers() {
     return users;
 }
 
+//Function to get top 5 users
 async function getTop5Users() {
     const users = await models.User.findAll({
         limit: 5,
         order: [
-            ['coins', 'DESC']
+            ["coins", "DESC"]
+        ]
+    });
+    return users;
+}
+
+//Function to get remaining users, minus top 5
+async function getRemainingUsers() {
+    const users = await models.User.findAll({
+        offset: 5,
+        order: [
+            ["coins", "DESC"]
         ]
     });
     return users;
@@ -151,13 +172,15 @@ async function getUserById(id) {
 //Helper function to put team data inside of matches
 async function swapTeamData(matches){
     for (let i = 0; i < matches.length; i++){
-        matches[i].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
-        let team1string = (await getTeamById(matches[i].dataValues.team1_id));
-        let team2string = (await getTeamById(matches[i].dataValues.team2_id));
-        matches[i].dataValues.team1_id = team1string;
-        matches[i].dataValues.team2_id = team2string;
+        // eslint-disable-next-line max-len
+        matches[parseInt(i)].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
+        let team1string = await getTeamById(matches[parseInt(i)].dataValues.team1_id);
+        let team2string = await getTeamById(matches[parseInt(i)].dataValues.team2_id);
+        matches[parseInt(i)].dataValues.team1_id = team1string;
+        matches[parseInt(i)].dataValues.team2_id = team2string;
     }
     return matches;
 }
 
-module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users};
+// eslint-disable-next-line max-len
+module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers};

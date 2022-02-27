@@ -108,8 +108,8 @@ router.get("/teams/:id", async (req, res) => {
     }
 });
 
-//Route to get all users
-router.get("/user", async (req, res) => {
+//Route to get top 5 users
+router.get("/user/top5", async (req, res) => {
     try {
         res.json(await dbFetch.getTop5Users());
     }
@@ -118,10 +118,30 @@ router.get("/user", async (req, res) => {
     }
 });
 
+//Route to get non top 5 users
+router.get("/user/rest", async (req, res) => {
+    try {
+        res.json(await dbFetch.getRemainingUsers());
+    }
+    catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+//Route to get all users
+router.get("/user/all", async (req, res) => {
+    try {
+        res.json(await dbFetch.getUsers());
+    }
+    catch(e) {
+        res.sendStatus(404);
+    }
+})
+
 //Route to get a user by id
 router.get("/user/:id", async (req, res) => {
     try {
-       res.json((await dbFetch.getUserById(req.params.id))[0]); 
+        res.json((await dbFetch.getUserById(req.params.id))[0]); 
     }
     catch(e) {
         res.sendStatus(404);
