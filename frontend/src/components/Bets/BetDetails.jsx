@@ -1,43 +1,74 @@
-import { Typography } from '@mui/material';
 import {Component, Fragment} from 'react';
-import Countdown from 'react-countdown';
-import { BetComparisonBar } from './styledElements';
-import { FlexBoxRow, FlexBoxColumn } from '../customUIComponents';
+import SavingsIcon from '@mui/icons-material/Savings';
+import { BetComparisonBar, CustomCountdown } from './styledElements';
+import { 
+    FlexBoxRow, 
+    FlexBoxColumn, 
+    TypographyLight, 
+    TypographyBold, 
+    TypographyMedium 
+} from '../customUIComponents';
 
 export default class BetDetails extends Component {
 
-  render() {
-    const matchDate = new Date(this.props.date);
+    render() {
+        const matchDate = new Date(this.props.date);
 
-    return (
+        return (
 
-      <Fragment>
-        <FlexBoxRow width='100%'>
-          <FlexBoxColumn alignItems='center' width='15%'>
-            <Countdown date={Date.now() + matchDate.getTime()} sx={{backgroundColor: 'red'}} />
-            <Typography >
-            Close Time
-            </Typography>
-            <Typography >
-              {matchDate.toLocaleString()}
-            </Typography>
-          </FlexBoxColumn>
+            <Fragment>
+                <FlexBoxRow width='100%'>
+                    <FlexBoxColumn alignItems='center' width='20%' justifyContent='center'>
+                        <CustomCountdown date={matchDate.getTime()} />
+                        <TypographyLight fontSize={10} marginTop='12px'>
+                          Close Time
+                        </TypographyLight>
+                        <TypographyLight fontSize={10} >
+                            {matchDate.toLocaleString()}
+                        </TypographyLight>
+                    </FlexBoxColumn>
           
-          <FlexBoxRow width='70%' justifyContent='center'>
-            <Typography >
-            Win Rate team 1
-            </Typography>
-            <Typography >
-            Win Rate team 2
-            </Typography>
-          </FlexBoxRow>
+                    <FlexBoxRow width='60%' justifyContent='center'>
+                        <FlexBoxColumn justifyContent='center' >
+                            <TypographyBold fontSize={24} marginBottom='12px'>
+                              Winning Odds
+                            </TypographyBold>
+                            <FlexBoxRow width='100%' my={'auto'}>
+                                <TypographyMedium fontSize={16} mx='auto'>
+                                  1.35x
+                                </TypographyMedium>
+                                <TypographyMedium fontSize={16} mx='auto'>
+                                  2.45x
+                                </TypographyMedium>
+                            </FlexBoxRow>
+                        </FlexBoxColumn>
+                    </FlexBoxRow>
           
-          <FlexBoxRow width='15%' >
-            <BetComparisonBar team1Percent={60}/>
-          </FlexBoxRow>
+                    <FlexBoxRow width='20%' >
+                        <FlexBoxColumn width='100%' justifyContent='center' alignItems='center'>
+                            <BetComparisonBar 
+                                team1Percent={60} 
+                                width='100%' 
+                            />
+                            <TypographyLight fontSize={10} marginTop='12px'>
+                              Current Pool:
+                            </TypographyLight>
+                            <FlexBoxRow 
+                                width='100%' 
+                                alignContent='center' 
+                                justifyContent='center' 
+                                alignItems='center'
+                            >
+                                <SavingsIcon />
+                                <TypographyLight fontSize={12} marginLeft='5px'>
+                                  1000
+                                </TypographyLight>
+                            </FlexBoxRow>
+                        </FlexBoxColumn>
+                    </FlexBoxRow>
           
-        </FlexBoxRow>
-      </Fragment>
-    );
-  }
+                </FlexBoxRow>
+            </Fragment>
+        );
+    }
 }

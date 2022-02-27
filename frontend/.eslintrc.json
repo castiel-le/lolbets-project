@@ -29,7 +29,7 @@
     "no-extra-parens": "warn",
     "indent": [
       "error",
-      2
+      4
     ],
     "block-scoped-var": "warn",
     "curly": "warn",

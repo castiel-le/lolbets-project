@@ -55,9 +55,9 @@ async function getMatchHistory(id, pageNum) {
             [Op.or]: [
                 // eslint-disable-next-line camelcase
                 { team1_id: id },
-                // eslint-disable-next-line camelcase
-                { team2_id: id }
-            ]
+                { team2_id: id },
+            ],
+            in_progress: false
         },
         order: [
             ["match_start_time", "DESC"]
