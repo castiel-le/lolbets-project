@@ -52,7 +52,6 @@
             "warn",
             "consistent"
         ],
-        "camelcase": "error",
         "comma-spacing": [
             "warn",
             {
@@ -66,10 +65,6 @@
         ],
         "brace-style": [
             "warn"
-        ],
-        "max-len": [
-            "warn",
-            100
         ],
         "no-inline-comments": "error",
         "no-tabs": "error",

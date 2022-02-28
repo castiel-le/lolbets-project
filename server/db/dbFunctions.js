@@ -24,7 +24,7 @@ async function getTeamById(id) {
             /* eslint-enable */
         }
     });
-    team[0].dataValues.winrate = Math.round(((await getWins(id))/(await getTotalMatches(id)))*10000)/100;
+    team[0].dataValues.winrate = Math.round(await getWins(id) / await getTotalMatches(id) * 10000) / 100;
     return team[0];
 }
 
@@ -32,6 +32,7 @@ async function getTeamById(id) {
 async function getTeamByName(name) {
     const team = await models.Team.findAll({
         where: {
+            // eslint-disable-next-line camelcase
             team_name: name
         }
     });
@@ -57,7 +58,7 @@ async function getMatchHistory(id, pageNum) {
             in_progress: false
         },
         order: [
-            ['match_start_time', 'DESC']
+            ["match_start_time", "DESC"]
         ]
     });
     return swapTeamData(matches);
@@ -143,8 +144,8 @@ async function getUserById(id) {
 async function swapTeamData(matches){
     for (let i = 0; i < matches.length; i++){
         matches[i].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
-        let team1string = (await getTeamById(matches[i].dataValues.team1_id));
-        let team2string = (await getTeamById(matches[i].dataValues.team2_id));
+        let team1string = await getTeamById(matches[i].dataValues.team1_id);
+        let team2string = await getTeamById(matches[i].dataValues.team2_id);
         matches[i].dataValues.team1_id = team1string;
         matches[i].dataValues.team2_id = team2string;
     }

@@ -136,6 +136,7 @@ export default class SignInForm extends Component {
                             </Button>
                             <Grid container>
                                 <Grid item xs>
+                                    <a className="button google" href="api/login/federated/google">Sign in with Google</a>
                                     <ReactLink to={"/signup"} >
                                         <Link href="/signup" variant="body2">
                                             <Typography sx={{color: "#f9f9f9", textAlign: "right", fontSize: "14px", margin: 2}}>
