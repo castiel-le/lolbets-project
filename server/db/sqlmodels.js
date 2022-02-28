@@ -130,10 +130,15 @@ const User = sequelize.define("user", {
 
 // Bet participant model
 const BetParticipant = sequelize.define("bet_participants", {
-    bet_id: {
+    bet_participant_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: false
+        autoIncrement: true,
+        primaryKey: true
+    },
+    bet_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     },
     user_id: {
         type: DataTypes.INTEGER,
@@ -150,5 +155,5 @@ const BetParticipant = sequelize.define("bet_participants", {
         allowNull: false,
         defaultValue: false
     },
-});
+}, {timestamps: false});
 module.exports = {Badge, Team, Match, User, BetParticipant};

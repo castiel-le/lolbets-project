@@ -182,5 +182,15 @@ async function swapTeamData(matches){
     return matches;
 }
 
+//Function to get user's bets history by id and with pagination
+async function getUserBetsById(id, page) {
+    const bets = await models.BetParticipant.findAll({
+        where: {
+            user_id: id
+        }
+    })
+    return bets;
+}
+
 // eslint-disable-next-line max-len
-module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers};
+module.exports = { getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers};
