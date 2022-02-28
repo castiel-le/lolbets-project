@@ -169,8 +169,12 @@ async function getUserById(id) {
 }
 
 //Function to get user's bets history by id and with pagination
-async function getUserBetsById(id, page) {
+async function getUserBetsById(id, page, limit) {
+    const limitNum = parseInt(limit);
+    const pageNum = parseInt(page);
     const bets = await models.BetParticipant.findAll({
+        offset: limitNum * (pageNum - 1),
+        limit: limitNum,
         where: {
             user_id: id
         }

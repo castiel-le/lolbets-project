@@ -155,5 +155,9 @@ const BetParticipant = sequelize.define("bet_participants", {
         allowNull: false,
         defaultValue: false
     },
+    creation_date: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
 }, {timestamps: false});
 module.exports = {Badge, Team, Match, User, BetParticipant};

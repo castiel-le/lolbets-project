@@ -159,7 +159,7 @@ router.get("/teams/history/:id", async (req, res) => {
 
 router.get("/user/history/:id", async (req, res) => {
     try {
-        res.json(await dbFetch.getUserBetsById(req.params.id, req.query.page));
+        res.json(await dbFetch.getUserBetsById(req.params.id, req.query.page, req.query.limit));
     } catch (e) {
         res.sendStatus(404);
     }
