@@ -168,20 +168,6 @@ async function getUserById(id) {
     return user;
 }
 
-
-//Helper function to put team data inside of matches
-async function swapTeamData(matches){
-    for (let i = 0; i < matches.length; i++){
-        // eslint-disable-next-line max-len
-        matches[parseInt(i)].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
-        let team1string = await getTeamById(matches[parseInt(i)].dataValues.team1_id);
-        let team2string = await getTeamById(matches[parseInt(i)].dataValues.team2_id);
-        matches[parseInt(i)].dataValues.team1_id = team1string;
-        matches[parseInt(i)].dataValues.team2_id = team2string;
-    }
-    return matches;
-}
-
 //Function to get user's bets history by id and with pagination
 async function getUserBetsById(id, page) {
     const bets = await models.BetParticipant.findAll({
@@ -189,7 +175,26 @@ async function getUserBetsById(id, page) {
             user_id: id
         }
     })
-    return bets;
+    return swapTeamData(bets);
+}
+
+async function swapMatchData(bets) {
+    for (let i = 0; i < matches.length; i++){
+        // eslint-disable-next-line max-len
+    }
+}
+
+//Helper function to put team data inside of matches
+async function swapTeamData(matches){
+    for (let i = 0; i < matches.length; i++){
+        // eslint-disable-next-line max-len
+        matches[i].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
+        let team1string = await getTeamById(matches[i].dataValues.team1_id);
+        let team2string = await getTeamById(matches[i].dataValues.team2_id);
+        matches[i].dataValues.team1_id = team1string;
+        matches[i].dataValues.team2_id = team2string;
+    }
+    return matches;
 }
 
 // eslint-disable-next-line max-len
