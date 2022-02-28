@@ -3,129 +3,152 @@ const {DataTypes} = require("sequelize");
 
 
 //Badge model
-const Badge = sequelize.define('badge', {
+const Badge = sequelize.define("badge", {
     // Model attributes are defined here
     badge_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true
     },
     badge_name: {
-      type: DataTypes.STRING,
-      allowNull: false
-      // allowNull defaults to true
+        type: DataTypes.STRING,
+        allowNull: false
+        // allowNull defaults to true
     },
     badge_image: {
-      type: DataTypes.STRING,
-      allowNull: false
+        type: DataTypes.STRING,
+        allowNull: false
     },  
-  }, {timestamps:false});
+}, {timestamps:false});
 
-  //Team model
-  const Team = sequelize.define('team', {
+//Team model
+const Team = sequelize.define("team", {
     //Model attributes
     team_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true
     },
     team_name : {
-      type: DataTypes.STRING,
-      allowNull: false
+        type: DataTypes.STRING,
+        allowNull: false
     },
     logo: {
-      type: DataTypes.STRING
+        type: DataTypes.STRING
     },
     abbreviation: {
-      type: DataTypes.STRING
+        type: DataTypes.STRING
     },
     wins: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+        type: DataTypes.INTEGER,
+        allowNull: false
     },
     losses: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
-  }, {timestamps: false});
+}, {timestamps: false});
 
-  //Match model
-  const Match = sequelize.define("match", {
+//Match model
+const Match = sequelize.define("match", {
     //Model attributes
     match_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true
     },
     team1_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+        type: DataTypes.INTEGER,
+        allowNull: false
     },
     team2_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+        type: DataTypes.INTEGER,
+        allowNull: false
     },
     winner_id: {
-      type: DataTypes.INTEGER,
-      defaultValue: null
+        type: DataTypes.INTEGER,
+        defaultValue: null
     },
     match_start_time: {
-      type: DataTypes.DATE,
-      allowNull: false
+        type: DataTypes.DATE,
+        allowNull: false
     },
     in_progress: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     },
     game_length: {
-      type: DataTypes.INTEGER
+        type: DataTypes.INTEGER
     },
     pandascore_id: {
-      type: DataTypes.INTEGER
+        type: DataTypes.INTEGER
     }
-  }, {timestamps: false});
+}, {timestamps: false});
 
-  //User model
-  const User = sequelize.define("user", {
+//User model
+const User = sequelize.define("user", {
     user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true
     },
     username: {
-      type: DataTypes.STRING,
-      allowNull: false
+        type: DataTypes.STRING,
+        allowNull: false
     },
     password_id: {
-      type: DataTypes.INTEGER
+        type: DataTypes.INTEGER
     },
     email: {
-      type: DataTypes.STRING,
-      allowNull: false
+        type: DataTypes.STRING,
+        allowNull: false
     },
     date_created: {
-      type: DataTypes.DATE,
-      allowNull: false
+        type: DataTypes.DATE,
+        allowNull: false
     },
     profile_pic: {
-      type: DataTypes.STRING
+        type: DataTypes.STRING
     },
     coins: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+        type: DataTypes.INTEGER,
+        allowNull: false
     },
     flagged: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     },
     banned: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
-  }, {timestamps: false});
+}, {timestamps: false});
 
-  module.exports = {Badge, Team, Match, User};
+// Bet participant model
+const BetParticipant = sequelize.define("bet_participants", {
+    bet_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false
+    },
+    user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false
+    },
+    team_betted_on: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false
+    },
+    amount_bet: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false
+    },
+});
+module.exports = {Badge, Team, Match, User, BetParticipant};
