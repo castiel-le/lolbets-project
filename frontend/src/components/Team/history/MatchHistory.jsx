@@ -17,7 +17,7 @@ export default class MatchHistory extends Component {
     }
 
     async componentDidMount() {
-        await this.props.setMatches(this.props.page + 1);
+        await this.props.setMatches(this.props.page);
     }
 
     /**
