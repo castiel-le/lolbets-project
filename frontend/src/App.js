@@ -12,6 +12,7 @@ import Profile from './components/Profile/Profile';
 import { Loading } from './components/customUIComponents';
 import Teams from "./components/Teams/Teams";
 import Leaderboard from "./components/Leaderboard/Leaderboard";
+import UserBetHistory from './components/UserBetHistory/UserBetHistroy';
 
 function App() {
     return (
@@ -37,7 +38,7 @@ function App() {
                         <Route path='/bets/edit/:id' element={<h1> Edit Bet Number </h1>} />
                         <Route path='/profile' element={<Profile />} />
                         <Route path='/user/:id' element={<Profile />} />
-                        <Route path='/user/:id/history' element={<Profile />} />
+                        <Route path='/user/:id/history' element={<UserBetHistory />} />
                         <Route path='/leaderboard' element={<Leaderboard />} />
                         <Route path='/teams' element={<Teams />} />
                         <Route path='/teams/:id' element={<Team />} />
