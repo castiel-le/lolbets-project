@@ -146,9 +146,10 @@ async function getTop5Users() {
 }
 
 //Function to get remaining users, minus top 5
-async function getRemainingUsers() {
+async function getRemainingUsers(pageNum) {
     const users = await models.User.findAll({
-        offset: 5,
+        offset: (pageNum - 1) * 10,
+        limit: 10,
         order: [
             ["coins", "DESC"]
         ]

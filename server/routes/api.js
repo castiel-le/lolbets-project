@@ -121,7 +121,7 @@ router.get("/user/top5", async (req, res) => {
 //Route to get non top 5 users
 router.get("/user/rest", async (req, res) => {
     try {
-        res.json(await dbFetch.getRemainingUsers());
+        res.json(await dbFetch.getRemainingUsers(req.query.page));
     }
     catch(e) {
         res.sendStatus(404);

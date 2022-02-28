@@ -1,5 +1,7 @@
+/* eslint-disable indent */
 /* eslint-disable max-len */
 import { Component } from "react";
+import LeaderboardTable from "./LeaderboardTable"
 import { Box } from "@mui/material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, TablePagination} from "@mui/material";
 import { Android, Icecream } from '@mui/icons-material';
@@ -11,20 +13,69 @@ class Leaderboard extends Component {
         this.state = {
             top5: [],
             remaining: [],
+            top5NotLoaded: true,
+            usersNotLoaded: true,
+            rowsPerPage: 10,
             page: 1
+        };
+        this.changeUsersNotLoaded = this.changeUsersNotLoaded.bind(this);
+        this.changePage = this.changePage.bind(this);
+        this.setUsers = this.setUsers.bind(this);
+    }
+
+    changeUsersNotLoaded(value) {
+      this.setState({usersNotLoaded: value});
+    }
+
+    async changePage(page) {
+        const tablePage = page - 1;
+        
+        // Check if new page exceeds current matches in the state
+        if (tablePage * this.state.rowsPerPage < this.state.remaining.length) {
+            this.setState({page: page, usersNotLoaded: false});
+        } else {
+            // fetch new matches
+            try {
+                const moreUsers = await this.getNextUsers(page);
+                console.log(moreUsers);
+                this.setState({ page: page, remaining: this.state.remaining.concat(moreUsers),
+                usersNotLoaded: false })
+            } catch (e) {
+                console.log("no users for page " + page);
+            }
+        }
+    }
+
+    async getNextUsers(page){
+        const urlToFetch = "/api/user/rest";
+
+        const userResponse = await fetch(urlToFetch + "?page=" + page);
+        console.log(userResponse.url);
+        if (userResponse.ok){
+            return await userResponse.json();
+        }
+        else {
+            throw new Error("no users for page: " + page);
+        }
+    }
+
+    async setUsers(page){
+        try {
+            this.setState({remaining: await this.getNextUsers(page), usersNotLoaded: false});
+        }
+        catch(e){
+            console.error(e);
         }
     }
 
     async componentDidMount(){
         const urlTop5 = "/api/user/top5";
-        const urlRest = "/api/user/rest";
         try {
             const top5 = await fetch(urlTop5);
-            const remaining = await fetch(urlRest);
-            if (top5.ok && remaining.ok){
+            if (top5.ok){
                 this.setState({
                     top5: await top5.json(),
-                    remaining: await remaining.json()
+                    top5NotLoaded: false
                 });
             }
             // eslint-disable-next-line brace-style
@@ -36,7 +87,7 @@ class Leaderboard extends Component {
 
     render(){
     // eslint-disable-next-line no-extra-parens
-        return this.state.top5.length !== 0 ? (
+        return !this.state.top5NotLoaded ? (
             <FlexBoxColumn width="80%" sx={{mx:'auto', alignItems: 'center'}}>
                 <FlexBoxRow>
                     <TypographyBold sx={{mx:'auto'}}>Leaderboard</TypographyBold>
@@ -108,45 +159,15 @@ class Leaderboard extends Component {
                         </FlexBoxColumn>
                     </FlexBoxRow>
                 </FlexBoxRow>
-
-                {/* Table for ranks 6+ */}
-                <TableContainer sx= {{ width: '80%'}} style={{ backgroundColor: 'grey', borderRadius: '5px', padding: '10px', margin: '10px'}}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell sx={{ align: 'center', width: '30%' }}>
-                                    <TypographyLight>Rank</TypographyLight>
-                                </TableCell>
-                                <TableCell>
-                                    <TypographyLight>Username</TypographyLight>
-                                </TableCell>
-                                <TableCell>
-                                    <TypographyLight>Coins</TypographyLight>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                this.state.remaining.map((testerrr, index) =>
-                                    <TableRow key={testerrr.username}>
-                                        <TableCell sx={{ width:'30%' }}>
-                                            <TypographyLight>{index + 6}</TypographyLight>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Box sx={{ display: 'flex', flexDirection: 'row'}}>
-                                                <Android sx={{ color: 'white' }}/>
-                                                <TypographyLight sx={{ pl: '40px' }}>{testerrr.username}</TypographyLight>
-                                            </Box>  
-                                        </TableCell>
-                                        <TableCell>
-                                            <TypographyLight>{testerrr.coins}</TypographyLight>
-                                        </TableCell>
-                                    </TableRow>
-                                )
-                            }
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                <LeaderboardTable 
+                    remaining={this.state.remaining}
+                    changePage={this.changePage}
+                    setUsers={this.setUsers}
+                    page={this.state.page}
+                    rowsPerPage={this.state.rowsPerPage}
+                    usersNotLoaded={this.state.usersNotLoaded}
+                    changeUsersNotLoaded={this.changeUsersNotLoaded}
+                />
             </FlexBoxColumn>
         ) : <CircularProgress />;
     }
