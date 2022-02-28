@@ -175,13 +175,20 @@ async function getUserBetsById(id, page) {
             user_id: id
         }
     })
-    return swapTeamData(bets);
+    return populateTeamOnBets(bets);
 }
 
-async function swapMatchData(bets) {
-    for (let i = 0; i < matches.length; i++){
-        // eslint-disable-next-line max-len
+/**
+ * Helper function to replace team_betted_on to team data.
+ * @param {Object} bets Array of BetParticipant models
+ * @returns Array of BetParticipant models with replaced team_betted_on
+ */
+async function populateTeamOnBets(bets) {
+    for (let i = 0; i < bets.length; i++){
+        const teamData = await getTeamById(bets[i].dataValues.team_betted_on);
+        bets[i].dataValues.team_betted_on = teamData;
     }
+    return bets;
 }
 
 //Helper function to put team data inside of matches
