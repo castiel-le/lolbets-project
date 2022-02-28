@@ -44,7 +44,7 @@ function App() {
                         <Route path='/teams/:id' element={<Team />} />
                         <Route path='/user/search/:username' element={<h1> Search User </h1>} />
                         <Route path='/teams/search/:teamname' element={<h1> Search Team </h1>} />
-                        <Route path='*' element={<h1> Not Found </h1>} />
+                        {/* <Route path='*' element={<h1> Not Found </h1>} /> */}
                     </Routes>
                 </Suspense>
             </Router>
