@@ -177,7 +177,10 @@ async function getUserBetsById(id, page, limit) {
         limit: limitNum,
         where: {
             user_id: id
-        }
+        },
+        order: [
+            ["creation_date", "DESC"]
+        ]
     })
     return populateTeamOnBets(bets);
 }
