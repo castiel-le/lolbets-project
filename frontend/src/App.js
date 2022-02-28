@@ -14,11 +14,17 @@ import Teams from "./components/Teams/Teams";
 import Leaderboard from "./components/Leaderboard/Leaderboard";
 import UserBetHistory from './components/UserBetHistory/UserBetHistroy';
 
+let logoutcheck = false;
+
+function logout(){
+    logoutcheck = true;
+}
+
 function App() {
     return (
         <div className="App">
             <Router >
-                <NavBar user={false} />
+                <NavBar logout={logoutcheck}/>
                 <Suspense fallback={<Loading />}>
                     <Routes >
                         <Route path='/' element={
@@ -44,6 +50,7 @@ function App() {
                         <Route path='/teams/:id' element={<Team />} />
                         <Route path='/user/search/:username' element={<h1> Search User </h1>} />
                         <Route path='/teams/search/:teamname' element={<h1> Search Team </h1>} />
+                        <Route path='/logout' element={logout()}/>
                         {/* <Route path='*' element={<h1> Not Found </h1>} /> */}
                     </Routes>
                 </Suspense>

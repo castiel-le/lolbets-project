@@ -26,7 +26,7 @@ passport.use(new GoogleStrategy({
     clientID: process.env["GOOGLE_CLIENT_ID"],
     clientSecret: process.env["GOOGLE_CLIENT_SECRET"],
     callbackURL: "/oauth2/redirect/google",
-    scope: ["profile", "email"]
+    scope: ["profile"]
 },
 function(issuer, profile, cb) {
     testdb.get("SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?", [
@@ -79,7 +79,7 @@ function(issuer, profile, cb) {
 //configure Passport to manage login session
 passport.serializeUser(function(user, done){
     process.nextTick(function(){
-        done(null, {id: user.id, username: user.username, name: user.username});
+        done(null, {id: user.id, username: user.email, name: user.name});
     });
 });
 

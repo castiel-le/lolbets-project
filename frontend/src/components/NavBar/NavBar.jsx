@@ -94,11 +94,13 @@ export default class NavBar extends Component {
             anchorToUser: null,
             openUserMenu: false,
             sideMenuOpen: false,
+            user: null,
         };
 
         this.handleOpenUserMenu = this.handleOpenUserMenu.bind(this);
         this.handleCloseUserMenu = this.handleCloseUserMenu.bind(this);
         this.toggleDrawer = this.toggleDrawer.bind(this);
+        this.verifyUser = this.verifyUser.bind(this);
     }
 
     handleOpenUserMenu(event) {
@@ -121,7 +123,25 @@ export default class NavBar extends Component {
         })
     }
 
+    async verifyUser(){
+        const userURL = "/userinfo"
+        
+        const userVerified = await fetch(userURL)
+        
+        if(userVerified.ok){
+            this.setState({user: await userVerified.json()})
+        }
+    }
+
+    componentDidMount(){
+        this.verifyUser();
+    }
+
     render() {
+        console.log(this.state.user)
+        if(this.props.logoutcheck){
+            this.verifyUser();
+        }
         return (
             <ThemeProvider theme={theme} >
                 <SideDrawer toggleDrawer={this.toggleDrawer} visible={this.state.sideMenuOpen} pages={pages} pageLinks={pageLinks} theme={theme}/>
@@ -172,7 +192,7 @@ export default class NavBar extends Component {
                                 )}
                             </Box>
 
-                            {this.props.user
+                            {this.state.user
                                 ? <UserAvatar 
                                     openUserMenu={this.state.openUserMenu} 
                                     anchorToUser={this.state.anchorToUser} 

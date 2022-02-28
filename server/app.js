@@ -22,6 +22,19 @@ app.use(passport.authenticate("session"));
 // all api calls to db is in /murals
 app.use("/api", router);
 
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/build"));
+});
+
+app.use("/userinfo", (req, res) =>{
+    res.send(req.user);
+});
+
+app.use("/logout", (req, res)=>{
+    req.logout();
+    res.redirect("/");
+})
+
 //Router to redirect back
 app.use("/oauth2/redirect/google", passport.authenticate("google", {
     successRedirect: "/",
