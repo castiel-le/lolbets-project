@@ -148,12 +148,18 @@ async function getTop5Users() {
 //Function to get remaining users, minus top 5
 async function getRemainingUsers(pageNum) {
     const users = await models.User.findAll({
-        offset: (pageNum - 1) * 10,
+        offset: ((pageNum - 1) * 10) + 5,
         limit: 10,
         order: [
             ["coins", "DESC"]
         ]
     });
+    return users;
+}
+
+//Function to get number of users
+async function getNumOfUsers() {
+    const users = await models.User.count();
     return users;
 }
 
@@ -184,4 +190,4 @@ async function swapTeamData(matches){
 }
 
 // eslint-disable-next-line max-len
-module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers};
+module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
