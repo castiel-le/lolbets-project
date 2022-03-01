@@ -56,7 +56,7 @@ class Team extends Component {
         } else {
             // fetch new matches
             try {
-                const newMatches = await this.getMatches(page + 1);
+                const newMatches = await this.getMatches(page);
                 this.setState({ page: page, matches: this.state.matches.concat(newMatches), 
                     matchNotLoaded: false })
             } catch (e) {

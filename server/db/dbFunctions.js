@@ -175,19 +175,48 @@ async function getUserById(id) {
     return user;
 }
 
+//Function to get user's bets history by id and with pagination
+async function getUserBetsById(id, page, limit) {
+    const limitNum = parseInt(limit);
+    const pageNum = parseInt(page);
+    const bets = await models.BetParticipant.findAll({
+        offset: limitNum * (pageNum - 1),
+        limit: limitNum,
+        where: {
+            user_id: id
+        },
+        order: [
+            ["creation_date", "DESC"]
+        ]
+    })
+    return populateTeamOnBets(bets);
+}
+
+/**
+ * Helper function to replace team_betted_on to team data.
+ * @param {Object} bets Array of BetParticipant models
+ * @returns Array of BetParticipant models with replaced team_betted_on
+ */
+async function populateTeamOnBets(bets) {
+    for (let i = 0; i < bets.length; i++){
+        const teamData = await getTeamById(bets[i].dataValues.team_betted_on);
+        bets[i].dataValues.team_betted_on = teamData;
+    }
+    return bets;
+}
 
 //Helper function to put team data inside of matches
 async function swapTeamData(matches){
     for (let i = 0; i < matches.length; i++){
         // eslint-disable-next-line max-len
-        matches[parseInt(i)].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
-        let team1string = await getTeamById(matches[parseInt(i)].dataValues.team1_id);
-        let team2string = await getTeamById(matches[parseInt(i)].dataValues.team2_id);
-        matches[parseInt(i)].dataValues.team1_id = team1string;
-        matches[parseInt(i)].dataValues.team2_id = team2string;
+        matches[i].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
+        let team1string = await getTeamById(matches[i].dataValues.team1_id);
+        let team2string = await getTeamById(matches[i].dataValues.team2_id);
+        matches[i].dataValues.team1_id = team1string;
+        matches[i].dataValues.team2_id = team2string;
     }
     return matches;
 }
 
 // eslint-disable-next-line max-len
-module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
+module.exports = { getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};

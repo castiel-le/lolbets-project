@@ -164,6 +164,14 @@ router.get("/teams/history/:id", async (req, res) => {
         res.sendStatus(404);
     }
 })
+
+router.get("/user/history/:id", async (req, res) => {
+    try {
+        res.json(await dbFetch.getUserBetsById(req.params.id, req.query.page, req.query.limit));
+    } catch (e) {
+        res.sendStatus(404);
+    }
+})
 module.exports = [
     router,
 ]
