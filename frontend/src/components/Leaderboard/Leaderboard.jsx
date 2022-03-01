@@ -2,10 +2,9 @@
 /* eslint-disable max-len */
 import { Component } from "react";
 import LeaderboardTable from "./LeaderboardTable"
-import { Box } from "@mui/material";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, TablePagination} from "@mui/material";
-import { Android, Icecream } from '@mui/icons-material';
-import customUIComponents, { FlexBoxColumn, FlexBoxRow, HorizontalDivider, TypographyBold, TypographyLight, TypographyMedium } from "../customUIComponents";
+import { CircularProgress} from "@mui/material";
+import { Icecream } from '@mui/icons-material';
+import { FlexBoxColumn, FlexBoxRow, TypographyBold, TypographyLight, TypographyMedium } from "../customUIComponents";
 
 class Leaderboard extends Component {
     constructor(props){
@@ -53,8 +52,7 @@ class Leaderboard extends Component {
         console.log(userResponse.url);
         if (userResponse.ok){
             return await userResponse.json();
-        }
-        else {
+        } else {
             throw new Error("no users for page: " + page);
         }
     }
@@ -62,8 +60,7 @@ class Leaderboard extends Component {
     async setUsers(page){
         try {
             this.setState({remaining: await this.getNextUsers(page), usersNotLoaded: false});
-        }
-        catch(e){
+        } catch(e){
             console.error(e);
         }
     }

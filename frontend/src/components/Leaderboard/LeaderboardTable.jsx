@@ -1,8 +1,9 @@
 import { Component } from "react";
 import { Box } from "@mui/material";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, TablePagination} from "@mui/material";
-import { Android, Icecream } from '@mui/icons-material';
-import customUIComponents, { FlexBoxColumn, FlexBoxRow, HorizontalDivider, TypographyBold, TypographyLight, TypographyMedium } from "../customUIComponents";
+// eslint-disable-next-line max-len
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination} from "@mui/material";
+import { Android } from '@mui/icons-material';
+import { FlexBoxColumn, TypographyLight } from "../customUIComponents";
 import './removeLabel.css';
 
 
@@ -40,8 +41,7 @@ class LeaderboardTable extends Component {
         const userCount = await fetch(urlToFetch + "?count=true");
         if (userCount.ok){
             return await userCount.json();
-        }
-        else {
+        } else {
             throw new Error("error occurred during count");
         }
     }
@@ -79,11 +79,13 @@ class LeaderboardTable extends Component {
                                 this.props.remaining.slice(start, end).map((testerrr, index) =>
                                     <TableRow key={testerrr.username}>
                                         <TableCell sx={{ width:'30%' }}>
+                                            {/* eslint-disable-next-line max-len */}
                                             <TypographyLight>{index + 6 + tablePage * 10}</TypographyLight>
                                         </TableCell>
                                         <TableCell>
                                             <Box sx={{ display: 'flex', flexDirection: 'row'}}>
                                                 <Android sx={{ color: 'white' }}/>
+                                                {/* eslint-disable-next-line max-len */}
                                                 <TypographyLight sx={{ pl: '40px' }}>{testerrr.username}</TypographyLight>
                                             </Box>  
                                         </TableCell>
