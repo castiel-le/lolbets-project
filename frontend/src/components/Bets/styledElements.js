@@ -3,6 +3,7 @@ import { Box, Button, Accordion, Typography, Avatar} from '@mui/material';
 import { FlexBoxRow, FlexBoxColumn, TypographyLight } from '../customUIComponents';
 import Countdown from 'react-countdown';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom'
 
 export const BetAccordion = styled(Accordion)({
     flexGrow: 1,
@@ -19,9 +20,12 @@ export const DateText = styled(Typography)({
     margin: 'inherit auto'
 });
 
-export const TeamLogo = styled(Avatar)({
+export const TeamLogo = styled(Avatar)({ 
     height: '72px',
-    width: '72px'
+    width: '72px',
+    ':hover': {
+        cursor: 'help'
+    }
 });
 
 export const TeamName = styled(Typography)({
@@ -82,13 +86,17 @@ export function TeamBox(props) {
                         {props.team.wins} - {props.team.losses}
                     </TeamWinLoss>
                 </FlexBoxColumn>
-                <TeamLogo my='auto' src={props.team.logo} />
+                <Link to={`/teams/${props.team.team_id}`}>
+                    <TeamLogo my='auto' src={props.team.logo} />
+                </Link>
             </FlexBoxRow>
         );
     } else {
         return (
             <FlexBoxRow width='40%' sx={{ alignItems: 'center' }}>
-                <TeamLogo my='auto' src={props.team.logo} />
+                <Link to={`/teams/${props.team.team_id}`}>
+                    <TeamLogo my='auto' src={props.team.logo} />
+                </Link>
                 <FlexBoxColumn sx={{ alignContent: 'center', marginRight: 'auto' }}>
                     <TeamName textAlign={'left'} >
                         {props.team.team_name}
