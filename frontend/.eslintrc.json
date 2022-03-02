@@ -61,7 +61,6 @@
       "warn",
       "consistent"
     ],
-    "camelcase": "error",
     "comma-spacing": [
       "warn",
       {
