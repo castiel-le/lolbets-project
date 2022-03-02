@@ -43,10 +43,13 @@ export default class BetBox extends Component {
     render() {
         return (
             <Fragment >
+                {/* Parent box holds everything within a center box with width 82% of whole window */}
                 <Box
                     sx={{ bgcolor: 'inherit', width: '82%', mx: 'auto' }}
                 >
                     <Item sx={{ flexGrow: 1, my: '0px', bgcolor: 'inherit', border: '0px' }}>
+
+                        {/* The styled Accordion element that hold all the bet info */}
                         <BetAccordion 
                             expanded={this.state.expanded} 
                             onChange={(event) => this.handleExpand(event)} 
@@ -64,14 +67,16 @@ export default class BetBox extends Component {
                                     <TimeBox time={this.props.time} />
 
                                     <TeamBox left={true} team={this.props.team1} />
+
                                     <TypographyLight
                                         fontSize='14px'
                                         mx='32px'
                                         textAlign={'center'}
                                         my='auto'
                                         sx={{ display: 'flex', width: '2%', justifyContent: 'center' }}>
-                    VS
+                                    VS
                                     </TypographyLight>
+                                    
                                     <TeamBox left={false} team={this.props.team2} />
 
                                     <BetButton expanded={this.state.expanded} selectBet={this.props.selectBet} />
