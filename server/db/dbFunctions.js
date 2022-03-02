@@ -165,13 +165,37 @@ async function getNumOfUsers() {
 
 //Function to get user by id
 async function getUserById(id) {
-    const user = await models.User.findAll({
+    const user = await models.User.findOne({
         where: {
             /* eslint-disable */
             user_id: id
             /* eslint-enable */
         }
     });
+    return getBetsStats(user);
+}
+
+/**
+ * Helper function to get the bets placed for the user
+ * @param {Model} user 
+ * @returns User model with bets_placed
+ */
+async function getBetsStats(user) {
+    const bets = await models.BetParticipant.count({
+        where: {
+            user_id: user.dataValues.user_id
+        }
+    });
+    let rank = await models.User.count({
+        where: {
+            coins: {
+                [Op.gt]:  user.dataValues.coins
+            },       
+        }
+    })
+    rank++;
+    user.dataValues.bets_placed = bets;
+    user.dataValues.rank = rank;
     return user;
 }
 
@@ -199,8 +223,12 @@ async function getUserBetsById(id, page, limit) {
  */
 async function populateTeamOnBets(bets) {
     for (let i = 0; i < bets.length; i++){
-        const teamData = await getTeamById(bets[i].dataValues.team_betted_on);
+        const teamId = bets[i].dataValues.team_betted_on;
+        const teamData = await getTeamById(teamId);
         bets[i].dataValues.team_betted_on = teamData;
+
+        const matchData = await getMatchById(teamId)
+        bets[i].dataValues.match = matchData;
     }
     return bets;
 }
@@ -218,5 +246,15 @@ async function swapTeamData(matches){
     return matches;
 }
 
+//Function to get match by id
+async function getMatchById(id) {
+    const match = await models.Match.findOne({
+        where: {
+            match_id: id
+        }
+    });
+    return match;
+}
+
 // eslint-disable-next-line max-len
-module.exports = { getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
+module.exports = { getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};

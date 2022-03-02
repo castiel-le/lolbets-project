@@ -149,9 +149,10 @@ router.get("/user/all", async (req, res) => {
 //Route to get a user by id
 router.get("/user/:id", async (req, res) => {
     try {
-        res.json((await dbFetch.getUserById(req.params.id))[0]); 
+        res.json((await dbFetch.getUserById(req.params.id))); 
     }
     catch(e) {
+        console.log(e)
         res.sendStatus(404);
     }
 })
@@ -169,6 +170,7 @@ router.get("/user/history/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getUserBetsById(req.params.id, req.query.page, req.query.limit));
     } catch (e) {
+        console.log(e)
         res.sendStatus(404);
     }
 })
