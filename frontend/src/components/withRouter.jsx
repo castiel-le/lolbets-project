@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 /**
  * Used to allow access withRouter functionality in class components to
@@ -10,6 +10,7 @@ export default function withRouter( Child ) {
     // eslint-disable-next-line react/display-name
     return ( props ) => {
         const params = useParams();
-        return <Child { ...props } params ={ params } />;
+        const navigate = useNavigate();
+        return <Child { ...props } params ={ params } navigate={navigate} />;
     }
 }
