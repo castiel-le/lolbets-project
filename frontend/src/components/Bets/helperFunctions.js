@@ -18,8 +18,13 @@ export function getFormattedDate(epoch) {
  * @returns 
  */
 export function getGameStartTimeObject(date) {
+    let hour = date.getHours() % 12;
+    if (hour === 0) {
+        hour = 12;
+    }
+    hour = hour.toString();
     return {
-        'hour': (date.getHours() % 12).toString(),
+        'hour': hour,
         'min': date.getMinutes() < 10 
             ? '0' + date.getMinutes().toString() 
             : date.getMinutes().toString(),

@@ -1,15 +1,21 @@
 import { styled } from '@mui/system';
-import { Box, Button, Accordion, Typography, Avatar} from '@mui/material';
+import { Button, Accordion, Typography, Avatar} from '@mui/material';
 import { FlexBoxRow, FlexBoxColumn, TypographyLight } from '../customUIComponents';
 import Countdown from 'react-countdown';
-import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom'
 
+/**
+ * Accordion element styled with color options specific to the bet view
+ */
 export const BetAccordion = styled(Accordion)({
     flexGrow: 1,
     backgroundColor: '#223039',
     color: '#f9f9f9'
 });
 
+/**
+ * Styled typography for the date header shown in upcoming bets
+ */
 export const DateText = styled(Typography)({
     fontFamily: 'Lemon-Milk-Bold',
     fontSize: "24px",
@@ -19,23 +25,38 @@ export const DateText = styled(Typography)({
     margin: 'inherit auto'
 });
 
+/**
+ * Styled Avatar with specific size for the team logos
+ */
 export const TeamLogo = styled(Avatar)({
     height: '72px',
-    width: '72px'
+    width: '72px',
+    ':hover': {
+        cursor: 'help'
+    }
 });
 
+/**
+ * Style used for the team names in bet view
+ */
 export const TeamName = styled(Typography)({
     fontFamily: 'Lemon-Milk-Medium',
     margin: 'auto 24px',
     fontSize: '20px'
 });
 
+/**
+ * Team win loss ratio displayed in bet view
+ */
 export const TeamWinLoss = styled(Typography)({
     fontFamily: 'Lemon-Milk-Light',
     margin: '10px 30px',
     fontSize: '14px'
 })
 
+/**
+ * Bet button in bet view styled
+ */
 export const BetButtonStyle = styled(Button)({
     variant: 'contained',
     margin: 'auto',
@@ -56,6 +77,9 @@ export const BetButtonStyle = styled(Button)({
     }
 });
 
+/**
+ * Styling of the bet button when the bet details are shown
+ */
 export const BetButtonStyleExpanded = styled(BetButtonStyle)({
     margin: 'inherit, 0px',
     backgroundColor: '#f9f9f9',
@@ -65,11 +89,19 @@ export const BetButtonStyleExpanded = styled(BetButtonStyle)({
     }
 });
 
+/**
+ * React Countdown styled
+ */
 export const CustomCountdown = styled(Countdown)({
     fontFamily: 'Lemon-Milk-Bold',
     fontSize: 24
 })
 
+/**
+ * Used to create a team flex box with all the team info
+ * @param {*} props props needs a team json with team_name, wins, losses, and logo inside
+ * @returns A Box with all the styled team Elements
+ */
 export function TeamBox(props) {
     if (props.left) {
         return (
@@ -82,13 +114,17 @@ export function TeamBox(props) {
                         {props.team.wins} - {props.team.losses}
                     </TeamWinLoss>
                 </FlexBoxColumn>
-                <TeamLogo my='auto' src={props.team.logo} />
+                <Link to={`/teams/${props.team.team_id}`}>
+                    <TeamLogo my='auto' src={props.team.logo} />
+                </Link>
             </FlexBoxRow>
         );
     } else {
         return (
             <FlexBoxRow width='40%' sx={{ alignItems: 'center' }}>
-                <TeamLogo my='auto' src={props.team.logo} />
+                <Link to={`/teams/${props.team.team_id}`}>
+                    <TeamLogo my='auto' src={props.team.logo} />
+                </Link>
                 <FlexBoxColumn sx={{ alignContent: 'center', marginRight: 'auto' }}>
                     <TeamName textAlign={'left'} >
                         {props.team.team_name}
@@ -102,6 +138,11 @@ export function TeamBox(props) {
     }
 }
 
+/**
+ * Used to create the custom time display at the top left of every bet
+ * @param {*} props must include hour, minute, and period within an object called time
+ * @returns A styled custom time component
+ */
 export function TimeBox(props) {
     return (
         <FlexBoxRow sx={{ width: '10%', flexShrink: 0, minWidth: '84px' }} >
@@ -115,17 +156,21 @@ export function TimeBox(props) {
     );
 }
 
+/**
+ * The bet button show inside every bet box
+ * @param {*} props must include team1 and team2 objects
+ * @returns A Styled BetButton
+ */
 export function BetButton(props) {
     if (props.expanded) {
         return (
             <FlexBoxRow width='10%'>
                 <BetButtonStyleExpanded
-                    onClick={() =>
+                    onClick={() => {
                         props.selectBet(
-                            { team1: this.state.team1, team2: this.state.team2 },
-                            this.state.team1, this.state.team2
+                            props.team1, props.team2
                         )
-                    }
+                    }}
                 >
                     Bet
                 </BetButtonStyleExpanded>
@@ -136,12 +181,11 @@ export function BetButton(props) {
             <FlexBoxRow width='10%' >
                 <BetButtonStyle
                     sx={{ my: 'auto' }}
-                    onClick={() =>
+                    onClick={() => {
                         props.selectBet(
-                            { team1: this.state.team1, team2: this.state.team2 },
-                            this.state.team1, this.state.team2
+                            props.team1, props.team2
                         )
-                    }
+                    }}
                 >
                     Bet
                 </BetButtonStyle>
@@ -150,6 +194,11 @@ export function BetButton(props) {
     }
 }
 
+/**
+ * Shown in bet detail view to show the difference between bets placed on team1 vs team2
+ * @param {*} props must include Team1Percent of bets placed
+ * @returns A coloured bar sperated by percentage of bets per team
+ */
 export function BetComparisonBar(props) {
   
     return (
@@ -185,35 +234,3 @@ export function BetComparisonBar(props) {
     );
 
 }
-
-export function Item(props) {
-    const { sx, ...other } = props;
-    return (
-        <Box
-            sx={{
-                p: 1,
-                m: 1,
-                bgcolor: (theme) => theme.palette.mode === 'dark' ? '#101010' : 'grey.100',
-                color: (theme) => theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800',
-                border: '1px solid',
-                borderColor: (theme) =>
-                    theme.palette.mode === 'dark' ? 'grey.800' : 'grey.300',
-                borderRadius: 2,
-                fontSize: '0.875rem',
-                fontWeight: '700',
-                ...sx,
-            }}
-            {...other}
-        />
-    );
-}
-
-Item.propTypes = {
-    sx: PropTypes.oneOfType([
-        PropTypes.arrayOf(
-            PropTypes.oneOfType([PropTypes.func, PropTypes.object, PropTypes.bool]),
-        ),
-        PropTypes.func,
-        PropTypes.object,
-    ]),
-};

@@ -1,45 +1,80 @@
 import { Fragment, Component } from "react";
-import { Box } from "@mui/material";
-import { TypographyMedium} from "../customUIComponents";
-
-export default class UserBetHistory extends Component {
-
+import withRouter from "../withRouter";
+import BetHistortyBox from "./BetHistortyBox"
+import { InView } from 'react-intersection-observer'
+import { Loading, TypographyLight } from "../customUIComponents"; 
+/**
+ * Contains all the bet history of a specific user.
+ */
+class UserBetHistory extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            bets: [],
+            page: 1,
+            isBetLoading: true,
+        }
+    }
+    /**
+     * Fetches the first 5 recent bets of user.
+     */
+    async componentDidMount() {
+        await this.fetchBets(this.state.page);
+    }
+    /**
+     * Updates bets to next page, along with best
+     * content on the state.
+     */
+    async updatePageAndBets() {
+        await this.fetchBets(this.state.page + 1);
+        this.setState({page: this.state.page + 1});
+    }
+    /**
+     * Fetches bets of the user based on the page number
+     * and amount to fetch. Then, update the state
+     * @param {Number} page page number 
+     */
+    async fetchBets(page) {
+        const url = "/api/user/history/";
+        const limit = 5;
+        try {
+            const response = await fetch(url + this.props.params.id 
+                + `?page=${page}&limit=${limit}`);
+            if (response.ok) {
+                this.setState({
+                    isBetLoading: false,
+                    bets: this.state.bets.concat(await response.json())
+                });
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
     render() {
-
         return(
             <Fragment>
-                <Box sx={{ bgcolor: '#343F46', width: '60%', mx: 'auto'}}>
-           
-                    <TypographyMedium fontSize='20px' position='relative' right='40%' top='50px'>
-                        Win
-                    </TypographyMedium>
-                    <TypographyMedium position='relative' bottom='30px'>
-                        <TypographyMedium marginTop='10px'>Cloud9</TypographyMedium>
-                        <img src="https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png" width='72px' height='72px'/>
-                        <TypographyMedium>January 28,2022</TypographyMedium>
-                        <TypographyMedium position='relative' left='35%' bottom='85px'>
-                                Total Winnings : 13
-                        </TypographyMedium>
-                    </TypographyMedium>
-                    
-                </Box>
-
-                
-                <Box sx={{ bgcolor: '#343F46', width: '60%',  mx: 'auto'}}>
-
-                    <TypographyMedium fontSize='20px' position='relative' right='40%' top='50px'>
-                        Loss
-                    </TypographyMedium>
-                    <TypographyMedium position='relative' bottom='30px'>
-                        <TypographyMedium marginTop='10px'>TSM</TypographyMedium>
-                        <img src="https://cdn.pandascore.co/images/team/image/387/team-solomid-bjjwknt9.png" width='72px' height='72px'/>
-                        <TypographyMedium>January 29,2022</TypographyMedium>
-                        <TypographyMedium position='relative' left='35%' bottom='85px'>
-                                Total Lost : 10
-                        </TypographyMedium>
-                    </TypographyMedium>
-                </Box>
+                {this.state.isBetLoading
+                    ? <Loading />
+                    : this.state.bets.length > 0
+                        ? this.state.bets.map(bet =>
+                            <BetHistortyBox bet={bet} key={bet.bet_participant_id} />)
+                        : <TypographyLight variant="h4" marginTop={1} marginBottom={1}
+                            style={{opacity: "50%"}}>
+                    No Bets Found
+                        </TypographyLight>
+                }    
+                <InView 
+                    as={'div'}
+                    initialInView={true}
+                    onChange={(inView, entry) => {
+                        if (inView && !this.state.isBetLoading) {
+                            this.updatePageAndBets();
+                        }
+                    }}
+                >
+                </InView>     
             </Fragment>
         );
     }
 }
+export default withRouter(UserBetHistory);

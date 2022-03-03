@@ -188,7 +188,15 @@ router.get("/user/top5", async (req, res) => {
 //Route to get non top 5 users
 router.get("/user/rest", async (req, res) => {
     try {
-        res.json(await dbFetch.getRemainingUsers());
+        if (req.query.page){
+            res.json(await dbFetch.getRemainingUsers(req.query.page));
+        }
+        else if (req.query.count){
+            res.json(await dbFetch.getNumOfUsers());
+        }
+        else {
+            res.sendStatus(404);
+        }
     }
     catch(e) {
         res.sendStatus(404);
@@ -208,9 +216,10 @@ router.get("/user/all", async (req, res) => {
 //Route to get a user by id
 router.get("/user/:id", async (req, res) => {
     try {
-        res.json((await dbFetch.getUserById(req.params.id))[0]); 
+        res.json((await dbFetch.getUserById(req.params.id))); 
     }
     catch(e) {
+        console.log(e)
         res.sendStatus(404);
     }
 })
@@ -219,6 +228,15 @@ router.get("/teams/history/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getMatchHistory(req.params.id, req.query.page));
     } catch(e){
+        res.sendStatus(404);
+    }
+})
+
+router.get("/user/history/:id", async (req, res) => {
+    try {
+        res.json(await dbFetch.getUserBetsById(req.params.id, req.query.page, req.query.limit));
+    } catch (e) {
+        console.log(e)
         res.sendStatus(404);
     }
 })

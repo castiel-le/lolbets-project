@@ -146,9 +146,10 @@ async function getTop5Users() {
 }
 
 //Function to get remaining users, minus top 5
-async function getRemainingUsers() {
+async function getRemainingUsers(pageNum) {
     const users = await models.User.findAll({
-        offset: 5,
+        offset: ((pageNum - 1) * 10) + 5,
+        limit: 10,
         order: [
             ["coins", "DESC"]
         ]
@@ -156,31 +157,104 @@ async function getRemainingUsers() {
     return users;
 }
 
+//Function to get number of users
+async function getNumOfUsers() {
+    const users = await models.User.count();
+    return users;
+}
+
 //Function to get user by id
 async function getUserById(id) {
-    const user = await models.User.findAll({
+    const user = await models.User.findOne({
         where: {
             /* eslint-disable */
             user_id: id
             /* eslint-enable */
         }
     });
+    return getBetsStats(user);
+}
+
+/**
+ * Helper function to get the bets placed for the user
+ * @param {Model} user 
+ * @returns User model with bets_placed
+ */
+async function getBetsStats(user) {
+    const bets = await models.BetParticipant.count({
+        where: {
+            user_id: user.dataValues.user_id
+        }
+    });
+    let rank = await models.User.count({
+        where: {
+            coins: {
+                [Op.gt]:  user.dataValues.coins
+            },       
+        }
+    })
+    rank++;
+    user.dataValues.bets_placed = bets;
+    user.dataValues.rank = rank;
     return user;
 }
 
+//Function to get user's bets history by id and with pagination
+async function getUserBetsById(id, page, limit) {
+    const limitNum = parseInt(limit);
+    const pageNum = parseInt(page);
+    const bets = await models.BetParticipant.findAll({
+        offset: limitNum * (pageNum - 1),
+        limit: limitNum,
+        where: {
+            user_id: id
+        },
+        order: [
+            ["creation_date", "DESC"]
+        ]
+    })
+    return populateTeamOnBets(bets);
+}
+
+/**
+ * Helper function to replace team_betted_on to team data.
+ * @param {Object} bets Array of BetParticipant models
+ * @returns Array of BetParticipant models with replaced team_betted_on
+ */
+async function populateTeamOnBets(bets) {
+    for (let i = 0; i < bets.length; i++){
+        const teamId = bets[i].dataValues.team_betted_on;
+        const teamData = await getTeamById(teamId);
+        bets[i].dataValues.team_betted_on = teamData;
+
+        const matchData = await getMatchById(teamId)
+        bets[i].dataValues.match = matchData;
+    }
+    return bets;
+}
 
 //Helper function to put team data inside of matches
 async function swapTeamData(matches){
     for (let i = 0; i < matches.length; i++){
         // eslint-disable-next-line max-len
-        matches[parseInt(i)].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
-        let team1string = await getTeamById(matches[parseInt(i)].dataValues.team1_id);
-        let team2string = await getTeamById(matches[parseInt(i)].dataValues.team2_id);
-        matches[parseInt(i)].dataValues.team1_id = team1string;
-        matches[parseInt(i)].dataValues.team2_id = team2string;
+        matches[i].dataValues.match_start_time = new Date(matches[i].dataValues.match_start_time).valueOf();
+        let team1string = await getTeamById(matches[i].dataValues.team1_id);
+        let team2string = await getTeamById(matches[i].dataValues.team2_id);
+        matches[i].dataValues.team1_id = team1string;
+        matches[i].dataValues.team2_id = team2string;
     }
     return matches;
 }
 
+//Function to get match by id
+async function getMatchById(id) {
+    const match = await models.Match.findOne({
+        where: {
+            match_id: id
+        }
+    });
+    return match;
+}
+
 // eslint-disable-next-line max-len
-module.exports = { getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers};
+module.exports = { getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};

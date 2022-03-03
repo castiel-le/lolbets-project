@@ -3,7 +3,7 @@ import { Component, Fragment } from 'react';
 
 import { Box, AccordionDetails, AccordionSummary } from '@mui/material';
 import { getTeamObject, fetchTeamInfo } from './helperFunctions';
-import { BetButton, BetAccordion, Item, TimeBox, TeamBox } from './styledElements';
+import { BetButton, BetAccordion, TimeBox, TeamBox } from './styledElements';
 import BetDetails from './BetDetails';
 import { FlexBoxRow, TypographyLight } from '../customUIComponents';
 
@@ -43,10 +43,11 @@ export default class BetBox extends Component {
     render() {
         return (
             <Fragment >
+                {/* Parent box holds everything within a center box with width 82% of whole window */}
                 <Box
                     sx={{ bgcolor: 'inherit', width: '82%', mx: 'auto' }}
                 >
-                    <Item sx={{ flexGrow: 1, my: '0px', bgcolor: 'inherit', border: '0px' }}>
+                    <Box sx={{p: 1, m: 1, flexGrow: 1, my: '0px', bgcolor: 'inherit', border: '0px' }}>
                         <BetAccordion 
                             expanded={this.state.expanded} 
                             onChange={(event) => this.handleExpand(event)} 
@@ -56,7 +57,8 @@ export default class BetBox extends Component {
                                 id="panel1bh-header"
                                 sx={{ 
                                     display: 'flex',
-                                    ":hover": { backgroundColor: this.state.expanded ? 'inherit' : '#1E2A32' } 
+                                    borderRadius: 2,
+                                    ":hover": { backgroundColor: this.state.expanded ? 'inherit' : '#1E2A32', borderRadius: 1 } 
                                 }}
                             >
                                 <FlexBoxRow width='100%'>
@@ -64,17 +66,20 @@ export default class BetBox extends Component {
                                     <TimeBox time={this.props.time} />
 
                                     <TeamBox left={true} team={this.props.team1} />
+
                                     <TypographyLight
                                         fontSize='14px'
                                         mx='32px'
                                         textAlign={'center'}
                                         my='auto'
-                                        sx={{ display: 'flex', width: '2%', justifyContent: 'center' }}>
-                    VS
+                                        sx={{ display: 'flex', width: '2%', justifyContent: 'center' }}
+                                    >
+                                        VS
                                     </TypographyLight>
+                                    
                                     <TeamBox left={false} team={this.props.team2} />
 
-                                    <BetButton expanded={this.state.expanded} selectBet={this.props.selectBet} />
+                                    <BetButton expanded={this.state.expanded} selectBet={this.props.selectBet} team1={this.props.team1} team2={this.props.team2} />
 
                                 </FlexBoxRow>
                             </AccordionSummary>
@@ -88,7 +93,7 @@ export default class BetBox extends Component {
                             </AccordionDetails>
 
                         </BetAccordion>
-                    </Item>
+                    </Box>
                 </Box>
             </Fragment >
         );
