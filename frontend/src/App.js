@@ -14,6 +14,12 @@ import Teams from "./components/Teams/Teams";
 import Leaderboard from "./components/Leaderboard/Leaderboard";
 import UserBetHistory from './components/UserBetHistory/UserBetHistroy';
 
+let logoutcheck = false;
+
+function logout(){
+    logoutcheck = true;
+}
+
 function App() {
     // https://www.freecodecamp.org/news/how-to-persist-a-logged-in-user-in-react/
     // implement fetch and save to local storage when users are done
@@ -22,7 +28,7 @@ function App() {
     //localStorage.setItem("user", user)
 
     useEffect(() => {
-        setUser({email:'email', username: 'username', isModerator: false});
+        //setUser({email:'email', username: 'username', isModerator: false});
 
     //     const loggedInUser = localStorage.getItem("user");
     //     if (loggedInUser) {
