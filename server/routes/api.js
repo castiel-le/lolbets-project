@@ -3,7 +3,8 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oidc");
 const router = express.Router({mergeParams:true});
 const dbFetch = require("../db/dbFunctions")
-const testdb = require("../db")
+const testdb = require("../db");
+const db = require("../db");
 
 router.get("/helloworld", async (req, res) => {
     res.json({"message":"Hello There"});
@@ -29,9 +30,17 @@ passport.use(new GoogleStrategy({
     scope: ["profile", "email"]
 }, async function(issuer, profile, cb) {
     try {
-        const isUserExist = await dbFetch.isUserExist(issuer, profile.id);
-        if (isUserExist) {
-        // TODO
+        const row = await dbFetch.isUserExist(issuer, profile.id);
+        if (row) {
+            const user = await dbFetch.getUserById(row.dataValues.user_id);
+
+            // If record exist, return user as JSON.
+            // Otherwise, return false to callback
+            if (user) {
+                cb(null, user.toJSON());
+            } else {
+                cb(null, false);
+            }
         } else {
             // Create new User record
             const user = await dbFetch.createUser(profile.displayName, profile.emails[0].value, profile.picture);

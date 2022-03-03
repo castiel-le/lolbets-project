@@ -260,7 +260,7 @@ async function getMatchById(id) {
  * provider.
  * @param {String} provider provider used to log in
  * @param {String} profileId the id of the user on
- * @returns Boolean: true if exist. Otherwise, false.
+ * @returns FederatedCredentials record
  */
 async function isUserExist(provider, profileId) {
     const row = await models.FederatedCredentials.findOne({
@@ -269,7 +269,7 @@ async function isUserExist(provider, profileId) {
             profile_id: profileId
         }
     });
-    return row !== null;
+    return row;
 }
 
 /**
