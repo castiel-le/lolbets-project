@@ -5,7 +5,6 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 
-const SQLiteStore = require("connect-sqlite3")(session);
 
 const passport = require("passport");
 
@@ -14,7 +13,6 @@ app.use(session({
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
-    store: new SQLiteStore({db: "sessions.db", dir: "./db/testdb"})
 }));
 
 app.use(passport.authenticate("session"));

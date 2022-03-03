@@ -162,7 +162,7 @@ const BetParticipant = sequelize.define("bet_participants", {
 }, {timestamps: false});
 
 // federated_credentials model
-const FederatedCredentials = sequelize.define("bet_participants", {
+const FederatedCredentials = sequelize.define("federated_credentials", {
     federated_credentials_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
