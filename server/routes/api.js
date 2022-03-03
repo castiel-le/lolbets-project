@@ -26,55 +26,68 @@ passport.use(new GoogleStrategy({
     clientID: process.env["GOOGLE_CLIENT_ID"],
     clientSecret: process.env["GOOGLE_CLIENT_SECRET"],
     callbackURL: "/oauth2/redirect/google",
-    scope: ["profile"]
-},
-function(issuer, profile, cb) {
-    testdb.get("SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?", [
-        issuer,
-        profile.id
-    ], function(err, row) {
-        if (err) {
-            return cb(err); 
-        }
-        if (!row) {
-            testdb.run("INSERT INTO users (name, email) VALUES (?, ?)", [
-                profile.displayName,
-                profile.emails[0].value
-            ], function(err) {
-                if (err) {
-                    return cb(err); 
-                }
-  
-                var id = this.lastID;
-                testdb.run("INSERT INTO federated_credentials (user_id, provider, subject) VALUES (?, ?, ?)", [
-                    id,
-                    issuer,
-                    profile.id
-                ], function(err) {
-                    if (err) {
-                        return cb(err); 
-                    }
-                    var user = {
-                        id: id,
-                        name: profile.displayName,
-                        email: profile.emails
-                    };
-                    return cb(null, user);
-                });
-            });
+    scope: ["profile", "email"]
+}, async function(issuer, profile, cb) {
+    try {
+        const isUserExist = await dbFetch.isUserExist(issuer, profile.id);
+        if (isUserExist) {
+        // TODO
         } else {
-            testdb.get("SELECT rowid AS id, * FROM users WHERE rowid = ?", [row.user_id], function(err, row) {
-                if (err) {
-                    return cb(err); 
-                }
-                if (!row) {
-                    return cb(null, false); 
-                }
-                return cb(null, row);
-            });
+            console.log(profile)
+            await dbFetch.createUser(profile.displayName, profile.emails[0].value, profile.picture);
         }
-    });
+    } catch (e) {
+        console.log(e);
+        cb(e);
+    }
 }));
+// function(issuer, profile, cb) {
+//     testdb.get("SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?", [
+//         issuer,
+//         profile.id
+//     ], function(err, row) {
+//         if (err) {
+//             return cb(err); 
+//         }
+//         if (!row) {
+//             testdb.run("INSERT INTO users (name, email) VALUES (?, ?)", [
+//                 profile.displayName,
+//                 profile.emails[0].value
+//             ], function(err) {
+//                 if (err) {
+//                     return cb(err); 
+//                 }
+  
+//                 var id = this.lastID;
+//                 testdb.run("INSERT INTO federated_credentials (user_id, provider, subject) VALUES (?, ?, ?)", [
+//                     id,
+//                     issuer,
+//                     profile.id
+//                 ], function(err) {
+//                     if (err) {
+//                         return cb(err); 
+//                     }
+//                     var user = {
+//                         id: id,
+//                         name: profile.displayName,
+//                         email: profile.emails
+//                     };
+//                     return cb(null, user);
+//                 });
+//             });
+//         } else {
+//             testdb.get("SELECT rowid AS id, * FROM users WHERE rowid = ?", [row.user_id], function(err, row) {
+//                 if (err) {
+//                     return cb(err); 
+//                 }
+//                 if (!row) {
+//                     return cb(null, false); 
+//                 }
+//                 return cb(null, row);
+//             });
+//         }
+//     });
+// }));
 
 //configure Passport to manage login session
 passport.serializeUser(function(user, done){

@@ -272,5 +272,33 @@ async function isUserExist(provider, profileId) {
     return row !== null;
 }
 
+/**
+ * Adds a new User record on the database
+ * @param {String} username username of new user
+ * @param {String} email email of new user
+ * @param {String} profilePic profile pic url of new user
+ */
+async function createUser(username, email, profilePic) {
+    await models.User.create({
+        username: username,
+        email: email,
+        profile_pic: profilePic,
+        coins: 1000,
+        date_created: new Date()
+    })
+}
+
+/**
+ * Creates a federated_credential on the database
+ * @param {String} provider provider used to login
+ * @param {String} profileId profile id from provider of user
+ */
+async function createFederatedCredentials(provider, profileId) {
+    await models.FederatedCredentials.create({
+        provider: provider,
+        profile_id: profileId
+    });
+}
+
 // eslint-disable-next-line max-len
-module.exports = { getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
+module.exports = {createUser, isUserExist, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
