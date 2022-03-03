@@ -255,6 +255,22 @@ async function getMatchById(id) {
     });
     return match;
 }
+/**
+ * Function to check if user logged in before on the specified
+ * provider.
+ * @param {String} provider provider used to log in
+ * @param {String} profileId the id of the user on
+ * @returns Boolean: true if exist. Otherwise, false.
+ */
+async function isUserExist(provider, profileId) {
+    const row = await models.FederatedCredentials.findOne({
+        where: {
+            provider: provider,
+            profile_id: profileId
+        }
+    });
+    return row !== null;
+}
 
 // eslint-disable-next-line max-len
 module.exports = { getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
