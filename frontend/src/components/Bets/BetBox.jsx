@@ -32,7 +32,6 @@ export default class BetBox extends Component {
    * Determines whether or not the bet should show details
    */
     handleExpand(event) {
-        console.log(event.target.tagName)
         if (event.target.tagName.toLowerCase() !== "button") {
             this.setState({
                 expanded: !this.state.expanded

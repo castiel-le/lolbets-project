@@ -10,7 +10,9 @@ import { HorizontalDivider, Loading, TypographyBold } from '../customUIComponent
 import './BetBox.css'
 import Notification from '../Notification';
 
-export default class AllBets extends Component {
+import withRouter from '../withRouter';
+
+class AllBets extends Component {
 
     constructor(props) {
         super(props);
@@ -140,13 +142,18 @@ export default class AllBets extends Component {
     /**
      * When the use clicks the bet button, tell them application which bet was selected
      * When selectedBet state is set, the popup shows up
+     * If the user is not logged in, redirect them to login
      * @param {*} team1 Team 1 of selected bet
      * @param {*} team2 Team 2 of selected bet
      */
     selectBet(team1, team2) {
-        this.setState({
-            selectedBet: {team1: team1, team2: team2},
-        });
+        if(Object.keys(this.props.user).length === 0) {
+            this.props.navigate("/login");
+        } else {
+            this.setState({
+                selectedBet: {team1: team1, team2: team2},
+            });
+        }
     }
 
     render() {
@@ -241,3 +248,5 @@ export default class AllBets extends Component {
         );
     }
 }
+
+export default withRouter(AllBets);
