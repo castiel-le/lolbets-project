@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Component } from "react";
 import { Box } from "@mui/material";
 // eslint-disable-next-line max-len
@@ -5,6 +6,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Table
 import { Android } from '@mui/icons-material';
 import { FlexBoxColumn, TypographyLight } from "../customUIComponents";
 import './removeLabel.css';
+import poro from "./images/poro.png";
 
 
 class LeaderboardTable extends Component {
@@ -84,9 +86,10 @@ class LeaderboardTable extends Component {
                                         </TableCell>
                                         <TableCell>
                                             <Box sx={{ display: 'flex', flexDirection: 'row'}}>
-                                                <Android sx={{ color: 'white' }}/>
+                                                <img src={poro} style={{height: '30px', width: '30px', margin: '0 5px', borderRadius: '5px' }}/>
+
                                                 {/* eslint-disable-next-line max-len */}
-                                                <TypographyLight sx={{ pl: '40px' }}>{testerrr.username}</TypographyLight>
+                                                <TypographyLight sx={{ pl: '10px' }}>{testerrr.username}</TypographyLight>
                                             </Box>  
                                         </TableCell>
                                         <TableCell>
