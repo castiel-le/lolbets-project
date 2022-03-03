@@ -33,8 +33,13 @@ passport.use(new GoogleStrategy({
         if (isUserExist) {
         // TODO
         } else {
-            console.log(profile)
-            await dbFetch.createUser(profile.displayName, profile.emails[0].value, profile.picture);
+            // Create new User record
+            const user = await dbFetch.createUser(profile.displayName, profile.emails[0].value, profile.picture);
+            const jsonUser = user.toJSON();
+
+            // Create new federated_credential record
+            await dbFetch.createFederatedCredentials(issuer, profile.id, jsonUser.user_id);
+            cb(null, jsonUser);
         }
     } catch (e) {
         console.log(e);
