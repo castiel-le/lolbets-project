@@ -3,8 +3,6 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oidc");
 const router = express.Router({mergeParams:true});
 const dbFetch = require("../db/dbFunctions")
-const testdb = require("../db");
-const db = require("../db");
 
 router.get("/helloworld", async (req, res) => {
     res.json({"message":"Hello There"});
