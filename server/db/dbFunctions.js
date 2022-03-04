@@ -148,7 +148,7 @@ async function getTop5Users() {
 //Function to get remaining users, minus top 5
 async function getRemainingUsers(pageNum) {
     const users = await models.User.findAll({
-        offset: ((pageNum - 1) * 10) + 5,
+        offset: (pageNum - 1) * 10 + 5,
         limit: 10,
         order: [
             ["coins", "DESC"]
@@ -304,5 +304,58 @@ async function createFederatedCredentials(provider, profileId, userId) {
     });
 }
 
+/**
+ * Create a bet pariticpant if the user has not entered the bet yet
+ * Edit the current bet if the user has already joing the bet
+ * @param {Number} bet_id the id of the bet the user is joining
+ * @param {Number} user_id the user id
+ * @param {Number} team the team the user bet on
+ * @param {Number} amount the amount the user bet
+ */
+async function updateOrCreateBetParticipant(bet_id, user_id, team, amount) {
+    // First try to find the record
+    const existingBetParticipant = await models.BetParticipant.findOne({
+        where: {
+            bet_id: bet_id,
+            user_id: user_id
+        }
+    });
+   
+    if (!existingBetParticipant) {
+        // Item not found, create a new one
+        const betAdded = await models.BetParticipant.create({
+            bet_id: bet_id,
+            user_id: user_id,
+            team_betted_on: team,
+            amount_bet: amount,
+            creation_date: Date.now()   
+        });
+        return {betAdded, created: true, ok: true}
+    }
+    existingBetParticipant.team_betted_on = team;
+    existingBetParticipant.amount_bet = amount;
+    existingBetParticipant.save();
+    return {existingBetParticipant, created: false, ok: true};
+}
+
+/**
+ * Remove a bet participant
+ * @param {Number} bet_id the id of the bet the user is joining
+ * @param {Number} user_id the user id
+ * @returns JSON response telling if transaction succeeded
+ */
+async function destroyBetParticipant(bet_id, user_id) {
+    // First try to find the record
+    const existingBetParticipant = await models.BetParticipant.findOne({
+        where: {
+            bet_id: bet_id,
+            user_id: user_id
+        }
+    });
+    // destroy... sounds like they just nuke the poor db or something
+    existingBetParticipant.destroy();
+    return {destroyed: true, ok: true};
+}
+
 // eslint-disable-next-line max-len
-module.exports = {createFederatedCredentials, createUser, isUserExist, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
+module.exports = { createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
