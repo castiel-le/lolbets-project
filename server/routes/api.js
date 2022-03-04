@@ -4,10 +4,6 @@ const GoogleStrategy = require("passport-google-oidc");
 const router = express.Router({mergeParams:true});
 const dbFetch = require("../db/dbFunctions")
 
-router.get("/helloworld", async (req, res) => {
-    res.json({"message":"Hello There"});
-});
-
 //Route to get only the fields necessary for logging in, most likely be changed later
 router.get("/login", async (req, res) => {
     return res.json({
@@ -94,6 +90,53 @@ router.get("/bets", async (req, res) => {
     }
 });
 
+// allows a user to join a bet
+// allows a user to edit their current bet
+// test: localhost:3001/api/bets/join?bet=2&user=1&team=891&amount=432
+router.put("/bets/join", async (req, res) => {
+    // if (!req.user) {
+    //     res.sendStatus(403);
+    // }
+    try{
+        let response = await dbFetch.updateOrCreateBetParticipant(
+            req.query.bet, 
+            req.query.user, 
+            req.query.team, 
+            req.query.amount
+        );
+        if (response.ok) {
+            res.status(200).send(response.item);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (exception) {
+        res.status(404).send(exception.message);
+        console.error(exception.message);
+    }
+});
+
+// Deletes a users bet
+// test: localhost:3001/api/bets/delete?bet=2&user=1
+router.delete("/bets/delete", async (req, res) => {
+// if (!req.user) {
+    //     res.sendStatus(403);
+    // }
+    try{
+        let response = await dbFetch.destroyBetParticipant(
+            req.query.bet, 
+            req.query.user
+        );
+        if (response.ok) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (exception) {
+        res.status(404).send(exception.message);
+        console.error(exception.message);
+    }
+});
+
 //Route to create a user when they signup, non functional yet
 router.post("/signup", async (req, res) => {
     try {
@@ -157,8 +200,7 @@ router.get("/teams/:id", async (req, res) => {
 router.get("/user/top5", async (req, res) => {
     try {
         res.json(await dbFetch.getTop5Users());
-    }
-    catch(e){
+    } catch(e){
         res.sendStatus(404);
     }
 });
@@ -168,15 +210,12 @@ router.get("/user/rest", async (req, res) => {
     try {
         if (req.query.page){
             res.json(await dbFetch.getRemainingUsers(req.query.page));
-        }
-        else if (req.query.count){
+        } else if (req.query.count){
             res.json(await dbFetch.getNumOfUsers());
-        }
-        else {
+        } else {
             res.sendStatus(404);
         }
-    }
-    catch(e) {
+    } catch(e) {
         res.sendStatus(404);
     }
 })
@@ -185,8 +224,7 @@ router.get("/user/rest", async (req, res) => {
 router.get("/user/all", async (req, res) => {
     try {
         res.json(await dbFetch.getUsers());
-    }
-    catch(e) {
+    } catch(e) {
         res.sendStatus(404);
     }
 })
@@ -194,9 +232,8 @@ router.get("/user/all", async (req, res) => {
 //Route to get a user by id
 router.get("/user/:id", async (req, res) => {
     try {
-        res.json((await dbFetch.getUserById(req.params.id))); 
-    }
-    catch(e) {
+        res.json(await dbFetch.getUserById(req.params.id)); 
+    } catch(e) {
         console.log(e)
         res.sendStatus(404);
     }
@@ -218,6 +255,7 @@ router.get("/user/history/:id", async (req, res) => {
         res.sendStatus(404);
     }
 })
+
 module.exports = [
     router,
 ]
