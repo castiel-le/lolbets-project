@@ -107,7 +107,7 @@ class Leaderboard extends Component {
                         </FlexBoxColumn>
                     </FlexBoxRow>
                 </FlexBoxRow>
-                <FlexBoxRow sx={{ width:'100%', mx:'auto', margin: '10px 0', justifyContent: 'space-between', padding: '10px', backgroundColor: 'grey', borderRadius: '5px', height: '80px'}}>
+                <FlexBoxRow sx={{ width:'100%', mx:'auto', margin: '10px 0', justifyContent: 'space-between', padding: '10px', backgroundColor: 'grey', borderRadius: '5px', height: '100px'}}>
                     {/* Ranks 2-5 */}
                     <LeaderboardRank2To5 user={this.state.top5[1]} rank={2}/>
                     <LeaderboardRank2To5 user={this.state.top5[2]} rank={3}/>
