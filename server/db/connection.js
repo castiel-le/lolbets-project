@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 // module imports
-const fs = require("fs");
 const { Sequelize } = require("sequelize");
 
 // database variables
