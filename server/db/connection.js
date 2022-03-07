@@ -4,7 +4,7 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 
 // database variables
-const dbUrl = process.env.dbUrl;
+const dbUrl = process.env.dbURL;
 const dbUsername = process.env.dbUsername;
 const dbPassword = process.env.dbPassword;
 const database = process.env.database;
