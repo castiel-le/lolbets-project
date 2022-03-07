@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination} from "@mui/material";
 import DiamondIcon from "@mui/icons-material/Diamond"
 import { FlexBoxColumn, FlexBoxRow, TypographyLight } from "../customUIComponents";
-import './removeLabel.css';
+import './leaderboardTable.css';
 import poro from "./images/poro.png";
 
 
