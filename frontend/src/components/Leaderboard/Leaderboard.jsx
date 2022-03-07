@@ -91,7 +91,7 @@ class Leaderboard extends Component {
                     <TypographyBold sx={{mx:'auto'}}>Leaderboard</TypographyBold>
                 </FlexBoxRow>
                 {/* 1st rank */}
-                <FlexBoxRow sx={{ width: '100%', height:'100px'}} style={{backgroundColor: 'grey', borderRadius: '5px', padding: '10px', margin: '10px 0', width: '60%'}}>
+                <FlexBoxRow sx={{ width: '100%', height:'100px'}} style={{backgroundColor: 'rgba(19, 60, 121, 0.96)', borderRadius: '5px', padding: '10px', margin: '10px 0', width: '60%'}}>
                     <FlexBoxRow>
                         <FlexBoxColumn sx={{ width: '75px', mr: '10px', alignItems: 'center', borderRadius: '10px'}} style={{backgroundColor: 'rgba(255, 155, 0, 0.3)'}}>
                             <TypographyMedium sx={{ my:'auto', color: '#ff9b00', fontSize: '40px', borderBottom: '2px #ff9b00 solid', width: '40%'}}>1</TypographyMedium>
@@ -107,7 +107,7 @@ class Leaderboard extends Component {
                         </FlexBoxColumn>
                     </FlexBoxRow>
                 </FlexBoxRow>
-                <FlexBoxRow sx={{ width:'100%', mx:'auto', margin: '10px 0', justifyContent: 'space-between', padding: '10px', backgroundColor: 'grey', borderRadius: '5px', height: '100px'}}>
+                <FlexBoxRow sx={{ width:'100%', mx:'auto', margin: '10px 0', justifyContent: 'space-between', padding: '10px', backgroundColor: 'rgba(19, 60, 121, 0.96)', borderRadius: '5px', height: '100px', alignItems: 'center'}}>
                     {/* Ranks 2-5 */}
                     <LeaderboardRank2To5 user={this.state.top5[1]} rank={2}/>
                     <LeaderboardRank2To5 user={this.state.top5[2]} rank={3}/>

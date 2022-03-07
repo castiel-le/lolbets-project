@@ -9,7 +9,7 @@ class LeaderboardRank2To5 extends Component {
     render(){
         return (
             // eslint-disable-next-line max-len
-            <FlexBoxColumn sx={{ width: '20%', backgroundColor: 'rgba(31, 52, 166, 0.34)', padding: '0 5px 5px 5px', borderRadius: '5px', alignItems: 'center', height: '91%'}}>
+            <FlexBoxColumn sx={{ width: '20%', backgroundColor: '#444bc7', padding: '0 5px 5px 5px', borderRadius: '5px', alignItems: 'center', height: '91%'}}>
                 <FlexBoxRow sx={{ borderRadius: '5px', padding: '5px', width: '100%', alignItems: 'center'}}>
                     <TypographyMedium sx={{ backgroundColor: 'rgba(31, 52, 166, 0.41)', height: '100%', px: '8px', borderRadius: '5px', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: 'lightblue'}}>{this.props.rank}</TypographyMedium>
                     <img src={poro} style={{height: '30px', width: '30px', margin: '0 5px', border: '1.5px gold solid', borderRadius: '5px' }}/>

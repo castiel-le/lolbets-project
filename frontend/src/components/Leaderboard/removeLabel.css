@@ -1,3 +1,9 @@
 .MuiTablePagination-displayedRows.css-levciy-MuiTablePagination-displayedRows{
     display:none
 }
+
+.MuiTablePagination-actions {
+    background-color: #86b6f0;
+    border-radius: 5px;
+    margin-top: 10px;
+}
