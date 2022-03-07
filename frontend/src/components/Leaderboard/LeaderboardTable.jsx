@@ -1,10 +1,12 @@
+/* eslint-disable max-len */
 import { Component } from "react";
 import { Box } from "@mui/material";
 // eslint-disable-next-line max-len
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination} from "@mui/material";
-import { Android } from '@mui/icons-material';
-import { FlexBoxColumn, TypographyLight } from "../customUIComponents";
-import './removeLabel.css';
+import DiamondIcon from "@mui/icons-material/Diamond"
+import { FlexBoxColumn, FlexBoxRow, TypographyLight } from "../customUIComponents";
+import './leaderboardTable.css';
+import poro from "./images/poro.png";
 
 
 class LeaderboardTable extends Component {
@@ -59,7 +61,7 @@ class LeaderboardTable extends Component {
             <FlexBoxColumn sx= {{ width: '100%', alignItems: 'center'}}>
                 {/* Table for ranks 6+ */}
                 {/* eslint-disable-next-line max-len */}
-                <TableContainer sx= {{ width: '80%'}} style={{ backgroundColor: 'grey', borderRadius: '5px', padding: '10px', margin: '10px'}}>
+                <TableContainer sx= {{ width: '80%'}} style={{ backgroundColor: 'rgba(19, 60, 121, 0.96)', borderRadius: '5px', padding: '10px', margin: '10px'}}>
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -71,6 +73,9 @@ class LeaderboardTable extends Component {
                                 </TableCell>
                                 <TableCell>
                                     <TypographyLight>Coins</TypographyLight>
+                                </TableCell>
+                                <TableCell>
+                                    <TypographyLight textAlign = 'center'>Win Rate</TypographyLight>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -84,13 +89,26 @@ class LeaderboardTable extends Component {
                                         </TableCell>
                                         <TableCell>
                                             <Box sx={{ display: 'flex', flexDirection: 'row'}}>
-                                                <Android sx={{ color: 'white' }}/>
+                                                <img src={poro} style={{height: '30px', width: '30px', margin: '0 5px', borderRadius: '5px' }}/>
+
                                                 {/* eslint-disable-next-line max-len */}
-                                                <TypographyLight sx={{ pl: '40px' }}>{testerrr.username}</TypographyLight>
+                                                <TypographyLight sx={{ pl: '10px', my: 'auto'}}>{testerrr.username}</TypographyLight>
                                             </Box>  
                                         </TableCell>
                                         <TableCell>
-                                            <TypographyLight>{testerrr.coins}</TypographyLight>
+                                            <FlexBoxRow>
+                                                <TypographyLight>{testerrr.coins}</TypographyLight>
+                                                <DiamondIcon sx={{ fontSize: '1rem', my: 'auto', color: 'lightblue', pl: '2px'}}/>
+                                            </FlexBoxRow>
+                                        </TableCell>
+                                        <TableCell>
+                                            <FlexBoxColumn>
+                                                <TypographyLight textAlign = 'center'>71%  |  5W - 2L</TypographyLight>
+                                                <FlexBoxRow sx={{ width: '100%', backgroundColor: 'rgb(238, 90, 82)', height: '10px', borderRadius: '5px'}}>
+                                                    <FlexBoxRow sx={{ width: '70%', backgroundColor: 'rgb(61, 149, 229)', borderTopLeftRadius: '5px', borderBottomLeftRadius: '5px'}} />
+                                                    
+                                                </FlexBoxRow>
+                                            </FlexBoxColumn>
                                         </TableCell>
                                     </TableRow>
                                 )
