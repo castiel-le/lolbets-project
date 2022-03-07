@@ -172,7 +172,7 @@ async function getUserById(id) {
             /* eslint-enable */
         }
     });
-    return getBetsStats(user);
+    return await getBetsStats(user);
 }
 
 /**
@@ -213,7 +213,7 @@ async function getUserBetsById(id, page, limit) {
             ["creation_date", "DESC"]
         ]
     })
-    return populateTeamOnBets(bets);
+    return await populateTeamOnBets(bets);
 }
 
 /**
