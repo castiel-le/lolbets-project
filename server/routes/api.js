@@ -53,7 +53,7 @@ passport.use(new GoogleStrategy({
 //configure Passport to manage login session
 passport.serializeUser(function(user, done){
     process.nextTick(function(){
-        done(null, {id: user.id, username: user.email, name: user.name});
+        done(null, {id: user.user_id});
     });
 });
 
