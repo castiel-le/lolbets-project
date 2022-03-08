@@ -52,8 +52,7 @@ class Profile extends Component {
         // otherwise, get logged in user's id.
         const id = this.props.params.id
             ? this.props.params.id
-            : null; 
-            // ^^ TODO get logged in user id
+            : this.props.user.id; 
         
         const url = "/api/user/history/";
         try {
@@ -77,8 +76,7 @@ class Profile extends Component {
         // otherwise, get logged in user's id.
         const id = this.props.params.id
             ? this.props.params.id
-            : null; 
-            // ^^ TODO get logged in user id
+            : this.props.user.id; 
         
         const url = "/api/user/";
         try {

@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/userinfo", (req, res) =>{
-    res.send(req.user);
+    res.json(req.user);
 });
 
 app.use("/logout", (req, res)=>{
