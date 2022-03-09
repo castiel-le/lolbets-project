@@ -1,10 +1,8 @@
 const express = require("express");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oidc");
 const router = express.Router({mergeParams:true});
 const dbFetch = require("../db/dbFunctions")
-
-router.get("/helloworld", async (req, res) => {
-    res.json({"message":"Hello There"});
-});
 
 //Route to get only the fields necessary for logging in, most likely be changed later
 router.get("/login", async (req, res) => {
@@ -12,6 +10,56 @@ router.get("/login", async (req, res) => {
         "user_id":1,
         "username":"Bob",
         "password_id":1
+    });
+});
+
+//Route to get authentication from Google
+router.get("/login/federated/google", passport.authenticate("google"));
+
+//Strategy for Google authentication
+passport.use(new GoogleStrategy({
+    clientID: process.env["GOOGLE_CLIENT_ID"],
+    clientSecret: process.env["GOOGLE_CLIENT_SECRET"],
+    callbackURL: "/oauth2/redirect/google",
+    scope: ["profile", "email"]
+}, async function(issuer, profile, cb) {
+    try {
+        const row = await dbFetch.isUserExist(issuer, profile.id);
+        if (row) {
+            const user = await dbFetch.getUserById(row.dataValues.user_id);
+
+            // If record exist, return user as JSON.
+            // Otherwise, return false to callback
+            if (user) {
+                cb(null, user.toJSON());
+            } else {
+                cb(null, false);
+            }
+        } else {
+            // Create new User record
+            const user = await dbFetch.createUser(profile.displayName, profile.emails[0].value, profile.picture);
+            const jsonUser = user.toJSON();
+
+            // Create new federated_credential record
+            await dbFetch.createFederatedCredentials(issuer, profile.id, jsonUser.user_id);
+            cb(null, jsonUser);
+        }
+    } catch (e) {
+        console.log(e);
+        cb(e);
+    }
+}));
+
+//configure Passport to manage login session
+passport.serializeUser(function(user, done){
+    process.nextTick(function(){
+        done(null, {id: user.user_id});
+    });
+});
+
+passport.deserializeUser(function(user, done){
+    process.nextTick(function(){
+        return done(null, user);
     });
 });
 
@@ -42,6 +90,53 @@ router.get("/bets", async (req, res) => {
     }
 });
 
+// allows a user to join a bet
+// allows a user to edit their current bet
+// test: localhost:3001/api/bets/join?bet=2&user=1&team=891&amount=432
+router.put("/bets/join", async (req, res) => {
+    // if (!req.user) {
+    //     res.sendStatus(403);
+    // }
+    try{
+        let response = await dbFetch.updateOrCreateBetParticipant(
+            req.query.bet, 
+            req.query.user, 
+            req.query.team, 
+            req.query.amount
+        );
+        if (response.ok) {
+            res.status(200).send(response.item);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (exception) {
+        res.status(404).send(exception.message);
+        console.error(exception.message);
+    }
+});
+
+// Deletes a users bet
+// test: localhost:3001/api/bets/delete?bet=2&user=1
+router.delete("/bets/delete", async (req, res) => {
+// if (!req.user) {
+    //     res.sendStatus(403);
+    // }
+    try{
+        let response = await dbFetch.destroyBetParticipant(
+            req.query.bet, 
+            req.query.user
+        );
+        if (response.ok) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (exception) {
+        res.status(404).send(exception.message);
+        console.error(exception.message);
+    }
+});
+
 //Route to create a user when they signup, non functional yet
 router.post("/signup", async (req, res) => {
     try {
@@ -61,18 +156,14 @@ router.get("/matches", async (req, res) => {
             //console.log(req.query.after);
             //res.json({"date": parseInt(req.query.after)});
             res.json(await dbFetch.getMatchesAfter(parseInt(req.query.after), parseInt(req.query.page)));
-        }
-        else if (req.query.afterthis && req.query.beforethis){
+        } else if (req.query.afterthis && req.query.beforethis){
             res.json(await dbFetch.getMatchesBetween(parseInt(req.query.afterthis), parseInt(req.query.beforethis)));
-        }
-        else if (Object.keys(req.query).length === 0){
+        } else if (Object.keys(req.query).length === 0){
             res.json(await dbFetch.getMatches());
-        }
-        else {
+        } else {
             res.sendStatus(404);
         }
-    }
-    catch(e){
+    } catch(e){
         res.sendStatus(404);
     }
 });
@@ -82,8 +173,7 @@ router.get("/matches", async (req, res) => {
 router.get("/badges", async (req, res) => {
     try {
         res.json(await dbFetch.getBadges());
-    }
-    catch(e){
+    } catch(e){
         res.sendStatus(404);
     }
 });
@@ -92,8 +182,7 @@ router.get("/badges", async (req, res) => {
 router.get("/teams", async (req, res) => {
     try {
         res.json(await dbFetch.getTeams());
-    }
-    catch(e){
+    } catch(e){
         res.sendStatus(404);
     }
 });
@@ -101,9 +190,8 @@ router.get("/teams", async (req, res) => {
 //Route to get a specific team
 router.get("/teams/:id", async (req, res) => {
     try {
-        res.json((await dbFetch.getTeamById(req.params.id)));
-    }
-    catch(e) {
+        res.json(await dbFetch.getTeamById(req.params.id));
+    } catch(e) {
         res.sendStatus(404);
     }
 });
@@ -112,8 +200,7 @@ router.get("/teams/:id", async (req, res) => {
 router.get("/user/top5", async (req, res) => {
     try {
         res.json(await dbFetch.getTop5Users());
-    }
-    catch(e){
+    } catch(e){
         res.sendStatus(404);
     }
 });
@@ -123,15 +210,12 @@ router.get("/user/rest", async (req, res) => {
     try {
         if (req.query.page){
             res.json(await dbFetch.getRemainingUsers(req.query.page));
-        }
-        else if (req.query.count){
+        } else if (req.query.count){
             res.json(await dbFetch.getNumOfUsers());
-        }
-        else {
+        } else {
             res.sendStatus(404);
         }
-    }
-    catch(e) {
+    } catch(e) {
         res.sendStatus(404);
     }
 })
@@ -140,8 +224,7 @@ router.get("/user/rest", async (req, res) => {
 router.get("/user/all", async (req, res) => {
     try {
         res.json(await dbFetch.getUsers());
-    }
-    catch(e) {
+    } catch(e) {
         res.sendStatus(404);
     }
 })
@@ -149,9 +232,9 @@ router.get("/user/all", async (req, res) => {
 //Route to get a user by id
 router.get("/user/:id", async (req, res) => {
     try {
-        res.json((await dbFetch.getUserById(req.params.id))[0]); 
-    }
-    catch(e) {
+        res.json(await dbFetch.getUserById(req.params.id)); 
+    } catch(e) {
+        console.log(e)
         res.sendStatus(404);
     }
 })
@@ -159,8 +242,7 @@ router.get("/user/:id", async (req, res) => {
 router.get("/teams/history/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getMatchHistory(req.params.id, req.query.page));
-    }
-    catch(e){
+    } catch(e){
         res.sendStatus(404);
     }
 })
@@ -169,9 +251,11 @@ router.get("/user/history/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getUserBetsById(req.params.id, req.query.page, req.query.limit));
     } catch (e) {
+        console.log(e)
         res.sendStatus(404);
     }
 })
+
 module.exports = [
     router,
 ]

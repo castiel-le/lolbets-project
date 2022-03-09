@@ -1,23 +1,23 @@
-import { Box } from '@mui/system';
 import { Component, Fragment } from 'react';
 import { InView } from 'react-intersection-observer'
-
 import { getFormattedDate, getGameStartTimeObject, sortMatchesByDate } from './helperFunctions';
-import BetBox from './BetBox'
-import PlaceBetPopup from './PlaceBetPopup';
-import { ListItem, List } from '@mui/material';
 
-import './BetBox.css'
+import BetBox from './BetBox'
+import PlaceBetPopup from './BetCreation/PlaceBetPopup';
+import { Box, ListItem, List } from '@mui/material';
 import { DateText } from './styledElements';
 import { HorizontalDivider, Loading, TypographyBold } from '../customUIComponents';
+import './BetBox.css'
+import Notification from '../Notification';
 
-export default class AllBets extends Component {
+import withRouter from '../withRouter';
+
+class AllBets extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             loading: true,
-            betOpen: false,
             selectedBet: null,
             upcomingMatches: [],
             upcomingMatchesByDate: [],
@@ -25,7 +25,8 @@ export default class AllBets extends Component {
             allFetchedDates: [0],
             lastFetchedDate: new Date().setHours(0, 0, 0, 0),
             fetching: false,
-            mounted: true
+            mounted: true,
+            showSuccessNotification: false,
         };
         this.toggleOpenBet = this.toggleOpenBet.bind(this);
         this.selectBet = this.selectBet.bind(this);
@@ -51,6 +52,9 @@ export default class AllBets extends Component {
         if (this.state.loading === true && nextState.loading === false) {
             return true;
         } else if (this.state.upcomingMatchesByDate !== nextState.upcomingMatchesByDate) {
+            return true;
+        }
+        if (this.state.selectedBet !== nextState.selectBet) {
             return true;
         }
         return false;
@@ -105,7 +109,10 @@ export default class AllBets extends Component {
                     this.setState({
                         loading: false,
                         upcomingMatches: [...this.state.upcomingMatches, ...matches],
-                        upcomingMatchesByDate: [...this.state.upcomingMatchesByDate, ...sortMatchesByDate(matches)],
+                        upcomingMatchesByDate: [
+                            ...this.state.upcomingMatchesByDate, 
+                            ...sortMatchesByDate(matches)
+                        ],
                         lastFetchedDate: nextDay,
                         fetching: false,
                     });
@@ -115,33 +122,38 @@ export default class AllBets extends Component {
     }
 
     /**
-     * If the user selects a bet, open the popup
+     * Closes the bet popup
+     * Will show a notification if the user submitted a bet
+     * @param {Boolean} betSubmitted if the user submitted a bet, show a notification confirming they did successfully
      */
-    toggleOpenBet() {
-        if (this.state.betOpen) {
+    toggleOpenBet(betSubmitted) {
+        if (this.state.selectedBet !== null) {
             this.setState({
-                betOpen: false,
                 selectedBet: null,
             });
-        } else {
+        }
+        if (betSubmitted) {
             this.setState({
-                betOpen: true,
+                showSuccessNotification: true,
             });
         }
     }
 
     /**
      * When the use clicks the bet button, tell them application which bet was selected
-     * @param {*} bet 
-     * @param {*} team1 
-     * @param {*} team2 
+     * When selectedBet state is set, the popup shows up
+     * If the user is not logged in, redirect them to login
+     * @param {*} team1 Team 1 of selected bet
+     * @param {*} team2 Team 2 of selected bet
      */
-    selectBet(bet, team1, team2) {
-        this.setState({
-            selectedBet: bet,
-            betTeams: [team1, team2]
-        });
-        this.toggleOpenBet();
+    selectBet(team1, team2) {
+        if(Object.keys(this.props.user).length === 0) {
+            this.props.navigate("/login");
+        } else {
+            this.setState({
+                selectedBet: {team1: team1, team2: team2},
+            });
+        }
     }
 
     render() {
@@ -156,7 +168,7 @@ export default class AllBets extends Component {
         return (
             <Fragment >
                 {!this.state.loading
-                // if upcoming matches are set, render this
+                // if upcoming matches are set, render a bet box for each match by date
                     ?
 
                     this.state.upcomingMatchesByDate.map((date, index, {length}) => {
@@ -172,10 +184,14 @@ export default class AllBets extends Component {
                                     <InView 
                                         as={'div'}
                                         initialInView={true}
-                                        onChange={(inView, entry) => {
-                                            // if you are currently looking at the last date on the current page
+                                        onChange={(inView) => {
+                                            // if you are currently looking at the 
+                                            // last date on the current page
                                             // fetch the next date
-                                            if ( inView && !this.state.fetching && index + 1 === length) {
+                                            if ( inView && 
+                                                !this.state.fetching && 
+                                                index + 1 === length
+                                            ) {
                                                 this.setState({
                                                     fetching: true
                                                 },
@@ -207,20 +223,30 @@ export default class AllBets extends Component {
                         );
                     })
 
-                // if the upcoming matches are not set do not display anything
+                    // if the upcoming matches are not set display a loading screen
                     :
                     <Loading />
                 }
 
-                {/*this.state.betOpen
-                ? <PlaceBetPopup 
-                    open={this.state.betOpen} 
+                <PlaceBetPopup 
+                    // if a bet is currently selected, open the popup
+                    open={this.state.selectedBet !== null ? true : false} 
                     bet={this.state.selectedBet} 
                     toggleOpenBet={this.toggleOpenBet} 
                 />
-                : null
-                */}
+
+                <Notification 
+                    open={this.state.showSuccessNotification} 
+                    close={() => this.setState({
+                        showSuccessNotification: false,
+                    })}
+                    type='success'
+                    message='Bet Placed'
+                />
+                
             </Fragment>
         );
     }
 }
+
+export default withRouter(AllBets);

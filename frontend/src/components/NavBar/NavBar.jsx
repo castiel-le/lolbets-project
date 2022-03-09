@@ -72,13 +72,15 @@ const UserAvatar = (props) => {
                     onClose={props.handleCloseUserMenu}
                     color='inherit'
                 >
-                    {settings.map((setting, index) => 
-                        <NavLink key={setting} to={settingLink[index]} >
-                            <MenuItem onClick={props.handleCloseUserMenu}>
-                                <Typography textAlign="center">{setting}</Typography>
-                            </MenuItem>
-                        </NavLink>
-                    )}
+                    {settings.map((setting, index) => {
+                        return (
+                            <NavLink key={setting} to={settingLink[index].replace(":id", props.user.id)} >
+                                <MenuItem onClick={props.handleCloseUserMenu}>
+                                    <Typography textAlign="center">{setting}</Typography>
+                                </MenuItem>
+                            </NavLink>
+                        )
+                    })}
                 </Menu>
             </Box>
         </ThemeProvider>
@@ -94,6 +96,7 @@ export default class NavBar extends Component {
             anchorToUser: null,
             openUserMenu: false,
             sideMenuOpen: false,
+            user: null,
         };
 
         this.handleOpenUserMenu = this.handleOpenUserMenu.bind(this);
@@ -122,6 +125,9 @@ export default class NavBar extends Component {
     }
 
     render() {
+        if(this.props.logoutcheck){
+            this.verifyUser();
+        }
         return (
             <ThemeProvider theme={theme} >
                 <SideDrawer toggleDrawer={this.toggleDrawer} visible={this.state.sideMenuOpen} pages={pages} pageLinks={pageLinks} theme={theme}/>
@@ -172,12 +178,13 @@ export default class NavBar extends Component {
                                 )}
                             </Box>
 
-                            {this.props.user
+                            {this.props.user.id
                                 ? <UserAvatar 
                                     openUserMenu={this.state.openUserMenu} 
                                     anchorToUser={this.state.anchorToUser} 
                                     handleOpenUserMenu={this.handleOpenUserMenu} 
                                     handleCloseUserMenu={this.handleCloseUserMenu}
+                                    user={this.props.user}
                                 />
                                 : <Stack direction="row" spacing={1}>
                                     <NavLink to={"/login"} style={{all: "inherit", cursor: "pointer"}}>

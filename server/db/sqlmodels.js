@@ -160,4 +160,30 @@ const BetParticipant = sequelize.define("bet_participants", {
         allowNull: false
     },
 }, {timestamps: false});
-module.exports = {Badge, Team, Match, User, BetParticipant};
+
+// federated_credentials model
+const FederatedCredentials = sequelize.define("federated_credentials", {
+    federated_credentials_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false
+    },
+    provider: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: false
+    },
+    profile_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: false
+    },
+}, {timestamps: false});
+
+module.exports = {FederatedCredentials, Badge, Team, Match, User, BetParticipant};

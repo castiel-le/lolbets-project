@@ -66,10 +66,6 @@
         "brace-style": [
             "warn"
         ],
-        "max-len": [
-            "warn",
-            100
-        ],
         "no-inline-comments": "error",
         "no-tabs": "error",
         "space-infix-ops": "warn",

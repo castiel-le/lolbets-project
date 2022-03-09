@@ -148,7 +148,7 @@ async function getTop5Users() {
 //Function to get remaining users, minus top 5
 async function getRemainingUsers(pageNum) {
     const users = await models.User.findAll({
-        offset: ((pageNum - 1) * 10) + 5,
+        offset: (pageNum - 1) * 10 + 5,
         limit: 10,
         order: [
             ["coins", "DESC"]
@@ -165,13 +165,37 @@ async function getNumOfUsers() {
 
 //Function to get user by id
 async function getUserById(id) {
-    const user = await models.User.findAll({
+    const user = await models.User.findOne({
         where: {
             /* eslint-disable */
             user_id: id
             /* eslint-enable */
         }
     });
+    return await getBetsStats(user);
+}
+
+/**
+ * Helper function to get the bets placed for the user
+ * @param {Model} user 
+ * @returns User model with bets_placed
+ */
+async function getBetsStats(user) {
+    const bets = await models.BetParticipant.count({
+        where: {
+            user_id: user.dataValues.user_id
+        }
+    });
+    let rank = await models.User.count({
+        where: {
+            coins: {
+                [Op.gt]:  user.dataValues.coins
+            },       
+        }
+    })
+    rank++;
+    user.dataValues.bets_placed = bets;
+    user.dataValues.rank = rank;
     return user;
 }
 
@@ -189,7 +213,7 @@ async function getUserBetsById(id, page, limit) {
             ["creation_date", "DESC"]
         ]
     })
-    return populateTeamOnBets(bets);
+    return await populateTeamOnBets(bets);
 }
 
 /**
@@ -199,8 +223,12 @@ async function getUserBetsById(id, page, limit) {
  */
 async function populateTeamOnBets(bets) {
     for (let i = 0; i < bets.length; i++){
-        const teamData = await getTeamById(bets[i].dataValues.team_betted_on);
+        const teamId = bets[i].dataValues.team_betted_on;
+        const teamData = await getTeamById(teamId);
         bets[i].dataValues.team_betted_on = teamData;
+
+        const matchData = await getMatchById(teamId)
+        bets[i].dataValues.match = matchData;
     }
     return bets;
 }
@@ -218,5 +246,116 @@ async function swapTeamData(matches){
     return matches;
 }
 
+//Function to get match by id
+async function getMatchById(id) {
+    const match = await models.Match.findOne({
+        where: {
+            match_id: id
+        }
+    });
+    return match;
+}
+/**
+ * Function to check if user logged in before on the specified
+ * provider.
+ * @param {String} provider provider used to log in
+ * @param {String} profileId the id of the user on
+ * @returns FederatedCredentials record
+ */
+async function isUserExist(provider, profileId) {
+    const row = await models.FederatedCredentials.findOne({
+        where: {
+            provider: provider,
+            profile_id: profileId
+        }
+    });
+    return row;
+}
+
+/**
+ * Adds a new User record on the database
+ * @param {String} username username of new user
+ * @param {String} email email of new user
+ * @param {String} profilePic profile pic url of new user
+ * @returns User model of new user
+ */
+async function createUser(username, email, profilePic) {
+    const newUser = await models.User.create({
+        username: username,
+        email: email,
+        profile_pic: profilePic,
+        coins: 1000,
+        date_created: new Date()
+    })
+    return newUser;
+}
+
+/**
+ * Creates a federated_credential on the database
+ * @param {String} provider provider used to login
+ * @param {String} profileId profile id from provider of user
+ * @param {Number} userId user_id of user in db
+ */
+async function createFederatedCredentials(provider, profileId, userId) {
+    await models.FederatedCredentials.create({
+        provider: provider,
+        profile_id: profileId,
+        user_id: userId
+    });
+}
+
+/**
+ * Create a bet pariticpant if the user has not entered the bet yet
+ * Edit the current bet if the user has already joing the bet
+ * @param {Number} bet_id the id of the bet the user is joining
+ * @param {Number} user_id the user id
+ * @param {Number} team the team the user bet on
+ * @param {Number} amount the amount the user bet
+ */
+async function updateOrCreateBetParticipant(bet_id, user_id, team, amount) {
+    // First try to find the record
+    const existingBetParticipant = await models.BetParticipant.findOne({
+        where: {
+            bet_id: bet_id,
+            user_id: user_id
+        }
+    });
+   
+    if (!existingBetParticipant) {
+        // Item not found, create a new one
+        const betAdded = await models.BetParticipant.create({
+            bet_id: bet_id,
+            user_id: user_id,
+            team_betted_on: team,
+            amount_bet: amount,
+            creation_date: Date.now()   
+        });
+        return {betAdded, created: true, ok: true}
+    }
+    existingBetParticipant.team_betted_on = team;
+    existingBetParticipant.amount_bet = amount;
+    existingBetParticipant.save();
+    return {existingBetParticipant, created: false, ok: true};
+}
+
+/**
+ * Remove a bet participant
+ * @param {Number} bet_id the id of the bet the user is joining
+ * @param {Number} user_id the user id
+ * @returns JSON response telling if transaction succeeded
+ */
+async function destroyBetParticipant(bet_id, user_id) {
+    // First try to find the record
+    const existingBetParticipant = await models.BetParticipant.findOne({
+        where: {
+            bet_id: bet_id,
+            user_id: user_id
+        }
+    });
+    // destroy... sounds like they just nuke the poor db or something
+    existingBetParticipant.destroy();
+    return {destroyed: true, ok: true};
+}
+
 // eslint-disable-next-line max-len
-module.exports = { getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
+module.exports = { createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
