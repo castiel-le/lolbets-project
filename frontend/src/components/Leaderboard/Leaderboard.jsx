@@ -7,8 +7,6 @@ import { CircularProgress} from "@mui/material";
 import poro2 from './images/poro2.png';
 import john from './images/gigascuffed.PNG';
 import DiamondIcon from "@mui/icons-material/Diamond";
-import { Icecream } from '@mui/icons-material';
-import poro2 from './images/poro2.png';
 import { FlexBoxColumn, FlexBoxRow, TypographyBold, TypographyLight, TypographyMedium } from "../customUIComponents";
 
 class Leaderboard extends Component {
@@ -112,6 +110,7 @@ class Leaderboard extends Component {
                             <TypographyMedium sx={{ my:'auto', color: '#ff9b00', fontSize: '40px', borderBottom: '2px #ff9b00 solid', width: '40%'}}>1</TypographyMedium>
                         </FlexBoxColumn>
                         <FlexBoxColumn sx={{ my: 'auto', mx: '20px', color: 'white'}}>
+                            <img src={poro2} style={rank1IconStyle}/>
                         </FlexBoxColumn>
                         <FlexBoxColumn>
                             <TypographyLight style={rank1UsernameStyle}>{this.state.top5[0].username}</TypographyLight>
