@@ -10,9 +10,11 @@ export default class BetHistoryBox extends Component {
             <Grid item xs={12} backgroundColor="#343f46" marginBottom={2.5}>
                 <Grid container>
                     <Grid item xs={2} display="flex" justifyContent="center" alignItems="center">
-                        {this.props.bet.team_betted_on.team_id === this.props.bet.match.winner_id
-                            ? <TypographyMedium align="center" sx={{color: "lightGreen"}}> WIN </TypographyMedium>
-                            : <TypographyMedium align="center" sx={{color: "red"}}> LOSE </TypographyMedium>
+                        {this.props.bet.match.in_progress
+                            ? <TypographyMedium align="center" sx={{color: "white"}}> ONGOING </TypographyMedium>
+                            : this.props.bet.team_betted_on.team_id === this.props.bet.match.winner_id
+                                ? <TypographyMedium align="center" sx={{color: "lightGreen"}}> WIN </TypographyMedium>
+                                : <TypographyMedium align="center" sx={{color: "red"}}> LOSE </TypographyMedium>
                         }
                     </Grid>
                     <Grid item xs={8} display="flex" justifyContent="center" alignItems="center">

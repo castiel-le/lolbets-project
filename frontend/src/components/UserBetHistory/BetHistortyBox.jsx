@@ -9,15 +9,20 @@ export default class UserBetHistory extends Component {
     render() {
         return(
             <Box sx={{ bgcolor: '#343F46', width: '50%', mx: 'auto'}}>
-                {this.props.bet.team_betted_on.team_id === this.props.bet.match.winner_id
-                    ? <TypographyMedium sx={{color: "lightGreen"}} fontSize='20px' 
+                {this.props.bet.match.in_progress ?
+                    <TypographyMedium sx={{color: "white"}} fontSize='20px' 
                         position='relative' right='40%' top='50px'> 
+                ONGOING 
+                    </TypographyMedium>
+                    : this.props.bet.team_betted_on.team_id === this.props.bet.match.winner_id
+                        ? <TypographyMedium sx={{color: "lightGreen"}} fontSize='20px' 
+                            position='relative' right='40%' top='50px'> 
                         WIN 
-                    </TypographyMedium>
-                    : <TypographyMedium sx={{color: "red"}} fontSize='20px' 
-                        position='relative' right='40%' top='50px'> 
+                        </TypographyMedium>
+                        : <TypographyMedium sx={{color: "red"}} fontSize='20px' 
+                            position='relative' right='40%' top='50px'> 
                         LOSE 
-                    </TypographyMedium>
+                        </TypographyMedium>
                 }
                 <TypographyMedium position='relative' bottom='30px'>
                     <TypographyMedium marginTop='10px'>Cloud9</TypographyMedium>

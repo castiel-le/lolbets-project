@@ -24,7 +24,7 @@ export default class AllBets extends Component {
                     :
                     
                     <Button variant="contained" align="center"
-                        component={Link} to="/user/1/history">
+                        component={Link} to={`/user/${this.props.id}/history`}>
                             View Full History
                     </Button>
                 }
