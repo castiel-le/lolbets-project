@@ -4,6 +4,9 @@ import { Component } from "react";
 import LeaderboardTable from "./LeaderboardTable";
 import LeaderboardRank2To5 from "./LeaderboardRank2To5";
 import { CircularProgress} from "@mui/material";
+import poro2 from './images/poro2.png';
+import john from './images/gigascuffed.PNG';
+import DiamondIcon from "@mui/icons-material/Diamond";
 import { Icecream } from '@mui/icons-material';
 import poro2 from './images/poro2.png';
 import { FlexBoxColumn, FlexBoxRow, TypographyBold, TypographyLight, TypographyMedium } from "../customUIComponents";
@@ -86,10 +89,16 @@ class Leaderboard extends Component {
 
     render(){
         // Styling
-        const rank1CardStyle = {height:'100px', backgroundColor: 'rgba(19, 60, 121, 0.96)', borderRadius: '5px', padding: '10px', margin: '10px 0', width: '60%'};
+        const rank1CardStyle = {height:'100px', borderRadius: '5px', padding: '10px', margin: '10px 0', width: '60%', backgroundImage: `url(${john})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'};
         const rankBoxStyle = {width: '75px', mr: '10px', alignItems: 'center', borderRadius: '10px', backgroundColor: 'rgba(255, 155, 0, 0.3)'};
         const ranks2To5ContainerStyle = {width:'100%', mx:'auto', margin: '10px 0', justifyContent: 'space-between', padding: '10px', backgroundColor: 'rgba(19, 60, 121, 0.96)', borderRadius: '5px', height: '120px', alignItems: 'center'};
-        
+        const rank1IconStyle = {width: '96px', borderRadius: '5px', border: '2px gold solid'};
+        const rank1UsernameStyle = {margin: 'auto 0'};
+        const coinsAndWinrateStyle = {alignItems: 'center', margin: 'auto 0 auto 75px', width: '125px'}
+        const lossesBar = {width: '100%', backgroundColor: 'rgb(238, 90, 82)', height: '10px', borderRadius: '5px'};
+        const winsBar = {width: '75%', backgroundColor: 'rgb(61, 149, 229)', borderTopLeftRadius: '5px', borderBottomLeftRadius: '5px'};
+
+
         // eslint-disable-next-line no-extra-parens
         return !this.state.top5NotLoaded ? (
             <FlexBoxColumn width="80%" sx={{mx:'auto', alignItems: 'center'}}>
@@ -103,13 +112,19 @@ class Leaderboard extends Component {
                             <TypographyMedium sx={{ my:'auto', color: '#ff9b00', fontSize: '40px', borderBottom: '2px #ff9b00 solid', width: '40%'}}>1</TypographyMedium>
                         </FlexBoxColumn>
                         <FlexBoxColumn sx={{ my: 'auto', mx: '20px', color: 'white'}}>
-                            <img src={poro2}/>
                         </FlexBoxColumn>
                         <FlexBoxColumn>
-                            <TypographyLight sx={{ my: 'auto', mx: '10px'}}>{this.state.top5[0].username}</TypographyLight>
+                            <TypographyLight style={rank1UsernameStyle}>{this.state.top5[0].username}</TypographyLight>
                         </FlexBoxColumn>
-                        <FlexBoxColumn>
-                            <TypographyLight sx={{ my:'auto', ml: '10px'}}>{this.state.top5[0].coins}</TypographyLight>
+                        <FlexBoxColumn style={coinsAndWinrateStyle}>
+                            <FlexBoxRow sx={{ alignItems: 'center' }}>
+                                <TypographyMedium>{this.state.top5[0].coins}</TypographyMedium>
+                                <DiamondIcon sx={{ fontSize: '1rem', my: 'auto', color: 'lightblue', pl: '3px'}}/>
+                            </FlexBoxRow>
+                            <TypographyLight>15W - 5L | 75%</TypographyLight>
+                            <FlexBoxRow style={lossesBar}>
+                                <FlexBoxRow style={winsBar} />
+                            </FlexBoxRow>
                         </FlexBoxColumn>
                     </FlexBoxRow>
                 </FlexBoxRow>
