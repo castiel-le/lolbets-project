@@ -40,8 +40,24 @@ class Profile extends Component {
      * the state.
      */
     async componentDidMount() {
+        await this.updateState();
+    }
+
+    /**
+     * Checks if previous prop's user changed. If it changed, update
+     * the state of this component.
+     * @param {*} prevProps previous props
+     * @param {*} prevState previous state
+     */
+    async componentDidUpdate(prevProps, prevState) {
+        if (prevProps.user !== this.props.user) {
+            await this.updateState();
+        }
+    }
+
+    async updateState() {
         await this.fetchUserInfo();
-        await this.fetchBets()
+        await this.fetchBets();
     }
 
     /**
