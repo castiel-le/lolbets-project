@@ -3,7 +3,8 @@ import { Component, Fragment } from 'react';
 
 import { Box, AccordionDetails, AccordionSummary } from '@mui/material';
 import { getTeamObject, fetchTeamInfo } from './helperFunctions';
-import { BetButton, BetAccordion, TimeBox, TeamBox } from './styledElements';
+import { BetAccordion, TimeBox, TeamBox } from './styledElements';
+import BetButton from './BetCreation/BetButton';
 import BetDetails from './BetDetails';
 import { FlexBoxRow, TypographyLight } from '../customUIComponents';
 
@@ -78,7 +79,14 @@ export default class BetBox extends Component {
                                     
                                     <TeamBox left={false} team={this.props.team2} />
 
-                                    <BetButton expanded={this.state.expanded} selectBet={this.props.selectBet} team1={this.props.team1} team2={this.props.team2} />
+                                    <BetButton 
+                                        expanded={this.state.expanded} 
+                                        selectBet={this.props.selectBet} 
+                                        betID={this.props.betID} 
+                                        team1={this.props.team1} 
+                                        team2={this.props.team2} 
+                                        existingBet={this.props.existingBet}
+                                    />
 
                                 </FlexBoxRow>
                             </AccordionSummary>

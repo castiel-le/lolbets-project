@@ -43,7 +43,7 @@ async function getTeamByName(name) {
 //Function to get all matches
 async function getMatches() {
     const matches = await models.Match.findAll();
-    return swapTeamData(matches);
+    return await swapTeamData(matches);
 }
 
 //Function to get match history from a specific team
@@ -63,7 +63,7 @@ async function getMatchHistory(id, pageNum) {
             ["match_start_time", "DESC"]
         ]
     });
-    return swapTeamData(matches);
+    return await swapTeamData(matches);
 }
 
 //Function to get all matches after a certain date
@@ -81,7 +81,7 @@ async function getMatchesAfter(date, pageNum) {
             ["match_start_time", "DESC"]
         ]
     });
-    return swapTeamData(matches);
+    return await swapTeamData(matches);
 }
 
 //Function to get all matches between two dates
@@ -98,7 +98,7 @@ async function getMatchesBetween(afterthis, beforethis) {
             ["match_start_time", "ASC"]
         ]
     });
-    return swapTeamData(matches);
+    return await swapTeamData(await getBetIDForMatches(matches));
 }
 
 //Function to get total number of matches played for a specific team
@@ -227,6 +227,27 @@ async function setBetsStats(user) {
     rank++;
     user.dataValues.bets_placed = bets;
     user.dataValues.rank = rank;
+}
+
+async function getAllBetsForUser(userID) {
+    const allBets = await models.BetParticipant.findAll({
+        where: {
+            user_id: userID,
+        }
+    })
+    return allBets;
+}
+
+async function getBetIDForMatches(matches) {
+    for (let i = 0; i < matches.length; i++) {
+        const betID = await models.Bet.findOne({
+            where: {
+                match_id: matches[i].dataValues.match_id,
+            }
+        });
+        matches[i].dataValues.bet = betID;
+    }
+    return matches;
 }
 
 //Function to get user's bets history by id and with pagination
@@ -434,4 +455,4 @@ async function setUsers(arrModels) {
 
 
 // eslint-disable-next-line max-len
-module.exports = { getAllTimeouts, getAllBans, createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
+module.exports = { getAllTimeouts, getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};

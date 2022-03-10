@@ -155,6 +155,43 @@ const BetParticipant = sequelize.define("bet_participants", {
     },
 }, {timestamps: false});
 
+// Bet participant model
+const Bet = sequelize.define("bets", {
+    bet_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    creator_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    category_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false
+    },
+    minimum_coins: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false
+    },
+    maximum_coins: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false
+    },
+    match_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    bet_locked: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
+}, {timestamps: false});
+
 // federated_credentials model
 const FederatedCredentials = sequelize.define("federated_credentials", {
     federated_credentials_id: {
@@ -236,4 +273,4 @@ const Timeout = sequelize.define("timeouts", {
 }, {timestamps: false});
 
 
-module.exports = {Timeout, Ban, FederatedCredentials, Badge, Team, Match, User, BetParticipant};
+module.exports = {Timeout, Ban, FederatedCredentials, Badge, Team, Match, User, BetParticipant, Bet};

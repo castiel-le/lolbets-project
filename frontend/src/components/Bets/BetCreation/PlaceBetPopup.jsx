@@ -4,7 +4,7 @@ import { Button, Dialog, DialogTitle, DialogContent,
     DialogActions, Divider, Slide, Avatar, 
     FormControl, InputAdornment, TextField } from '@mui/material';
 import { styled } from '@mui/system';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { FlexBoxRow, HorizontalDivider, TypographyBold } from "../../customUIComponents";
 
@@ -68,24 +68,30 @@ export default class PlaceBetPopup extends Component {
             openConfirmation: false,
             openNotification: false,
             notificationType: 'success',
-            notificationMessage: 'Bet Created'
+            notificationMessage: 'Bet Created',
+            existingBet: false,
         };
         this.closeDialog = this.closeDialog.bind(this);
         this.betAmountChangeTextField = this.betAmountChangeTextField.bind(this);
         this.addQuickBetAmount = this.addQuickBetAmount.bind(this);
         this.openConfirmationBox = this.openConfirmationBox.bind(this);
         this.submitBet = this.submitBet.bind(this);
+        this.fillInEditBet = this.fillInEditBet.bind(this);
+        this.deleteBetParticipant = this.deleteBetParticipant.bind(this);
     }
 
     /**
      * Logic for when the Dialog Box is closed without a bet entered
+     * @param {Boolean} betSuccess if the bet successfully closed
+     * @param {*} closeNotificationType does not need to be defined, but if it is then it determines the notification popup type
+     * @param {*} closeNotificationMessage does not need to be defined, but if it is then it determines the notification message
      */
-    closeDialog(betSuccess) {
+    closeDialog(betSuccess, closeNotificationType, closeNotificationMessage) {
         this.setState({
             selectedTeam: null,
             betAmount: 0,
         })
-        this.props.toggleOpenBet(betSuccess);
+        this.props.toggleOpenBet(betSuccess, closeNotificationType, closeNotificationMessage);
     }
 
     /**
@@ -163,14 +169,76 @@ export default class PlaceBetPopup extends Component {
      * Called when the user confirms their bet amount
      * @param {Boolean} accepted whether the user confirmed their bet or not
      */
-    submitBet(accepted) {
+    async submitBet(accepted, betID, userID, teamID, amount) {
+        // since I store the selected team as 1 or 2, I use that logic to get the real id from team1 or team2 props
+        teamID = teamID === 1 ? this.props.bet.team1.team_id : this.props.bet.team2.team_id;
         if (accepted) {
-            this.closeDialog(true);
+            let response = await fetch(`/api/bets/join?bet=${betID}&user=${userID}&team=${teamID}&amount=${amount}`, {method: 'put'});
+            if (response.ok) {
+                this.closeDialog(true);
+            } else {
+                this.setState({
+                    notificationType: 'error',
+                    notificationMessage: 'Unable to place bet',
+                    openNotification: true,
+                });
+            }
+            
         }
         this.setState({
             openConfirmation: false
         })
 
+    }
+
+    /**
+     * Finds whether the user has a current bet on the bet selected
+     * If they do have a bet, set the state of the popup to be the same as their previous bet
+     */
+    fillInEditBet() {
+        // reset existing bet state
+        this.setState({
+            existingBet: false,
+        })
+        for (let i = 0; i < this.props.existingBets.length; i++) {
+            if (this.props.existingBets[i].bet_id === this.props.bet.betID && this.props.bet.betID !== null) {
+                this.setState({
+                    betAmount: this.props.existingBets[i].amount_bet,
+                    selectedTeam: this.props.existingBets[i].team_betted_on === this.props.bet.team1.team_id ? 1 : 2,
+                    existingBet: true
+                })
+            }
+        }
+    }
+
+    /**
+     * Deletes a users current bet on a match
+     * Displays an error message if the response was not ok
+     * If Delete worked it displays an info notification to the user to let them know
+     * @param {Number} betID the id for the bet that will be deleted
+     */
+    async deleteBetParticipant(betID) {
+        const selectedTeamName = this.state.selectedTeam === 1 ? this.props.bet.team1.team_name : this.props.bet.team2.team_name;
+        const response = await fetch(`/api/bets/delete?bet=${betID}&user=${this.props.userID}`, {method: 'DELETE'});
+        if (response.ok) {
+            this.closeDialog(true, 'info', `Bet for ${selectedTeamName} Removed`)
+        } else {
+            this.setState({
+                notificationType: 'error',
+                notificationMessage: 'Unable to Remove Bet',
+                openNotification: true
+            })
+        }
+    }
+
+    /**
+     * I used this to determine whether or not the component should try to fill it's state with a previous bet
+     * @param {*} prevProps the props before the current render
+     */
+    componentDidUpdate(prevProps) {
+        if (prevProps.bet === null && this.props.bet !== null) {
+            this.fillInEditBet();
+        }
     }
 
     render() {
@@ -188,7 +256,7 @@ export default class PlaceBetPopup extends Component {
                     PaperProps={{
                         style: {
                             backgroundColor: '#223039',
-                            boxShadow:'0 0px 20px #f9f9f9',
+                            boxShadow:'0 0px 10px #f9f9f9',
                             width: '300px',
                             p: 1
                         },
@@ -197,7 +265,7 @@ export default class PlaceBetPopup extends Component {
 
                     <DialogTitle>
                         <TypographyBold fontSize={20}>
-                            Place Bet
+                            {this.state.existingBet ? "Edit Bet" : "Place Bet"}
                         </TypographyBold>    
                         <HorizontalDivider width='100%' />
                     </DialogTitle>
@@ -292,6 +360,14 @@ export default class PlaceBetPopup extends Component {
                     </DialogContent>
             
                     <DialogActions>
+                        {this.state.existingBet
+                            ? <Button onClick={() => {
+                                this.deleteBetParticipant(this.props.bet.betID);
+                            }}>
+                                <DeleteIcon sx={{color: 'white'}}/>
+                            </Button>
+                            : null
+                        }
                         <Button onClick={() => {
                             this.closeDialog(false);
                         }}
@@ -332,7 +408,7 @@ export default class PlaceBetPopup extends Component {
                 <ConfirmBet 
                     open={this.state.openConfirmation} 
                     onClose={(accepted) => {
-                        this.submitBet(accepted);
+                        this.submitBet(accepted, this.props.bet.betID, this.props.userID, this.state.selectedTeam, this.state.betAmount);
                     }}
                     amount={this.state.betAmount}
                     team={this.state.selectedTeam === 1 ? this.props.bet.team1 : this.props.bet.team2}
