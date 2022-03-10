@@ -243,6 +243,16 @@ router.get("/user/:id", async (req, res) => {
     }
 })
 
+// gets all the bets a user has placed
+router.get("/allbets/:id", async (req, res) => {
+    try {
+        res.json(await dbFetch.getAllBetsForUser(req.params.id));
+    } catch(e) {
+        console.log(e)
+        res.sendStatus(404);
+    }
+});
+
 router.get("/teams/history/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getMatchHistory(req.params.id, req.query.page));

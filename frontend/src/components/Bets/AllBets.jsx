@@ -27,19 +27,28 @@ class AllBets extends Component {
             fetching: false,
             mounted: true,
             showSuccessNotification: false,
+            notificationType: 'success',
+            notificationMessage: 'Bet Placed',
+            userCurrentBets: [],
         };
         this.toggleOpenBet = this.toggleOpenBet.bind(this);
         this.selectBet = this.selectBet.bind(this);
         this.fetchUpcomingMatches = this.fetchUpcomingMatches.bind(this);
+        this.fetchAllUserBets = this.fetchAllUserBets.bind(this);
+        this.userHasExistingBet = this.userHasExistingBet.bind(this);
     }
 
     componentDidMount() {
         this.fetchUpcomingMatches(1);
+        // if user is logged in, fetch their bets
+        if (Object.keys(this.props.user).length !== 0) {
+            this.fetchAllUserBets(this.props.user.id);
+        }
         // fetch all matches starting from today
         this.setState({
             allFetchedDates: [this.state.lastFetchedDate]
-        },
-        )
+        });
+        
     }
 
     componentWillUnmount() {
@@ -57,7 +66,25 @@ class AllBets extends Component {
         if (this.state.selectedBet !== nextState.selectBet) {
             return true;
         }
+        if (this.state.userCurrentBets !== nextState.userCurrentBets) {
+            return true;
+        }
         return false;
+    }
+
+    /**
+     * Fetchs all the bets for the current user
+     * @param {Number} userID The current logged in user ID
+     */
+    async fetchAllUserBets(userID) {
+        let response = await fetch(`/api/allbets/${userID}`);
+        if (response.ok) {
+            this.setState({
+                userCurrentBets: await response.json(),
+            });
+        } else {
+            console.error('unable to fetch user bets for current user');
+        }
     }
 
     /**
@@ -94,7 +121,7 @@ class AllBets extends Component {
                     // If we have tried fetching for over 2 weeks of data, 
                     // and nothing has returned, 
                     // display that their are no upcoming games
-                    if (nextDay - today < 14 * 86400 * 1000) {
+                    if (nextDay - today < 28 * 86400 * 1000) {
                         this.setState({
                             lastFetchedDate: nextDay
                         },
@@ -126,16 +153,28 @@ class AllBets extends Component {
      * Will show a notification if the user submitted a bet
      * @param {Boolean} betSubmitted if the user submitted a bet, show a notification confirming they did successfully
      */
-    toggleOpenBet(betSubmitted) {
+    toggleOpenBet(betSubmitted, notificationType, notificationMessage) {
         if (this.state.selectedBet !== null) {
             this.setState({
                 selectedBet: null,
             });
         }
-        if (betSubmitted) {
+        if (betSubmitted && notificationType && notificationMessage) {
             this.setState({
                 showSuccessNotification: true,
+                notificationType: notificationType,
+                notificationMessage: notificationMessage
             });
+        } else if (betSubmitted) {
+            this.setState({
+                showSuccessNotification: true,
+                notificationType: 'success',
+                notificationMessage: 'Bet Placed'
+            });
+        }
+        // if user is logged in, update the bets they have places
+        if (Object.keys(this.props.user).length !== 0) {
+            this.fetchAllUserBets(this.props.user.id);
         }
     }
 
@@ -146,13 +185,39 @@ class AllBets extends Component {
      * @param {*} team1 Team 1 of selected bet
      * @param {*} team2 Team 2 of selected bet
      */
-    selectBet(team1, team2) {
-        if(Object.keys(this.props.user).length === 0) {
+    selectBet(betID, team1, team2) {
+        if(this.props.user.id === null) {
             this.props.navigate("/login");
         } else {
             this.setState({
-                selectedBet: {team1: team1, team2: team2},
+                selectedBet: {betID: betID, team1: team1, team2: team2},
             });
+        }
+    }
+
+    /**
+     * Determines whether the user has a bet already placed on this match or not
+     * @param {JSON} match json object for current match
+     * @returns a boolean on whether or not the user has a bet already placed for that bet
+     */
+    userHasExistingBet(match) {
+        // if the bet object is null then it is impossible to place a bet
+        if (match.bet === null) {
+            return false;
+        }
+        for (let i = 0; i < this.state.userCurrentBets.length; i++) {
+            if (this.state.userCurrentBets[i].bet_id === match.bet.bet_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        // mitigates a refresh bug
+        // If this is not here then when the user refreshes their current bets won't show
+        if (prevProps.user !== this.props.user) {
+            this.fetchAllUserBets(this.props.user.id);
         }
     }
 
@@ -161,7 +226,7 @@ class AllBets extends Component {
         if (this.state.noUpcomingGames && this.state.upcomingMatchesByDate === []) {
             return (
                 <TypographyBold sx={{ marginTop: '10%' }}>
-          No Upcoming Games in the next 2 weeks
+                    No Upcoming Games in the next 2 weeks
                 </TypographyBold>
             );
         }
@@ -203,6 +268,8 @@ class AllBets extends Component {
                                         <List >
                                             {date.map(match => {
                                                 let gameTime = new Date(match.match_start_time);
+                                                const existingBet = this.userHasExistingBet(match);
+                                                const betID = match.bet ? match.bet.bet_id : null;
                                                 return (
                                                     <ListItem key={match.match_id}>
                                                         <BetBox
@@ -212,6 +279,8 @@ class AllBets extends Component {
                                                             team1={match.team1_id}
                                                             team2={match.team2_id}
                                                             selectBet={this.selectBet}
+                                                            betID={betID}
+                                                            existingBet={existingBet}
                                                         />
                                                     </ListItem>
                                                 )
@@ -232,7 +301,9 @@ class AllBets extends Component {
                     // if a bet is currently selected, open the popup
                     open={this.state.selectedBet !== null ? true : false} 
                     bet={this.state.selectedBet} 
-                    toggleOpenBet={this.toggleOpenBet} 
+                    toggleOpenBet={this.toggleOpenBet}
+                    userID={this.props.user.id} 
+                    existingBets={this.state.userCurrentBets}
                 />
 
                 <Notification 
@@ -240,8 +311,8 @@ class AllBets extends Component {
                     close={() => this.setState({
                         showSuccessNotification: false,
                     })}
-                    type='success'
-                    message='Bet Placed'
+                    type={this.state.notificationType}
+                    message={this.state.notificationMessage}
                 />
                 
             </Fragment>

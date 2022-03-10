@@ -157,44 +157,6 @@ export function TimeBox(props) {
 }
 
 /**
- * The bet button show inside every bet box
- * @param {*} props must include team1 and team2 objects
- * @returns A Styled BetButton
- */
-export function BetButton(props) {
-    if (props.expanded) {
-        return (
-            <FlexBoxRow width='10%'>
-                <BetButtonStyleExpanded
-                    onClick={() => {
-                        props.selectBet(
-                            props.team1, props.team2
-                        )
-                    }}
-                >
-                    Bet
-                </BetButtonStyleExpanded>
-            </FlexBoxRow>
-        );
-    } else {
-        return (
-            <FlexBoxRow width='10%' >
-                <BetButtonStyle
-                    sx={{ my: 'auto' }}
-                    onClick={() => {
-                        props.selectBet(
-                            props.team1, props.team2
-                        )
-                    }}
-                >
-                    Bet
-                </BetButtonStyle>
-            </FlexBoxRow>
-        );
-    }
-}
-
-/**
  * Shown in bet detail view to show the difference between bets placed on team1 vs team2
  * @param {*} props must include Team1Percent of bets placed
  * @returns A coloured bar sperated by percentage of bets per team
