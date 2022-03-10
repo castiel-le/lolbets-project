@@ -100,9 +100,6 @@ const User = sequelize.define("user", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    password_id: {
-        type: DataTypes.INTEGER
-    },
     email: {
         type: DataTypes.STRING,
         allowNull: false
@@ -118,13 +115,10 @@ const User = sequelize.define("user", {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    flagged: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-    },
-    banned: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
+    user_role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: true
     }
 }, {timestamps: false});
 
@@ -186,4 +180,60 @@ const FederatedCredentials = sequelize.define("federated_credentials", {
     },
 }, {timestamps: false});
 
-module.exports = {FederatedCredentials, Badge, Team, Match, User, BetParticipant};
+// Ban model
+const Ban = sequelize.define("bans", {
+    ban_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        defaultValue: false
+    },
+    user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false,
+    },
+    start_date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: false
+    },
+    reason: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: false
+    },
+}, {timestamps: false});
+
+// Timeout model
+const Timeout = sequelize.define("timeouts", {
+    timeouts_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        defaultValue: false
+    },
+    user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false,
+    },
+    start_date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: false
+    },
+    end_date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: false
+    },
+    reason: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: false
+    },
+}, {timestamps: false});
+
+
+module.exports = {Timeout, Ban, FederatedCredentials, Badge, Team, Match, User, BetParticipant};

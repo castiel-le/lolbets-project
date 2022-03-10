@@ -1,5 +1,5 @@
 const models = require("./sqlmodels");
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 
 //Function to get all badges
 async function getBadges() {
@@ -170,17 +170,48 @@ async function getUserById(id) {
             /* eslint-disable */
             user_id: id
             /* eslint-enable */
+        },
+    });
+    await setBetsStats(user);
+    await setBan(user);
+    await setTimeout(user);
+    return user;
+}
+
+/**
+ * Helper function to get the timeout of the user, if it exists
+ * @param {Model} user 
+ */
+async function setTimeout(user) {
+    const timeout = await models.Timeout.findOne({
+        where: {
+            user_id: user.dataValues.user_id,
+            // only get Timeout that is still ongoing
+            end_date: {
+                [Op.gte]: new Date()
+            }
         }
     });
-    return await getBetsStats(user);
+    user.dataValues.timeout = timeout;
+}
+
+/**
+ * Helper function to get the ban of the user, if it exists
+ * @param {Model} user 
+ */
+async function setBan(user) {
+    user.dataValues.banned = await models.Ban.findOne({
+        where: {
+            user_id: user.dataValues.user_id
+        }
+    });
 }
 
 /**
  * Helper function to get the bets placed for the user
  * @param {Model} user 
- * @returns User model with bets_placed
  */
-async function getBetsStats(user) {
+async function setBetsStats(user) {
     const bets = await models.BetParticipant.count({
         where: {
             user_id: user.dataValues.user_id
@@ -196,7 +227,6 @@ async function getBetsStats(user) {
     rank++;
     user.dataValues.bets_placed = bets;
     user.dataValues.rank = rank;
-    return user;
 }
 
 //Function to get user's bets history by id and with pagination
@@ -357,5 +387,51 @@ async function destroyBetParticipant(bet_id, user_id) {
     return {destroyed: true, ok: true};
 }
 
+/**
+ * Function that gets all bans from bans table sorted
+ * by most recent start date.
+ * @returns array of Ban models 
+ */
+async function getAllBans() {
+    const bans = await models.Ban.findAll({
+        order: [
+            ["start_date", "DESC"]
+        ]
+    })
+    await setUsers(bans)
+    return bans;
+}
+
+/**
+ * Function that gets all timeouts from bans table sorted
+ * by most recent start date.
+ * @returns array of Ban models 
+ */
+async function getAllTimeouts() {
+    const timeouts = await models.Timeout.findAll({
+        order: [
+            ["start_date", "DESC"]
+        ]
+    })
+    await setUsers(timeouts);
+    return timeouts;
+}
+
+/**
+ * Helper function that sets user_id into data
+ * from User model
+ * @param {Array} arrModels Array of sequelize models where to add User 
+ */
+async function setUsers(arrModels) {
+    for (let i = 0; i < arrModels.length; i++) {
+        arrModels[i].dataValues.user_id = await models.User.findOne({
+            where: {
+                user_id: arrModels[i].dataValues.user_id
+            }
+        })
+    }
+}
+
+
 // eslint-disable-next-line max-len
-module.exports = { createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
+module.exports = { getAllTimeouts, getAllBans, createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
