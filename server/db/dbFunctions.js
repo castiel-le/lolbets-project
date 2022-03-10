@@ -274,11 +274,18 @@ async function getUserBetsById(id, page, limit) {
  */
 async function populateTeamOnBets(bets) {
     for (let i = 0; i < bets.length; i++){
+        // Get team data of team betted on
         const teamId = bets[i].dataValues.team_betted_on;
         const teamData = await getTeamById(teamId);
         bets[i].dataValues.team_betted_on = teamData;
 
-        const matchData = await getMatchById(teamId)
+        // Get match data from bet
+        const betOfBetParticipant = await models.Bet.findOne({
+            where: {
+                bet_id: bets[i].dataValues.bet_id
+            }
+        });
+        const matchData = await getMatchById(betOfBetParticipant.dataValues.match_id)
         bets[i].dataValues.match = matchData;
     }
     return bets;
