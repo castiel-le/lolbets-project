@@ -41,10 +41,10 @@ function App() {
         const userVerified = await fetch(userURL)
         
         if(userVerified.ok){
-            const userId = await userVerified.json();
-            setUser({id: userId.id});
+            const user = await userVerified.json();
+            setUser({id: user.id, role: user.role});
         } else {
-            setUser({id: null});
+            setUser({id: null, role: null});
         }
     }
 

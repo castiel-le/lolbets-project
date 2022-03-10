@@ -27,11 +27,15 @@ passport.use(new GoogleStrategy({
         const row = await dbFetch.isUserExist(issuer, profile.id);
         if (row) {
             const user = await dbFetch.getUserById(row.dataValues.user_id);
-
-            // If record exist, return user as JSON.
+            // If record exist, return user
             // Otherwise, return false to callback
             if (user) {
-                cb(null, user.toJSON());
+                // Check if user is banned or have an ongoing timeout
+                if (user.dataValues.banned || user.dataValues.timeout) {
+                    cb(null, false);
+                } else {
+                    cb(null, user.toJSON());
+                } 
             } else {
                 cb(null, false);
             }
@@ -53,7 +57,7 @@ passport.use(new GoogleStrategy({
 //configure Passport to manage login session
 passport.serializeUser(function(user, done){
     process.nextTick(function(){
-        done(null, {id: user.user_id});
+        done(null, {id: user.user_id, role: user.user_role});
     });
 });
 
@@ -256,6 +260,21 @@ router.get("/user/history/:id", async (req, res) => {
     }
 })
 
+router.get("/bans", async (req, res) => {
+    try {
+        res.json(await dbFetch.getAllBans());
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+router.get("/timeouts", async (req, res) => {
+    try {
+        res.json(await dbFetch.getAllTimeouts());
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
 module.exports = [
     router,
 ]
