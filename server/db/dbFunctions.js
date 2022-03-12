@@ -329,6 +329,35 @@ async function isUserExist(provider, profileId) {
     });
     return row;
 }
+/**
+ * Function that returns all users that have a matching username to the keyword
+ * @param {String} keyword word to search for
+ * @returns Users Array that match the keyword
+ */
+async function searchUsersByKeyword(keyword) {
+    const users = await models.User.findAll({
+        where: {
+            username:{
+                [Op.like]: "%" + keyword + "%"
+            }
+        },
+        order: [
+            ["coins", "DESC"]
+        ]
+    });
+    for (let i = 0; i < users.length; i++) {
+        let rank = await models.User.count({
+            where: {
+                coins: {
+                    [Op.gt]:  users[parseInt(i)].dataValues.coins
+                },       
+            }
+        })
+        rank++;
+        users[parseInt(i)].dataValues.rank = rank;
+    }
+    return users;
+}
 
 /**
  * Adds a new User record on the database
@@ -462,4 +491,4 @@ async function setUsers(arrModels) {
 
 
 // eslint-disable-next-line max-len
-module.exports = { getAllTimeouts, getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers};
+module.exports = { getAllTimeouts, getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers, searchUsersByKeyword};
