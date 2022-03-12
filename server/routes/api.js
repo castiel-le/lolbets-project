@@ -224,6 +224,23 @@ router.get("/user/rest", async (req, res) => {
     }
 })
 
+router.get("/user/search", async (req, res) => {
+    try {
+        if (req.query.keyword){
+            let matched = await dbFetch.searchUsersByKeyword(req.query.keyword);
+            if (matched.length > 0) {
+                res.json(matched);
+            } else {
+                res.json([]);
+            }
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (e){
+        res.sendStatus(404);
+    }
+})
+
 //Route to get all users
 router.get("/user/all", async (req, res) => {
     try {

@@ -7,6 +7,8 @@ import { CircularProgress} from "@mui/material";
 import poro2 from './images/poro2.png';
 import john from './images/gigascuffed.PNG';
 import DiamondIcon from "@mui/icons-material/Diamond";
+import { Link } from "react-router-dom";
+import minorStyling from './minorStyling.css';
 import { FlexBoxColumn, FlexBoxRow, TypographyBold, TypographyLight, TypographyMedium } from "../customUIComponents";
 
 class Leaderboard extends Component {
@@ -113,7 +115,9 @@ class Leaderboard extends Component {
                             <img src={poro2} style={rank1IconStyle}/>
                         </FlexBoxColumn>
                         <FlexBoxColumn>
-                            <TypographyLight style={rank1UsernameStyle}>{this.state.top5[0].username}</TypographyLight>
+                            <Link to={`/user/${this.state.top5[0].user_id}`} style={rank1UsernameStyle}>
+                                <TypographyLight>{this.state.top5[0].username}</TypographyLight>
+                            </Link>
                         </FlexBoxColumn>
                         <FlexBoxColumn style={coinsAndWinrateStyle}>
                             <FlexBoxRow sx={{ alignItems: 'center' }}>

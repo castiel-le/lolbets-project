@@ -13,6 +13,7 @@ import { Loading } from './components/customUIComponents';
 import Teams from "./components/Teams/Teams";
 import Leaderboard from "./components/Leaderboard/Leaderboard";
 import UserBetHistory from './components/UserBetHistory/UserBetHistroy';
+import SearchResults from './components/Leaderboard/SearchResults'
 
 let logoutcheck = false;
 
@@ -82,7 +83,7 @@ function App() {
                     <Route path='/leaderboard' element={<Leaderboard  user={user} />} />
                     <Route path='/teams' element={<Teams  user={user} />} />
                     <Route path='/teams/:id' element={<Team  user={user} />} />
-                    <Route path='/user/search/:username' element={<h1> Search User </h1>} />
+                    <Route path='/user/results' element={<SearchResults />} />
                     <Route path='/teams/search/:teamname' element={<h1> Search Team </h1>} />
                     <Route path='*' element={<h1> Not Found </h1>} />
                 </Routes>

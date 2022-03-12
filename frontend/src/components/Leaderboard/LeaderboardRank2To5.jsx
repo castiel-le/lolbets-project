@@ -1,8 +1,10 @@
 /* eslint-disable max-len */
 import { Component } from "react";
 import { FlexBoxColumn, FlexBoxRow, TypographyLight, TypographyMedium } from "../customUIComponents";
-import poro from "./images/poro.png"
-import DiamondIcon from "@mui/icons-material/Diamond"
+import poro from "./images/poro.png";
+import DiamondIcon from "@mui/icons-material/Diamond";
+import {Link} from "react-router-dom";
+import minorStyling from './minorStyling.css';
 
 class LeaderboardRank2To5 extends Component {
     
@@ -22,7 +24,9 @@ class LeaderboardRank2To5 extends Component {
                 <FlexBoxRow style={rankIconNameStyle}>
                     <TypographyMedium style={rankStyle}>{this.props.rank}</TypographyMedium>
                     <img src={poro} style={iconStyle}/>
-                    <TypographyLight style={usernameStyle}>{this.props.user.username}</TypographyLight>
+                    <Link to={`/user/${this.props.user.user_id}`} style={usernameStyle}>
+                        <TypographyLight noWrap>{this.props.user.username}</TypographyLight>
+                    </Link>
                 </FlexBoxRow>
                 <FlexBoxRow sx={{ padding: '5px'}}>
                     <TypographyLight sx={{ my: 'auto', textAlign: 'left', pr: '3px'}}>{this.props.user.coins}</TypographyLight>
