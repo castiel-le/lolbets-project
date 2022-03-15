@@ -255,10 +255,20 @@ router.get("/user/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getUserById(req.params.id)); 
     } catch(e) {
-        console.log(e)
+        console.log(e);
         res.sendStatus(404);
     }
 })
+
+// route to get the users current coin count by id
+router.get("/user/coins/:id", async (req, res) => {
+    try {
+        res.json({coins: await dbFetch.getUserCoins(req.params.id)})
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(404);
+    }
+});
 
 // gets all the bets a user has placed
 router.get("/allbets/:id", async (req, res) => {
