@@ -178,6 +178,18 @@ async function getUserById(id) {
     return user;
 }
 
+//Function to get user by id
+async function getUserCoins(id) {
+    const user = await models.User.findOne({
+        where: {
+            /* eslint-disable */
+            user_id: id
+            /* eslint-enable */
+        },
+    });
+    return user.coins;
+}
+
 /**
  * Helper function to get the timeout of the user, if it exists
  * @param {Model} user 
@@ -491,4 +503,4 @@ async function setUsers(arrModels) {
 
 
 // eslint-disable-next-line max-len
-module.exports = { getAllTimeouts, getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers, searchUsersByKeyword};
+module.exports = { getUserCoins, getAllTimeouts, getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers, searchUsersByKeyword};

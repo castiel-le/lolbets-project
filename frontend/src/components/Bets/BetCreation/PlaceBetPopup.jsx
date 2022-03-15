@@ -8,11 +8,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { FlexBoxRow, HorizontalDivider, TypographyBold } from "../../customUIComponents";
 
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import DiamondIcon from "@mui/icons-material/Diamond";
 
 import './BetPopup.module.css';
 import ConfirmBet from "./ConfirmBet";
 import Notification from "../../Notification";
+import { getUserCoins }  from "../../globalFetches";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -64,7 +65,7 @@ export default class PlaceBetPopup extends Component {
         this.state = {
             selectedTeam: null,
             betAmount: 0,
-            maxBet: 1000,
+            maxBet: 0,
             openConfirmation: false,
             openNotification: false,
             notificationType: 'success',
@@ -78,6 +79,7 @@ export default class PlaceBetPopup extends Component {
         this.submitBet = this.submitBet.bind(this);
         this.fillInEditBet = this.fillInEditBet.bind(this);
         this.deleteBetParticipant = this.deleteBetParticipant.bind(this);
+        this.fillInUserMaxBet = this.fillInUserMaxBet.bind(this);
     }
 
     /**
@@ -122,7 +124,7 @@ export default class PlaceBetPopup extends Component {
     addQuickBetAmount(amount) {
         if (amount === 'max') {
             this.setState({
-                betAmount: 1000
+                betAmount: this.state.maxBet
             });
         } else if (this.state.betAmount + amount > this.state.maxBet) {
             this.setState({
@@ -232,12 +234,28 @@ export default class PlaceBetPopup extends Component {
     }
 
     /**
+     * Fills in the maxBet state for the current user (if the user id is defined)
+     */
+    async fillInUserMaxBet() {
+        if (this.props.userID) {
+            this.setState({
+                maxBet: (await getUserCoins(this.props.userID)).coins,
+            });
+        }
+    }
+
+    async componentDidMount() {
+        this.fillInUserMaxBet();
+    }
+
+    /**
      * I used this to determine whether or not the component should try to fill it's state with a previous bet
      * @param {*} prevProps the props before the current render
      */
-    componentDidUpdate(prevProps) {
+    async componentDidUpdate(prevProps) {
         if (prevProps.bet === null && this.props.bet !== null) {
             this.fillInEditBet();
+            await this.fillInUserMaxBet();
         }
     }
 
@@ -327,7 +345,7 @@ export default class PlaceBetPopup extends Component {
                                     InputProps={{
                                         startAdornment: 
                                       <InputAdornment position="start" sx={{color: '#f9f9f9'}}>
-                                          <MonetizationOnIcon />
+                                          <DiamondIcon />
                                       </InputAdornment>,
                                     }}
                                     onChange={(event) => {
