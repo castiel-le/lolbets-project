@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 // Imports from modules
-import { Component } from 'react';
+import { Component, Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
     AppBar, 
@@ -15,17 +15,20 @@ import {
     Tooltip, 
     MenuItem, 
     Stack
-} from '@mui/material'
+} from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import { Login, Menu as MenuIcon } from '@mui/icons-material';
+import { Google, Menu as MenuIcon } from '@mui/icons-material';
+
+import DiamondIcon from "@mui/icons-material/Diamond";
+import {FlexBoxColumn, FlexBoxRow, HorizontalDivider, TypographyMedium} from '../customUIComponents';
 
 // Custom components imports
-import SideDrawer from "./SideDrawer"
-import './NavBar.css';
+import SideDrawer from "./SideDrawer";
+import '../../fonts/fonts.module.css';
 import { theme } from './navbartheme';
 
-import { pages, pageLinks } from '../../config/pages'
-import { settings, settingLink } from '../../config/userDropDown'
+import { pages, pageLinks } from '../../config/pages';
+import { settings, settingLink } from '../../config/userDropDown';
 
 const Hamburger = (props) => {
     return (
@@ -48,47 +51,66 @@ const Hamburger = (props) => {
 
 const UserAvatar = (props) => {
     return (
-        <ThemeProvider theme={theme} >
-            <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Open settings">
-                    <IconButton onClick={props.handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" sx={{height: 32, width: 32}}/>
-                    </IconButton>
-                </Tooltip>
-                <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={props.anchorToUser}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                    open={props.openUserMenu}
-                    onClose={props.handleCloseUserMenu}
-                    color='inherit'
-                >
-                    {settings.map((setting, index) => {
-                        return (
-                            <NavLink key={setting} to={settingLink[index].replace(":id", props.user.id)} >
-                                <MenuItem onClick={props.handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            </NavLink>
-                        )
-                    })}
-                </Menu>
-            </Box>
-        </ThemeProvider>
+        <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+                <IconButton onClick={props.handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar 
+                        alt={props.user.username} 
+                        src={props.user.profile_pic} 
+                        sx={{height: 36, width: 36}}
+                    />
+                </IconButton>
+            </Tooltip>
+            <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={props.anchorToUser}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                open={props.openUserMenu}
+                onClose={props.handleCloseUserMenu}
+                color='inherit'
+            >
+                {settings.map((setting, index) => {
+                    return (
+                        <NavLink key={setting} to={settingLink[index].replace(":id", props.user.user_id)} sx={{all: 'unset'}}>
+                            <MenuItem onClick={props.handleCloseUserMenu}>
+                                <TypographyMedium textAlign="center" sx={{color: '#2a373c'}}>
+                                    {setting}
+                                </TypographyMedium>
+                            </MenuItem>
+                        </NavLink>
+                    )
+                })}
+            </Menu>
+        </Box>
+    );
+}
+
+const AccountBalance = (props) => {
+    return (
+
+        <FlexBoxColumn mx={2} my={'auto'}>
+            <FlexBoxRow >
+                <DiamondIcon sx={{fontSize: '1.25rem'}}/>
+                <TypographyMedium fontSize={14} sx={{ml: '6px', my: 'auto'}}>
+                    {props.user.coins}
+                </TypographyMedium>
+            </FlexBoxRow>
+            <HorizontalDivider width='100%' sx={{my: 0, height: 'fit-content'}}/>
+        </FlexBoxColumn>    
     );
 }
 
 
-export default class NavBar extends Component {
+class NavBar extends Component {
 
     constructor(props) {
         super(props);
@@ -96,14 +118,31 @@ export default class NavBar extends Component {
             anchorToUser: null,
             openUserMenu: false,
             sideMenuOpen: false,
-            user: null,
+            userInfo: null,
         };
 
         this.handleOpenUserMenu = this.handleOpenUserMenu.bind(this);
         this.handleCloseUserMenu = this.handleCloseUserMenu.bind(this);
         this.toggleDrawer = this.toggleDrawer.bind(this);
+        this.fetchUserInfo = this.fetchUserInfo.bind(this);
     }
 
+    async componentDidMount() {
+        if (this.props.user.id !== null) {
+            await this.fetchUserInfo();
+        }
+    }
+
+    async componentDidUpdate() {
+        if (this.props.user.id && this.state.userInfo === null) {
+            await this.fetchUserInfo();
+        }
+    }
+
+    /**
+     * logic that happens when the user opens the avatar user menu
+     * @param {Event} event 
+     */
     handleOpenUserMenu(event) {
         this.setState({
             anchorToUser: event.currentTarget,
@@ -111,6 +150,9 @@ export default class NavBar extends Component {
         });
     }
 
+    /**
+     * logic that happens when the user closes the avatar user menu
+     */
     handleCloseUserMenu() {
         this.setState({
             anchorToUser: null,
@@ -118,10 +160,34 @@ export default class NavBar extends Component {
         });
     }
 
+    /**
+     * Opens or closes the side drawer
+     */
     toggleDrawer() {
         this.setState({
             sideMenuOpen: !this.state.sideMenuOpen
         })
+    }
+
+    /**
+     * Fetches user information and adds it to the component state.
+     * isUsetInfoLoading will be set to false if fetch is successful.
+     */
+    async fetchUserInfo() {
+        if (this.props.user.id === null) {
+            return;
+        } 
+        const url = "/api/user/";
+        try {
+            const response = await fetch(url + this.props.user.id);
+            if (response.ok) {
+                this.setState({
+                    userInfo: await response.json(),
+                });
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     render() {
@@ -132,7 +198,7 @@ export default class NavBar extends Component {
             <ThemeProvider theme={theme} >
                 <SideDrawer toggleDrawer={this.toggleDrawer} visible={this.state.sideMenuOpen} pages={pages} pageLinks={pageLinks} theme={theme}/>
                 <AppBar position="static" color='primary' sx={{px: 2}}>
-                    <Container maxWidth="xl">
+                    <Container maxWidth="xxl">
                         <Toolbar disableGutters>
 
                             <Typography
@@ -142,7 +208,7 @@ export default class NavBar extends Component {
                                 sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
                             >
                                 <NavLink to={"/"} style={{all: "inherit", cursor: "pointer", marginRight: "0px"}}>
-                                    <img className="navbar-logo" src="logo192.png" alt='lolbets logo'/>
+                                    <img src="logo192.png" alt='lolbets logo' style={{maxHeight: '40px'}}/>
                                 </NavLink>
                             </Typography>
 
@@ -155,42 +221,47 @@ export default class NavBar extends Component {
                                 sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
                             >
                                 <NavLink to={"/"} style={{all: "inherit", cursor: "pointer", marginRight: "0px"}}>
-                                    <img className="navbar-logo" src="logo192.png" alt='lolbets logo'/>
+                                    <img className="navbar-logo" src="logo192.png" alt='lolbets logo' style={{maxHeight: '40px'}}/>
                                 </NavLink>
                             </Typography>
 
                             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                                 {pages.map((page, index) => 
-                                    <Button
-                                        key={page}
-                                        onClick={this.handleCloseNavMenu}
-                                        sx={{
-                                            py: 2, color: 'inherit', display: 'block', px: '2',
-                                            '&:hover': {
-                                                backgroundColor: "rgba(128,128,128,.3);",
-                                            }
-                                        }}
-                                    >
-                                        <NavLink to={pageLinks[index]} style={{ textDecoration: "none", color: "inherit" }}>
-                                            {page}
-                                        </NavLink>
-                                    </Button>
+                                    <NavLink key={page} to={pageLinks[index]} style={{ textDecoration: "none", color: "inherit" }}>
+                                        <Button
+                                            onClick={this.handleCloseNavMenu}
+                                            sx={{
+                                                py: 2, color: 'inherit', display: 'block', px: '2',
+                                                '&:hover': {
+                                                    backgroundColor: "rgba(128,128,128,.3);",
+                                                }
+                                            }}
+                                        >
+                                            <TypographyMedium>
+                                                {page}
+                                            </TypographyMedium>
+                                        </Button>
+                                    </NavLink>
                                 )}
                             </Box>
 
-                            {this.props.user.id
-                                ? <UserAvatar 
-                                    openUserMenu={this.state.openUserMenu} 
-                                    anchorToUser={this.state.anchorToUser} 
-                                    handleOpenUserMenu={this.handleOpenUserMenu} 
-                                    handleCloseUserMenu={this.handleCloseUserMenu}
-                                    user={this.props.user}
-                                />
+                            {this.props.user.id && this.state.userInfo !== null
+                                ?
+                                <Fragment>
+                                    <AccountBalance user={this.props.user}/>
+                                    <UserAvatar 
+                                        openUserMenu={this.state.openUserMenu} 
+                                        anchorToUser={this.state.anchorToUser} 
+                                        handleOpenUserMenu={this.handleOpenUserMenu} 
+                                        handleCloseUserMenu={this.handleCloseUserMenu}
+                                        user={this.state.userInfo}
+                                    />
+                                </Fragment>
                                 : <Stack direction="row" spacing={1}>
-                                    <NavLink to={"/login"} style={{all: "inherit", cursor: "pointer"}}>
+                                    <a href={"/api/login/federated/google"} style={{all: "inherit", cursor: "pointer"}}>
                                         <Button 
                                             variant="contained" 
-                                            startIcon={<Login />}
+                                            startIcon={<Google />}
                                             color='secondary' 
                                             sx={{
                                                 color: "#0f1519", 
@@ -199,10 +270,12 @@ export default class NavBar extends Component {
                                                     backgroundColor: "rgb(0, 200, 200)",
                                                 }}}
                                         >
-                                            Login
+                                            <TypographyMedium sx={{color: 'unset'}}>
+                                                Login
+                                            </TypographyMedium>
                                         </Button>
-                                    </NavLink>
-                                    <NavLink to={"/login"} style={{all: "inherit", cursor: "pointer"}}>
+                                    </a>
+                                    <NavLink to={"/api/login/federated/google"} style={{all: "inherit", cursor: "pointer"}}>
                                         <Button
                                             variant="contained"
                                             color="secondary"
@@ -214,7 +287,7 @@ export default class NavBar extends Component {
                                                     backgroundColor: "rgb(0, 200, 200)",
                                                 }}}
                                         >
-                                            <Login />
+                                            <Google />
                                         </Button>
                                     </NavLink>
                                 </Stack>
@@ -226,3 +299,5 @@ export default class NavBar extends Component {
         );
     }
 }
+
+export default NavBar;

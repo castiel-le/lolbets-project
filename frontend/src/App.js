@@ -15,16 +15,10 @@ import Leaderboard from "./components/Leaderboard/Leaderboard";
 import UserBetHistory from './components/UserBetHistory/UserBetHistroy';
 import SearchResults from './components/Leaderboard/SearchResults'
 
-let logoutcheck = false;
-
-function logout(){
-    logoutcheck = true;
-}
-
 function App() {
     // https://www.freecodecamp.org/news/how-to-persist-a-logged-in-user-in-react/
     // implement fetch and save to local storage when users are done
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({id: null, role: null, coins: 0});
     const location = useLocation();
 
     //localStorage.setItem("user", user)
@@ -37,16 +31,16 @@ function App() {
      * be updated.
      */
     const verifyUser = async () => {
-        const userURL = "/userinfo"
+        const userURL = "/userinfo";
+        const userVerified = await fetch(userURL);
         
-        const userVerified = await fetch(userURL)
-        
-        if(userVerified.ok){
-            const user = await userVerified.json();
-            setUser({id: user.id, role: user.role});
-        } else {
-            setUser({id: null, role: null});
+        if(userVerified.ok) {
+            const fetchedUser = await userVerified.json();
+            setUser({id: fetchedUser.id, role: fetchedUser.role, coins: fetchedUser.coins});
+            return;
         }
+
+        setUser({id: null, role: null, coins: 0});
     }
 
     /**
@@ -71,9 +65,7 @@ function App() {
                 Based page of LoLBets
                             </p>
                         </header>} />
-                    <Route path="/login" element={<SignInForm user={user} />} />
-                    <Route path='/signup' element={<Signup  user={user} />} />
-                    <Route path='/bets' element={<AllBets user={user} />} />
+                    <Route path='/bets' element={<AllBets user={user} updateUser={verifyUser}/>} />
                     <Route path='/bets/:id' element={<h1> Bet Number </h1>} />
                     <Route path='/bets/create' element={<h1> Create Bet </h1>} />
                     <Route path='/bets/edit/:id' element={<h1> Edit Bet Number </h1>} />
