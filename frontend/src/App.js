@@ -83,7 +83,7 @@ function App() {
                     <Route path='/leaderboard' element={<Leaderboard  user={user} />} />
                     <Route path='/teams' element={<Teams  user={user} />} />
                     <Route path='/teams/:id' element={<Team  user={user} />} />
-                    <Route path='/user/results' element={<SearchResults />} />
+                    <Route path='/user/search' element={<SearchResults />} />
                     <Route path='/teams/search/:teamname' element={<h1> Search Team </h1>} />
                     <Route path='*' element={<h1> Not Found </h1>} />
                 </Routes>
