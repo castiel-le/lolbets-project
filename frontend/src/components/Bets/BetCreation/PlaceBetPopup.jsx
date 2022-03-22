@@ -65,7 +65,6 @@ export default class PlaceBetPopup extends Component {
         this.state = {
             selectedTeam: null,
             betAmount: 0,
-            maxBet: 0,
             openConfirmation: false,
             openNotification: false,
             notificationType: 'success',
@@ -79,7 +78,6 @@ export default class PlaceBetPopup extends Component {
         this.submitBet = this.submitBet.bind(this);
         this.fillInEditBet = this.fillInEditBet.bind(this);
         this.deleteBetParticipant = this.deleteBetParticipant.bind(this);
-        this.fillInUserMaxBet = this.fillInUserMaxBet.bind(this);
     }
 
     /**
@@ -106,9 +104,9 @@ export default class PlaceBetPopup extends Component {
             this.setState({
                 betAmount: 0
             });
-        } else if (amount > this.state.maxBet)  {
+        } else if (amount > this.props.user.coins)  {
             this.setState({
-                betAmount: this.state.maxBet
+                betAmount: this.props.user.coins
             });
         } else {
             this.setState({
@@ -124,11 +122,11 @@ export default class PlaceBetPopup extends Component {
     addQuickBetAmount(amount) {
         if (amount === 'max') {
             this.setState({
-                betAmount: this.state.maxBet
+                betAmount: this.props.user.coins
             });
-        } else if (this.state.betAmount + amount > this.state.maxBet) {
+        } else if (this.state.betAmount + amount > this.props.user.coins) {
             this.setState({
-                betAmount: this.state.maxBet
+                betAmount: this.props.user.coins
             });
         } else if (this.state.betAmount + amount > 0) {
             this.setState({
@@ -147,7 +145,7 @@ export default class PlaceBetPopup extends Component {
     openConfirmationBox() {
         // if the bet is between 1 and max, show the confirmation box and the user selected a team
         if (this.state.betAmount > 0 && 
-            this.state.betAmount <= this.state.maxBet && 
+            this.state.betAmount <= this.props.user.coins && 
             this.state.selectedTeam !== null) {
             this.setState({
                 openConfirmation: true,
@@ -221,7 +219,7 @@ export default class PlaceBetPopup extends Component {
      */
     async deleteBetParticipant(betID) {
         const selectedTeamName = this.state.selectedTeam === 1 ? this.props.bet.team1.team_name : this.props.bet.team2.team_name;
-        const response = await fetch(`/api/bets/delete?bet=${betID}&user=${this.props.userID}`, {method: 'DELETE'});
+        const response = await fetch(`/api/bets/delete?bet=${betID}&user=${this.props.user.id}`, {method: 'DELETE'});
         if (response.ok) {
             this.closeDialog(true, 'info', `Bet for ${selectedTeamName} Removed`)
         } else {
@@ -234,28 +232,12 @@ export default class PlaceBetPopup extends Component {
     }
 
     /**
-     * Fills in the maxBet state for the current user (if the user id is defined)
-     */
-    async fillInUserMaxBet() {
-        if (this.props.userID) {
-            this.setState({
-                maxBet: (await getUserCoins(this.props.userID)).coins,
-            });
-        }
-    }
-
-    async componentDidMount() {
-        this.fillInUserMaxBet();
-    }
-
-    /**
      * I used this to determine whether or not the component should try to fill it's state with a previous bet
      * @param {*} prevProps the props before the current render
      */
-    async componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps) {
         if (prevProps.bet === null && this.props.bet !== null) {
             this.fillInEditBet();
-            await this.fillInUserMaxBet();
         }
     }
 
@@ -426,7 +408,7 @@ export default class PlaceBetPopup extends Component {
                 <ConfirmBet 
                     open={this.state.openConfirmation} 
                     onClose={(accepted) => {
-                        this.submitBet(accepted, this.props.bet.betID, this.props.userID, this.state.selectedTeam, this.state.betAmount);
+                        this.submitBet(accepted, this.props.bet.betID, this.props.user.id, this.state.selectedTeam, this.state.betAmount);
                     }}
                     amount={this.state.betAmount}
                     team={this.state.selectedTeam === 1 ? this.props.bet.team1 : this.props.bet.team2}

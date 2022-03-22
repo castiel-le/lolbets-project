@@ -7,7 +7,7 @@ import PlaceBetPopup from './BetCreation/PlaceBetPopup';
 import { Box, ListItem, List } from '@mui/material';
 import { DateText } from './styledElements';
 import { HorizontalDivider, Loading, TypographyBold } from '../customUIComponents';
-import './BetBox.css'
+import '../../fonts/fonts.module.css';
 import Notification from '../Notification';
 
 import withRouter from '../withRouter';
@@ -153,13 +153,15 @@ class AllBets extends Component {
      * Will show a notification if the user submitted a bet
      * @param {Boolean} betSubmitted if the user submitted a bet, show a notification confirming they did successfully
      */
-    toggleOpenBet(betSubmitted, notificationType, notificationMessage) {
+    async toggleOpenBet(betSubmitted, notificationType, notificationMessage) {
         if (this.state.selectedBet !== null) {
             this.setState({
                 selectedBet: null,
             });
         }
         if (betSubmitted && notificationType && notificationMessage) {
+            //refetch current user info to get their updated coins
+            this.props.updateUser();
             this.setState({
                 showSuccessNotification: true,
                 notificationType: notificationType,
@@ -173,7 +175,9 @@ class AllBets extends Component {
             });
         }
         // if user is logged in, update the bets they have places
-        if (Object.keys(this.props.user).length !== 0) {
+        if (this.props.user.id !== null) {
+            //refetch current user info to get their updated coins
+            await this.props.updateUser();
             this.fetchAllUserBets(this.props.user.id);
         }
     }
@@ -302,7 +306,7 @@ class AllBets extends Component {
                     open={this.state.selectedBet !== null ? true : false} 
                     bet={this.state.selectedBet} 
                     toggleOpenBet={this.toggleOpenBet}
-                    userID={this.props.user.id} 
+                    user={this.props.user} 
                     existingBets={this.state.userCurrentBets}
                 />
 

@@ -9,7 +9,7 @@ import CasinoIcon from '@mui/icons-material/Casino';
 import Paper from '@mui/material/Paper'
 import { ThemeProvider } from '@mui/material/styles';
 
-import './NavBar.css'
+import '../../fonts/fonts.module.css';
 import { NavLink } from 'react-router-dom';
 
 export default function TemporaryDrawer(props) {
