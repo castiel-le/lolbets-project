@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Navigate } from 'react-router-dom';
+import minorStyling from "./minorStyling.css";
 
 class Search extends Component {
     constructor(props){
@@ -10,6 +10,7 @@ class Search extends Component {
 
         this.submit = this.submit.bind(this);
         this.keywordChange = this.keywordChange.bind(this);
+        this.setLoadingToTrue = this.setLoadingToTrue.bind(this);
     }
 
     keywordChange(event){
@@ -18,24 +19,34 @@ class Search extends Component {
         });
     }
 
+    setLoadingToTrue(){
+        this.props.updateLoadingState(true);
+    }
+
     async submit(event){
         event.preventDefault();
         let searchURL = "/api/user/search";
         let searchResults = await fetch(searchURL + "?keyword=" + this.state.keyword);
-        console.log(searchURL);
         if (searchResults.ok){
             this.props.updateUsersState(await searchResults.json());
+            this.props.updateLoadingState(false);
         } else {
             console.error("Something went wrong.");
         }
     }
 
+    async enterSearch(e) {
+        if (e === 'Enter') {
+            await this.submit();
+        }
+    }
+
     render(){
         return (
-            <div>
+            <div className="searchContainer">
                 <form onSubmit={this.submit}>
-                    <input onChange={this.keywordChange} />
-                    <button type="submit">Search</button>
+                    <input placeholder="Search" onChange={this.keywordChange} onKeyUp={this.enterSearch.bind(this)} className="searchInput"/>
+                    <button type="submit" className="searchButton" onClick={this.setLoadingToTrue}>Search</button>
                 </form>
             </div>
         )
