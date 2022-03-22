@@ -407,6 +407,26 @@ async function updateOrCreateBetParticipant(bet_id, user_id, team, amount) {
             user_id: user_id
         }
     });
+
+    // get the match id for the bet
+    const betInfo = await models.Bet.findOne({
+        where: {
+            bet_id: bet_id
+        }
+    });
+
+    // get matchInfo based on bet id to see it's close time
+    const matchInfo = await models.Match.findOne({
+        where: {
+            match_id: betInfo.match_id
+        }
+    });
+
+    // if the match start time was in the past, do not allow the user to enter a bet
+    const matchDateInEpoch = new Date(matchInfo.match_start_time).valueOf();
+    if (matchDateInEpoch <= Date.now()) {
+        return {created: false, ok: false};
+    }
    
     if (!existingBetParticipant) {
         // Item not found, create a new one
@@ -421,6 +441,7 @@ async function updateOrCreateBetParticipant(bet_id, user_id, team, amount) {
     }
     existingBetParticipant.team_betted_on = team;
     existingBetParticipant.amount_bet = amount;
+    existingBetParticipant.date_created = Date.now();
     existingBetParticipant.save();
     return {existingBetParticipant, created: false, ok: true};
 }
