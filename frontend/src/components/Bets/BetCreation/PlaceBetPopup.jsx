@@ -1,4 +1,4 @@
-import { Component, Fragment, forwardRef } from "react";
+import { Component, Fragment, forwardRef, useContext } from "react";
 
 import { Button, Dialog, DialogTitle, DialogContent, 
     DialogActions, Divider, Slide, Avatar, 
@@ -12,8 +12,7 @@ import DiamondIcon from "@mui/icons-material/Diamond";
 
 import './BetPopup.module.css';
 import ConfirmBet from "./ConfirmBet";
-import Notification from "../../Notification";
-import { getUserCoins }  from "../../globalFetches";
+import { SnackbarContext } from '../../Snackbar/SnackbarContext'
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -60,15 +59,14 @@ const coinIncreaseButtonAmounts = [-10, -5, +5, +10, 'max']
 
 export default class PlaceBetPopup extends Component {
 
+    static contextType = SnackbarContext;
+
     constructor(props) {
         super(props);
         this.state = {
             selectedTeam: null,
             betAmount: 0,
             openConfirmation: false,
-            openNotification: false,
-            notificationType: 'success',
-            notificationMessage: 'Bet Created',
             existingBet: false,
         };
         this.closeDialog = this.closeDialog.bind(this);
@@ -151,17 +149,9 @@ export default class PlaceBetPopup extends Component {
                 openConfirmation: true,
             });
         } else if (this.state.selectedTeam === null) {
-            this.setState({
-                notificationType: 'error',
-                notificationMessage: 'Select a team first',
-                openNotification: true
-            });
+            this.context.setSnackbar(true, 'Select a team first', 'error');
         } else {
-            this.setState({
-                notificationType: 'error',
-                notificationMessage: 'Enter a bet amount first',
-                openNotification: true
-            });
+            this.context.setSnackbar(true, 'Enter a bet amount first', 'error');
         }
     }
 
@@ -177,11 +167,7 @@ export default class PlaceBetPopup extends Component {
             if (response.ok) {
                 this.closeDialog(true);
             } else {
-                this.setState({
-                    notificationType: 'error',
-                    notificationMessage: 'Unable to place bet',
-                    openNotification: true,
-                });
+                this.context.setSnackbar(true, 'Unable to place bet', 'error');
             }
             
         }
@@ -223,11 +209,7 @@ export default class PlaceBetPopup extends Component {
         if (response.ok) {
             this.closeDialog(true, 'info', `Bet for ${selectedTeamName} Removed`)
         } else {
-            this.setState({
-                notificationType: 'error',
-                notificationMessage: 'Unable to Remove Bet',
-                openNotification: true
-            })
+            this.context.setSnackbar(true, 'Unable to Remove Bet', 'error');
         }
     }
 
@@ -412,15 +394,6 @@ export default class PlaceBetPopup extends Component {
                     }}
                     amount={this.state.betAmount}
                     team={this.state.selectedTeam === 1 ? this.props.bet.team1 : this.props.bet.team2}
-                />
-
-                <Notification 
-                    open={this.state.openNotification} 
-                    close={() => this.setState({
-                        openNotification: false,
-                    })}
-                    type={this.state.notificationType}
-                    message={this.state.notificationMessage}
                 />
 
             </Fragment>
