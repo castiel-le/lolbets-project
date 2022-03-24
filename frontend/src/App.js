@@ -14,17 +14,13 @@ import Teams from "./components/Teams/Teams";
 import Leaderboard from "./components/Leaderboard/Leaderboard";
 import UserBetHistory from './components/UserBetHistory/UserBetHistroy';
 import SearchResults from './components/Leaderboard/SearchResults'
-
-let logoutcheck = false;
-
-function logout(){
-    logoutcheck = true;
-}
+import { SnackbarContainer } from './components/Snackbar/SnackbarContext';
+import SnackbarAlert from './components/Snackbar/SnackbarAlert';
 
 function App() {
     // https://www.freecodecamp.org/news/how-to-persist-a-logged-in-user-in-react/
     // implement fetch and save to local storage when users are done
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({id: null, role: null, coins: 0});
     const location = useLocation();
 
     //localStorage.setItem("user", user)
@@ -37,16 +33,16 @@ function App() {
      * be updated.
      */
     const verifyUser = async () => {
-        const userURL = "/userinfo"
+        const userURL = "/userinfo";
+        const userVerified = await fetch(userURL);
         
-        const userVerified = await fetch(userURL)
-        
-        if(userVerified.ok){
-            const user = await userVerified.json();
-            setUser({id: user.id, role: user.role});
-        } else {
-            setUser({id: null, role: null});
+        if(userVerified.ok) {
+            const fetchedUser = await userVerified.json();
+            setUser({id: fetchedUser.id, role: fetchedUser.role, coins: fetchedUser.coins});
+            return;
         }
+
+        setUser({id: null, role: null, coins: 0});
     }
 
     /**
@@ -58,37 +54,39 @@ function App() {
     }, [location]);
 
     return (
-        <div className="App">
-            <NavBar user={user} />
-            <Suspense fallback={<Loading />}>
-                <Routes >
-                    <Route path='/' element={
-                        <header className="App-header">
-                            <div className="svg-container">
-                                <img src={logo} width="64" className="App-logo" alt="logo" />
-                            </div>
-                            <p id="desc">
+        <SnackbarContainer>
+            <SnackbarAlert />
+            <div className="App">
+                <NavBar user={user} />
+                <Suspense fallback={<Loading />}>
+                    <Routes >
+                        <Route path='/' element={
+                            <header className="App-header">
+                                <div className="svg-container">
+                                    <img src={logo} width="64" className="App-logo" alt="logo" />
+                                </div>
+                                <p id="desc">
                 Based page of LoLBets
-                            </p>
-                        </header>} />
-                    <Route path="/login" element={<SignInForm user={user} />} />
-                    <Route path='/signup' element={<Signup  user={user} />} />
-                    <Route path='/bets' element={<AllBets user={user} />} />
-                    <Route path='/bets/:id' element={<h1> Bet Number </h1>} />
-                    <Route path='/bets/create' element={<h1> Create Bet </h1>} />
-                    <Route path='/bets/edit/:id' element={<h1> Edit Bet Number </h1>} />
-                    <Route path='/profile' element={<Profile user={user} />} />
-                    <Route path='/user/:id' element={<Profile user={user} />} />
-                    <Route path='/user/:id/history' element={<UserBetHistory  user={user} />} />
-                    <Route path='/leaderboard' element={<Leaderboard  user={user} />} />
-                    <Route path='/teams' element={<Teams  user={user} />} />
-                    <Route path='/teams/:id' element={<Team  user={user} />} />
-                    <Route path='/user/results' element={<SearchResults />} />
-                    <Route path='/teams/search/:teamname' element={<h1> Search Team </h1>} />
-                    <Route path='*' element={<h1> Not Found </h1>} />
-                </Routes>
-            </Suspense>
-        </div>
+                                </p>
+                            </header>} />
+                        <Route path='/bets' element={<AllBets user={user} updateUser={verifyUser}/>} />
+                        <Route path='/bets/:id' element={<h1> Bet Number </h1>} />
+                        <Route path='/bets/create' element={<h1> Create Bet </h1>} />
+                        <Route path='/bets/edit/:id' element={<h1> Edit Bet Number </h1>} />
+                        <Route path='/profile' element={<Profile user={user} />} />
+                        <Route path='/user/:id' element={<Profile user={user} />} />
+                        <Route path='/user/:id/history' element={<UserBetHistory  user={user} />} />
+                        <Route path='/leaderboard' element={<Leaderboard  user={user} />} />
+                        <Route path='/teams' element={<Teams  user={user} />} />
+                        <Route path='/teams/:id' element={<Team  user={user} />} />
+                        <Route path='/user/search' element={<SearchResults />} />
+                        <Route path='/teams/search/:teamname' element={<h1> Search Team </h1>} />
+                        <Route path='*' element={<h1> Not Found </h1>} />
+                    </Routes>
+                </Suspense>
+            </div>
+        </SnackbarContainer>
+
     );
 }
 

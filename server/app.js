@@ -4,6 +4,7 @@ const router = require("./routes/api");
 const path = require("path");
 const bodyParser = require("body-parser");
 const session = require("express-session");
+const dbFetch = require("./db/dbFunctions");
 
 
 const passport = require("passport");
@@ -17,16 +18,36 @@ app.use(session({
 
 app.use(passport.authenticate("session"));
 
-// all api calls to db is in /murals
+
+app.use(express.json())
 app.use("/api", router);
+
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/build"));
 });
 
-app.use("/userinfo", (req, res) =>{
-    res.json(req.user);
+app.use("/userinfo", async (req, res) => {
+    await updateUserCoins(req);
+    if (req.user !== undefined) {
+        res.json(req.user);
+    } else {
+        res.sendStatus(401);
+    }
 });
+
+/**
+ * updates the req.user object of passport js for the new coins value on the db
+ * @param {Request} req request object from fetch request
+ * @returns only returns if user is undefined ( do not continue if user is undefined )
+ */
+async function updateUserCoins(req) {
+    if (req.user === undefined) {
+        return;
+    }
+    const user = await dbFetch.getUserById(req.user.id);
+    req.user.coins = user.coins;
+}
 
 app.use("/logout", (req, res)=>{
     req.logout();

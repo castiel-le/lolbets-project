@@ -7,12 +7,14 @@ import PlaceBetPopup from './BetCreation/PlaceBetPopup';
 import { Box, ListItem, List } from '@mui/material';
 import { DateText } from './styledElements';
 import { HorizontalDivider, Loading, TypographyBold } from '../customUIComponents';
-import './BetBox.css'
-import Notification from '../Notification';
+import '../../fonts/fonts.module.css';
+import { SnackbarContext } from '../Snackbar/SnackbarContext'
 
 import withRouter from '../withRouter';
 
 class AllBets extends Component {
+
+    static contextType = SnackbarContext;
 
     constructor(props) {
         super(props);
@@ -26,9 +28,6 @@ class AllBets extends Component {
             lastFetchedDate: new Date().setHours(0, 0, 0, 0),
             fetching: false,
             mounted: true,
-            showSuccessNotification: false,
-            notificationType: 'success',
-            notificationMessage: 'Bet Placed',
             userCurrentBets: [],
         };
         this.toggleOpenBet = this.toggleOpenBet.bind(this);
@@ -153,27 +152,23 @@ class AllBets extends Component {
      * Will show a notification if the user submitted a bet
      * @param {Boolean} betSubmitted if the user submitted a bet, show a notification confirming they did successfully
      */
-    toggleOpenBet(betSubmitted, notificationType, notificationMessage) {
+    async toggleOpenBet(betSubmitted, notificationType, notificationMessage) {
         if (this.state.selectedBet !== null) {
             this.setState({
                 selectedBet: null,
             });
         }
         if (betSubmitted && notificationType && notificationMessage) {
-            this.setState({
-                showSuccessNotification: true,
-                notificationType: notificationType,
-                notificationMessage: notificationMessage
-            });
+            //refetch current user info to get their updated coins
+            this.props.updateUser();
+            this.context.setSnackbar(true, notificationMessage, notificationType);
         } else if (betSubmitted) {
-            this.setState({
-                showSuccessNotification: true,
-                notificationType: 'success',
-                notificationMessage: 'Bet Placed'
-            });
+            this.context.setSnackbar(true, 'Bet Placed', 'success');
         }
         // if user is logged in, update the bets they have places
-        if (Object.keys(this.props.user).length !== 0) {
+        if (this.props.user.id !== null) {
+            //refetch current user info to get their updated coins
+            await this.props.updateUser();
             this.fetchAllUserBets(this.props.user.id);
         }
     }
@@ -186,8 +181,8 @@ class AllBets extends Component {
      * @param {*} team2 Team 2 of selected bet
      */
     selectBet(betID, team1, team2) {
-        if(this.props.user.id === null) {
-            this.props.navigate("/login");
+         if(this.props.user.id === null) {
+             this.props.navigate("/api/login/federated/google");
         } else {
             this.setState({
                 selectedBet: {betID: betID, team1: team1, team2: team2},
@@ -302,17 +297,8 @@ class AllBets extends Component {
                     open={this.state.selectedBet !== null ? true : false} 
                     bet={this.state.selectedBet} 
                     toggleOpenBet={this.toggleOpenBet}
-                    userID={this.props.user.id} 
+                    user={this.props.user} 
                     existingBets={this.state.userCurrentBets}
-                />
-
-                <Notification 
-                    open={this.state.showSuccessNotification} 
-                    close={() => this.setState({
-                        showSuccessNotification: false,
-                    })}
-                    type={this.state.notificationType}
-                    message={this.state.notificationMessage}
                 />
                 
             </Fragment>

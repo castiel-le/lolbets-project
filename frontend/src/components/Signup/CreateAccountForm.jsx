@@ -18,6 +18,7 @@ import {ThemeProvider} from '@mui/material/styles';
 
 import {theme} from '../NavBar/navbartheme';
 import {bordertheme} from '../Login/logintheme';
+import '../../fonts/fonts.module.css';
 
 export default class CreateAccount extends Component {
 

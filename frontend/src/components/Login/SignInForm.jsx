@@ -21,6 +21,7 @@ import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import {theme} from '../NavBar/navbartheme';
 import {bordertheme} from './logintheme';
 import "./SignInForm.css";
+import '../../fonts/fonts.module.css';
 
 
 export default class SignInForm extends Component {

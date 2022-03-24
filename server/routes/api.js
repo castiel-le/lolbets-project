@@ -48,7 +48,7 @@ passport.use(new GoogleStrategy({
 //configure Passport to manage login session
 passport.serializeUser(function(user, done){
     process.nextTick(function(){
-        done(null, {id: user.user_id, role: user.user_role});
+        done(null, {id: user.user_id, role: user.user_role, coins: user.coins});
     });
 });
 
@@ -203,16 +203,6 @@ router.get("/user/:id", async (req, res) => {
     }
 })
 
-// route to get the users current coin count by id
-router.get("/user/coins/:id", async (req, res) => {
-    try {
-        res.json({coins: await dbFetch.getUserCoins(req.params.id)})
-    } catch (e) {
-        console.log(e);
-        res.sendStatus(404);
-    }
-});
-
 // gets all the bets a user has placed
 router.get("/allbets/:id", async (req, res) => {
     try {
@@ -255,4 +245,97 @@ router.get("/timeouts", async (req, res) => {
         res.sendStatus(404);
     }
 })
-module.exports = router
+
+router.put("/bans", async (req, res) => {
+    try {
+        // Check if body exists
+        if (!req.body) {
+            res.sendStatus(404);
+        }
+
+        // Check if body has user_id, start_date, and reason
+        if (req.body.user_id && req.body.start_date && req.body.reason) {
+            const response = await dbFetch.createBan(req.body.user_id,
+                req.body.start_date, req.body.reason);
+            
+            // if response is not null, send 200.
+            // otherwise, send 404.
+            res.sendStatus(response ? 200 : 404);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+router.put("/timeouts", async (req, res) => {
+    try {
+        // Check if body exists
+        if (!req.body) {
+            res.sendStatus(404);
+        }
+
+        // Check if body has user_id, start_date, end_date, and reason
+        if (req.body.user_id && req.body.start_date && req.body.end_date && req.body.reason) {
+            const response = await dbFetch.createTimeout(req.body.user_id,
+                req.body.start_date, req.body.end_date, req.body.reason);
+            
+            // if response is not null, send 200.
+            // otherwise, send 404.
+            res.sendStatus(response ? 200 : 404);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+router.delete("/timeouts", async (req, res) => {
+    try {
+        // Check if body exists
+        if (!req.body) {
+            res.sendStatus(404);
+        }
+
+        // Check if body has timeout_id
+        if (req.body.timeout_id) {
+            const response = await dbFetch.deleteTimeout(req.body.timeout_id);
+            
+            // if response is not null, send 200.
+            // otherwise, send 404.
+            res.sendStatus(response ? 200 : 404);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+router.delete("/bans", async (req, res) => {
+    try {
+        // Check if body exists
+        if (!req.body) {
+            res.sendStatus(404);
+        }
+
+        // Check if body has ban_id
+        if (req.body.ban_id) {
+            const response = await dbFetch.deleteBan(req.body.ban_id);
+            
+            // if response is not null, send 200.
+            // otherwise, send 404.
+            res.sendStatus(response ? 200 : 404);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+module.exports = [
+    router,
+]
