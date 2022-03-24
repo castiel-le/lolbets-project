@@ -13,7 +13,7 @@ import withRouter from "../withRouter";
 import defaultBanner from "./images/defaultBanner.png";
 import BetHistory from "./BetsHistory/BetHistory";
 import UserInfo from "./UserInfo/UserInfo";
-
+import ModButtons from "./ModButtons/ModButtons";
 
 class Profile extends Component {
     constructor(props) {
@@ -28,12 +28,15 @@ class Profile extends Component {
                 coins: "",
                 bets_placed: "",
                 rank: "",
+                banned: null,
+                timeout: null,
             },
             badges: [],
             bets: [],
             banner: defaultBanner,
             isUserInfoLoading: true,
         };
+        this.fetchUserInfo = this.fetchUserInfo.bind(this);
     }
     /**
      * Fertches user info and bets, then update
@@ -79,7 +82,7 @@ class Profile extends Component {
                 });
             }
         } catch (e) {
-            console.log(e);
+            console.log("Something went wrong");
         }
     }
 
@@ -108,6 +111,19 @@ class Profile extends Component {
         }
     }
     render() {
+        // styling
+        const styleTimeoutText = {color: "orange", width: "100%"};
+        const styleBanText = {color: "red"};
+
+        // Condition to determine if whether or not to display specific mod actions
+        let showModActions = false;
+        if (this.props.params.id) {
+            // eslint-disable-next-line eqeqeq
+            if (this.props.user.role === "moderator" && this.props.params.id != this.props.user.id) {
+                showModActions = true;
+            }
+        }
+
         return (
             <Fragment>
                 <FlexBoxColumn width='82%' mx='auto' backgroundColor='#1E2A32'>
@@ -163,6 +179,38 @@ class Profile extends Component {
                         </TypographyBold>
                         <HorizontalDivider width='100%' />
                     </FlexBoxColumn>
+                    {showModActions
+                        ?
+                        <FlexBoxRow my="auto" 
+                            alignSelf="center" marginTop={1} marginBottom={1}>
+                            <ModButtons 
+                                userInfo={this.state.userInfo} 
+                                fetchUserInfo={this.fetchUserInfo} />
+                        </FlexBoxRow>  
+                        : null
+                    }    
+                    {this.state.userInfo.banned
+                        ? 
+                        <FlexBoxColumn my="auto" alignSelf="center" marginTop={1} marginBottom={1}>
+                            <TypographyBold fontSize='32px' align="center" style={styleBanText}>
+                                Banned: {this.state.userInfo.banned.reason}
+                            </TypographyBold>
+                        </FlexBoxColumn>
+                        : null
+                    } 
+                    {this.state.userInfo.timeout
+                        ? 
+                        <FlexBoxColumn my="auto" alignSelf="center" marginTop={1} marginBottom={1}>
+                            <TypographyBold fontSize='32px' color="red" align="center" style={styleTimeoutText}>
+                                    Timeout: {this.state.userInfo.timeout.reason}
+                            </TypographyBold>
+                            <TypographyBold fontSize='32px' color="red" align="center" style={styleTimeoutText}>
+                                    Duration: {new Date(this.state.userInfo.timeout.end_date).toLocaleDateString()}
+                            </TypographyBold>
+                        </FlexBoxColumn>
+                        : null
+                    }
+                    
                     <UserInfo userInfo={this.state.userInfo} />
                     <HorizontalDivider width='100%' />
                     <BetHistory bets={this.state.bets}
