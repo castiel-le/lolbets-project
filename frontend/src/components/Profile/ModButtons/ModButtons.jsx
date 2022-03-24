@@ -1,10 +1,12 @@
 import { Component, Fragment } from "react";
 import withRouter from "../../withRouter";
-import Notification from "../../Notification";
 import DialogBox from "./DialogBox";
 import ToogleButtons from "./ToggleButtons";
+import { SnackbarContext } from "../../Snackbar/SnackbarContext";
 
 class ModButtons extends Component {
+    static contextType = SnackbarContext;
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -12,14 +14,10 @@ class ModButtons extends Component {
             dialogType: "",
             textfieldText: "",
             dateValue: "",
-            notificationState: false,
-            notificationType: "",
-            notificationMessage: "",
         }
         this.popUpDialog = this.popUpDialog.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleTextfieldChange = this.handleTextfieldChange.bind(this);
-        this.closeNotification = this.closeNotification.bind(this);
         this.changeDateTime = this.changeDateTime.bind(this);
         this.handleModAction = this.handleModAction.bind(this);
     }
@@ -40,11 +38,7 @@ class ModButtons extends Component {
         // Check if new value is defined
         if (!newValue) {
             // Show error notification message
-            this.setState({
-                notificationState: true,
-                notificationType: "error", 
-                notificationMessage: "Something went wrong. Please try again later."
-            })
+            this.context.setSnackbar(true, 'Something went wrong. Please try again later', 'error');
         }
 
         // Check mod actions and perform accordingly
@@ -53,11 +47,7 @@ class ModButtons extends Component {
             // Check if the user is already banned
             if (this.props.userInfo.banned) {
                 // Show already banned notification message
-                this.setState({
-                    notificationState: true,
-                    notificationType: "error", 
-                    notificationMessage: `${this.props.userInfo.username} is already banned`
-                })
+                this.context.setSnackbar(true, `${this.props.userInfo.username} is already banned`, 'error');
             } else {
                 // Pop up ban dialog
                 this.setState({dialogState: true, dialogType: newValue[0]});
@@ -67,19 +57,12 @@ class ModButtons extends Component {
             // Check if the user is already banned
             if (this.props.userInfo.banned) {
                 // Show already banned notification message
-                this.setState({
-                    notificationState: true,
-                    notificationType: "error", 
-                    notificationMessage: `Cannot timeout a user that is already banned`
-                })
+                this.context.setSnackbar(true, `Cannot timeout a user that is already banned`, 'error');
+
             // Check if the user is already has an ongoing timeout
             } else if (this.props.userInfo.timeout) {
                 // Show already timeout notification message
-                this.setState({
-                    notificationState: true,
-                    notificationType: "error", 
-                    notificationMessage: `${this.props.userInfo.username} already has an ongoing timeout`
-                })
+                this.context.setSnackbar(true, `${this.props.userInfo.username} already has an ongoing timeout`, 'error');
             } else {
                 // Pop up timeout dialog
                 this.setState({dialogState: true, dialogType: newValue[0]});
@@ -89,11 +72,7 @@ class ModButtons extends Component {
             // Check if the user is NOT banned when trying to unban
             if (!this.props.userInfo.banned) {
                 // Show not banned notification message
-                this.setState({
-                    notificationState: true,
-                    notificationType: "error", 
-                    notificationMessage: `${this.props.userInfo.username} is not banned`
-                })
+                this.context.setSnackbar(true, `${this.props.userInfo.username} is not banned`, 'error');
             } else {
                 // Pop up timeout dialog
                 this.setState({dialogState: true, dialogType: newValue[0]});
@@ -103,11 +82,7 @@ class ModButtons extends Component {
             // Check if the user has NO timeout when trying to untimeout
             if (!this.props.userInfo.timeout) {
                 // Show no timeout notification message
-                this.setState({
-                    notificationState: true,
-                    notificationType: "error", 
-                    notificationMessage: `${this.props.userInfo.username} has no ongoing timeout`
-                })
+                this.context.setSnackbar(true, `${this.props.userInfo.username} has no ongoing timeout`, 'error');
             } else {
                 // Pop up timeout dialog
                 this.setState({dialogState: true, dialogType: newValue[0]});
@@ -115,11 +90,7 @@ class ModButtons extends Component {
             break;
         default:
             // Show error notification message
-            this.setState({
-                notificationState: true,
-                notificationType: "error", 
-                notificationMessage: "Unknown action. Please try again"
-            })   
+            this.context.setSnackbar(true, "Unknown action. Please try again", 'error');
         }
         
     }
@@ -136,13 +107,6 @@ class ModButtons extends Component {
      */
     handleTextfieldChange(e) {
         this.setState({textfieldText: e.target.value})
-    }
-
-    /**
-     * Resets notification state to default and not visible.
-     */
-    closeNotification() {
-        this.setState({notificationState: false, notificationMessage: "", notificationType: ""})
     }
 
     /**
@@ -176,11 +140,7 @@ class ModButtons extends Component {
             break;
         default:
             // Show error notification message
-            this.setState({
-                notificationState: true,
-                notificationType: "error",
-                notificationMessage: `Unknown action. Please try again`
-            });
+            this.context.setSnackbar(true, `Unknown action. Please try again`, 'error');
             break;
         }
     }
@@ -202,29 +162,19 @@ class ModButtons extends Component {
             })
             if (response.ok) {
                 // Show a success notification message and close dialog
+                this.context.setSnackbar(true, `Successfully unbanned ${this.props.userInfo.username}`, 'success');
                 this.setState({
                     textfieldText: "",
                     dialogState: false, 
                     dialogType: "",
-                    notificationState: true,
-                    notificationType: "success",
-                    notificationMessage: `Successfully unbanned ${this.props.userInfo.username}`
                 });
             } else {
                 // Show a failed notification message
-                this.setState({
-                    notificationState: true,
-                    notificationType: "error",
-                    notificationMessage: `${this.props.userInfo.username} is not banned`
-                });
+                this.context.setSnackbar(true, `${this.props.userInfo.username} is not banned`, 'error');                
             }
         } catch (e) {
             // Show an error notification message
-            this.setState({
-                notificationState: true,
-                notificationType: "error",
-                notificationMessage: `Unban failed. Please try again later`
-            });
+            this.context.setSnackbar(true, `Unban failed. Please try again later`, 'error');                
         }
     }
 
@@ -245,30 +195,20 @@ class ModButtons extends Component {
             })
             if (response.ok) {
                 // Show a success notification message and close dialog
+                this.context.setSnackbar(true, `Successfully untimeout ${this.props.userInfo.username}`, 'success');                
                 this.setState({
                     textfieldText: "",
                     dateValue: "",
                     dialogState: false, 
                     dialogType: "",
-                    notificationState: true,
-                    notificationType: "success",
-                    notificationMessage: `Successfully untimeout ${this.props.userInfo.username}`
                 });
             } else {
                 // Show a failed notification message
-                this.setState({
-                    notificationState: true,
-                    notificationType: "error",
-                    notificationMessage: `${this.props.userInfo.username} does not have a timeout`
-                });
+                this.context.setSnackbar(true, `${this.props.userInfo.username} does not have a timeout`, 'error');                
             }
         } catch (e) {
             // Show an error notification message
-            this.setState({
-                notificationState: true,
-                notificationType: "error",
-                notificationMessage: `Unban failed. Please try again later`
-            });
+            this.context.setSnackbar(true, `Untimeout failed. Please try again later`, 'error');                
         }
     }
 
@@ -280,19 +220,12 @@ class ModButtons extends Component {
     // Check if text field is empty
         if (this.state.textfieldText === "") {
             // Show empty text field error notification message
-            this.setState({
-                notificationState: true,
-                notificationType: "error",
-                notificationMessage: `Must enter a reason for the timeout`
-            });
+            this.context.setSnackbar(true, `Must enter a reason for the timeout`, 'error');                
+
         // Check if date time value is defined
         } else if (!this.state.dateValue) {
             // Show empty date time error notification message
-            this.setState({
-                notificationState: true,
-                notificationType: "error",
-                notificationMessage: `Must enter a timeout duration`
-            });
+            this.context.setSnackbar(true, `Must enter a timeout duration`, 'error');                
         } else {
             const url = "/api/timeouts";
             try {
@@ -309,29 +242,20 @@ class ModButtons extends Component {
                 });
                 if (response.ok) {
                 // Closes dialog box and show a success notification message
+                    this.context.setSnackbar(true, `Successfully timeout ${this.props.userInfo.username}`, 'success');                
+
                     this.setState({
                         textfieldText: "",
                         dialogState: false, 
                         dialogType: "",
-                        notificationState: true,
-                        notificationType: "success",
-                        notificationMessage: `Successfully timeout ${this.props.userInfo.username}`
                     });
                 } else {
                     // Show a failed notification message
-                    this.setState({
-                        notificationState: true,
-                        notificationType: "error",
-                        notificationMessage: `${this.props.userInfo.username} is already has a ban or an ongoing timeout`
-                    });
+                    this.context.setSnackbar(true, `${this.props.userInfo.username} is already has a ban or an ongoing timeout`, 'error');
                 }
             } catch (e) {
-            // Show an error notification message
-                this.setState({
-                    notificationState: true,
-                    notificationType: "error",
-                    notificationMessage: `Ban failed. Please try again later`
-                });
+                // Show an error notification message
+                this.context.setSnackbar(true, `Timeout failed. Please try again later`, 'error');
             }
         }
     }
@@ -344,11 +268,7 @@ class ModButtons extends Component {
         // Check if text field is empty
         if (this.state.textfieldText === "") {
             // Show empty text field error notification message
-            this.setState({
-                notificationState: true,
-                notificationType: "error",
-                notificationMessage: `Must enter a reason for the ban`
-            });
+            this.context.setSnackbar(true, `Must enter a reson for the ban`, 'error');
         } else {
             const url = "/api/bans";
             try {
@@ -365,29 +285,19 @@ class ModButtons extends Component {
                 });
                 if (response.ok) {
                     // Closes dialog box and show a success notification message
+                    this.context.setSnackbar(true, `Successfully banned ${this.props.userInfo.username}`, 'success');
                     this.setState({
                         textfieldText: "",
                         dialogState: false, 
                         dialogType: "",
-                        notificationState: true,
-                        notificationType: "success",
-                        notificationMessage: `Successfully banned ${this.props.userInfo.username}`
                     });
                 } else {
                 // Show a failed notification message
-                    this.setState({
-                        notificationState: true,
-                        notificationType: "error",
-                        notificationMessage: `${this.props.userInfo.username} is already banned`
-                    });
+                    this.context.setSnackbar(true, `${this.props.userInfo.username} is already banned`, 'error');
                 }
             } catch (e) {
                 // Show an error notification message
-                this.setState({
-                    notificationState: true,
-                    notificationType: "error",
-                    notificationMessage: `Timeout failed. Please try again later`
-                });
+                this.context.setSnackbar(true, `Timeout failed. Please try again later`, 'error');
             }
         }
     }
@@ -412,12 +322,6 @@ class ModButtons extends Component {
                     confirm={this.handleModAction}
                     cancel={this.handleClose}
                 />
-
-                <Notification
-                    open={this.state.notificationState}
-                    message={this.state.notificationMessage} 
-                    type={this.state.notificationType}
-                    close={this.closeNotification} />
             </Fragment>
         )
     }

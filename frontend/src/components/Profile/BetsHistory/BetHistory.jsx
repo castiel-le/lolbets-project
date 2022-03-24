@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Grid, Button, Box } from '@mui/material';
+import { Grid, Button, Box, CircularProgress } from '@mui/material';
 import BetHistoryBox from "./BetHistoryBox";
 import { Link } from 'react-router-dom';
 import { TypographyMedium, TypographyLight } from "../../customUIComponents";
@@ -16,17 +16,19 @@ export default class AllBets extends Component {
                     )}
 
                 </Grid >
-                {this.props.bets.length === 0
-                    ? <TypographyLight variant="h4" marginTop={1} marginBottom={1}
-                        style={{opacity: "50%"}}>
+                {this.props.isBetsInfoLoading 
+                    ? <CircularProgress />
+                    : this.props.bets.length === 0
+                        ? <TypographyLight variant="h4" marginTop={1} marginBottom={1}
+                            style={{opacity: "50%"}}>
                         No Bets Found
-                    </TypographyLight>
-                    :
+                        </TypographyLight>
+                        :
                     
-                    <Button variant="contained" align="center"
-                        component={Link} to={`/user/${this.props.id}/history`}>
+                        <Button variant="contained" align="center"
+                            component={Link} to={`/user/${this.props.id}/history`}>
                             View Full History
-                    </Button>
+                        </Button>
                 }
             </Box>
         );

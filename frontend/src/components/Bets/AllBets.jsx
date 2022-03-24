@@ -181,8 +181,8 @@ class AllBets extends Component {
      * @param {*} team2 Team 2 of selected bet
      */
     selectBet(betID, team1, team2) {
-         if(this.props.user.id === null) {
-             this.props.navigate("/api/login/federated/google");
+        if(this.props.user.id === null) {
+            this.props.navigate("/api/login/federated/google");
         } else {
             this.setState({
                 selectedBet: {betID: betID, team1: team1, team2: team2},
