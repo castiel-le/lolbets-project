@@ -4,15 +4,6 @@ const GoogleStrategy = require("passport-google-oidc");
 const router = express.Router({mergeParams:true});
 const dbFetch = require("../db/dbFunctions")
 
-//Route to get only the fields necessary for logging in, most likely be changed later
-router.get("/login", async (req, res) => {
-    return res.json({
-        "user_id":1,
-        "username":"Bob",
-        "password_id":1
-    });
-});
-
 //Route to get authentication from Google
 router.get("/login/federated/google", passport.authenticate("google"));
 
@@ -67,33 +58,6 @@ passport.deserializeUser(function(user, done){
     });
 });
 
-//Route to get all bets (fake data for now)
-router.get("/bets", async (req, res) => {
-    try {
-        return res.json([{
-            "bet_id":1,
-            "creator_id":1,
-            "category_id":1,
-            "win_condition_id":1,
-            "minimum_coins":10,
-            "maximum_coins":100,
-            "match_id":1,
-            "bet_locked":false
-        }, {
-            "bet_id":2,
-            "creator_id":1,
-            "category_id":1,
-            "win_condition_id":1,
-            "minimum_coins":100,
-            "maximum_coins":1000,
-            "match_id":2,
-            "bet_locked":false
-        }]);
-    } catch(error){
-        return res.json({"Error":error})
-    }
-});
-
 // allows a user to join a bet
 // allows a user to edit their current bet
 // test: localhost:3001/api/bets/join?bet=2&user=1&team=891&amount=432
@@ -141,18 +105,6 @@ router.delete("/bets/delete", async (req, res) => {
     }
 });
 
-//Route to create a user when they signup, non functional yet
-router.post("/signup", async (req, res) => {
-    try {
-        res.send(req.body);
-        console.log("successfully sent!");
-        console.log(req.body);
-    } catch(e){
-        console.log("error occurred");
-    }
-});
-
-
 //Route to get match information
 router.get("/matches", async (req, res) => {
     try {
@@ -172,15 +124,6 @@ router.get("/matches", async (req, res) => {
     }
 });
 
-
-//Route to get badges
-router.get("/badges", async (req, res) => {
-    try {
-        res.json(await dbFetch.getBadges());
-    } catch(e){
-        res.sendStatus(404);
-    }
-});
 
 //Route to get teams
 router.get("/teams", async (req, res) => {
@@ -210,7 +153,7 @@ router.get("/user/top5", async (req, res) => {
 });
 
 //Route to get non top 5 users
-router.get("/user/rest", async (req, res) => {
+router.get("/user/nontop5", async (req, res) => {
     try {
         if (req.query.page){
             res.json(await dbFetch.getRemainingUsers(req.query.page));
@@ -312,6 +255,4 @@ router.get("/timeouts", async (req, res) => {
         res.sendStatus(404);
     }
 })
-module.exports = [
-    router,
-]
+module.exports = router
