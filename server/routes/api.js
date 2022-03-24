@@ -302,6 +302,97 @@ router.get("/timeouts", async (req, res) => {
         res.sendStatus(404);
     }
 })
+
+router.put("/bans", async (req, res) => {
+    try {
+        // Check if body exists
+        if (!req.body) {
+            res.sendStatus(404);
+        }
+
+        // Check if body has user_id, start_date, and reason
+        if (req.body.user_id && req.body.start_date && req.body.reason) {
+            const response = await dbFetch.createBan(req.body.user_id,
+                req.body.start_date, req.body.reason);
+            
+            // if response is not null, send 200.
+            // otherwise, send 404.
+            res.sendStatus(response ? 200 : 404);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+router.put("/timeouts", async (req, res) => {
+    try {
+        // Check if body exists
+        if (!req.body) {
+            res.sendStatus(404);
+        }
+
+        // Check if body has user_id, start_date, end_date, and reason
+        if (req.body.user_id && req.body.start_date && req.body.end_date && req.body.reason) {
+            const response = await dbFetch.createTimeout(req.body.user_id,
+                req.body.start_date, req.body.end_date, req.body.reason);
+            
+            // if response is not null, send 200.
+            // otherwise, send 404.
+            res.sendStatus(response ? 200 : 404);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+router.delete("/timeouts", async (req, res) => {
+    try {
+        // Check if body exists
+        if (!req.body) {
+            res.sendStatus(404);
+        }
+
+        // Check if body has timeout_id
+        if (req.body.timeout_id) {
+            const response = await dbFetch.deleteTimeout(req.body.timeout_id);
+            
+            // if response is not null, send 200.
+            // otherwise, send 404.
+            res.sendStatus(response ? 200 : 404);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+router.delete("/bans", async (req, res) => {
+    try {
+        // Check if body exists
+        if (!req.body) {
+            res.sendStatus(404);
+        }
+
+        // Check if body has ban_id
+        if (req.body.ban_id) {
+            const response = await dbFetch.deleteBan(req.body.ban_id);
+            
+            // if response is not null, send 200.
+            // otherwise, send 404.
+            res.sendStatus(response ? 200 : 404);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
 module.exports = [
     router,
 ]

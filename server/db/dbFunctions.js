@@ -510,6 +510,66 @@ async function setUsers(arrModels) {
     }
 }
 
+/**
+ * Creates a new Ban record on the database.
+ * @param {Number} userId user_id of ban
+ * @param {Date} startDate start_date of ban
+ * @param {String} reason  reason of ban
+ * @returns the Ban model after it is saved on db.
+ */
+async function createBan(userId, startDate, reason) {
+    const newBan =  await models.Ban.create({
+        user_id: userId,
+        start_date: startDate,
+        reason: reason
+    })
+    return newBan;
+}
+
+/**
+ * Creates a new Timeout record on the database.
+ * @param {Number} userId user_id of timeout
+ * @param {Date} startDate start_date of timeout
+ * @param {String} reason  reason of timeout
+ * @returns the Timeout model after it is saved on db.
+ */
+async function createTimeout(userId, startDate, endDate, reason) {
+    const newTimeout =  await models.Timeout.create({
+        user_id: userId,
+        start_date: startDate,
+        end_date: endDate,
+        reason: reason
+    })
+    return newTimeout;
+}
+
+/**
+ * Removes a Ban record on the database.
+ * @param {Number} banId ban_id of Ban record to be deleted
+ * @returns true if successful. False otherwise.
+ */
+async function deleteBan(banId) {
+    const rowsAffected = await models.Ban.destroy({
+        where: {
+            ban_id: banId
+        }
+    });
+    return rowsAffected === 1;
+}
+
+/**
+ * Removes a Timeout record on the database.
+ * @param {Number} timeoutId timeouts_id of Ban record to be deleted
+ * @returns true if successful. False otherwise.
+ */
+async function deleteTimeout(timeoutId) {
+    const rowsAffected = await models.Timeout.destroy({
+        where: {
+            timeouts_id: timeoutId
+        }
+    });
+    return rowsAffected === 1;
+}
 
 // eslint-disable-next-line max-len
-module.exports = { getAllTimeouts, getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers, searchUsersByKeyword};
+module.exports = { deleteBan, deleteTimeout, createTimeout, createBan, getAllTimeouts, getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers, searchUsersByKeyword};

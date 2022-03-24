@@ -18,8 +18,10 @@ app.use(session({
 
 app.use(passport.authenticate("session"));
 
-// all api calls to db is in /murals
+
+app.use(express.json())
 app.use("/api", router);
+
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/build"));
