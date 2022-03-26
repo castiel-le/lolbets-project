@@ -11,6 +11,7 @@ import '../../fonts/fonts.module.css';
 import { SnackbarContext } from '../Snackbar/SnackbarContext'
 
 import withRouter from '../withRouter';
+import CreateBetButton from './BetCreation/CreateBetButton';
 
 class AllBets extends Component {
 
@@ -29,12 +30,14 @@ class AllBets extends Component {
             fetching: false,
             mounted: true,
             userCurrentBets: [],
+            showCreateBetPopup:false,
         };
         this.toggleOpenBet = this.toggleOpenBet.bind(this);
         this.selectBet = this.selectBet.bind(this);
         this.fetchUpcomingMatches = this.fetchUpcomingMatches.bind(this);
         this.fetchAllUserBets = this.fetchAllUserBets.bind(this);
         this.userHasExistingBet = this.userHasExistingBet.bind(this);
+        this.createBet = this.createBet.bind(this);
     }
 
     componentDidMount() {
@@ -216,6 +219,12 @@ class AllBets extends Component {
         }
     }
 
+    createBet() {
+        this.setState({
+            showCreateBetPopup: true,
+        });
+    }
+
     render() {
     // return that there are no upcoming games if none were fetched
         if (this.state.noUpcomingGames && this.state.upcomingMatchesByDate === []) {
@@ -300,6 +309,8 @@ class AllBets extends Component {
                     user={this.props.user} 
                     existingBets={this.state.userCurrentBets}
                 />
+
+                <CreateBetButton createBet={this.showCreateBetPopup}/>
                 
             </Fragment>
         );
