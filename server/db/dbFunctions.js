@@ -124,7 +124,6 @@ async function getWins(id){
             winner_id: id
         }
     });
-    console.log(wins);
     return wins;
 }
 
@@ -139,9 +138,28 @@ async function getTop5Users() {
     const users = await models.User.findAll({
         limit: 5,
         order: [
-            ["coins", "DESC"]
+            ["coins", "DESC"],
+            ["date_created", "ASC"]
         ]
     });
+    for (let i = 0; i < users.length; i++){
+        let wins = 0;
+        let losses = 0;
+        const bets = await this.getAllBetsForUserWithMatchData(users[i].dataValues.user_id);
+        if (bets.length !== 0) {
+            for (let j = 0; j < bets.length; j++){
+                if (bets[j].dataValues.match.dataValues.winner_id !== null){
+                    if (bets[j].dataValues.team_betted_on.dataValues.team_id === bets[j].dataValues.match.dataValues.winner_id){
+                        wins++;
+                    } else {
+                        losses++;
+                    }
+                }
+            }
+        }
+        users[i].dataValues.wins = wins;
+        users[i].dataValues.losses = losses;
+    }
     return users;
 }
 
@@ -151,9 +169,28 @@ async function getRemainingUsers(pageNum) {
         offset: (pageNum - 1) * 10 + 5,
         limit: 10,
         order: [
-            ["coins", "DESC"]
+            ["coins", "DESC"],
+            ["date_created", "ASC"]
         ]
     });
+    for (let i = 0; i < users.length; i++){
+        let wins = 0;
+        let losses = 0;
+        const bets = await this.getAllBetsForUserWithMatchData(users[i].dataValues.user_id);
+        if (bets.length !== 0) {
+            for (let j = 0; j < bets.length; j++){
+                if (bets[j].dataValues.match.dataValues.winner_id !== null){
+                    if (bets[j].dataValues.team_betted_on.dataValues.team_id === bets[j].dataValues.match.dataValues.winner_id){
+                        wins++;
+                    } else {
+                        losses++;
+                    }
+                }
+            }
+        }
+        users[i].dataValues.wins = wins;
+        users[i].dataValues.losses = losses;
+    }
     return users;
 }
 
@@ -267,6 +304,14 @@ async function getUserBetsById(id, page, limit) {
     return await populateTeamOnBets(bets);
 }
 
+async function getAllBetsForUserWithMatchData(id) {
+    const allBets = await models.BetParticipant.findAll({
+        where: {
+            user_id: id,
+        }
+    })
+    return await populateTeamOnBets(allBets);
+}
 /**
  * Helper function to replace team_betted_on to team data.
  * @param {Object} bets Array of BetParticipant models
@@ -572,4 +617,9 @@ async function deleteTimeout(timeoutId) {
 }
 
 // eslint-disable-next-line max-len
-module.exports = { deleteBan, deleteTimeout, createTimeout, createBan, getAllTimeouts, getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers, searchUsersByKeyword};
+module.exports = { deleteBan, deleteTimeout, createTimeout, createBan, getAllTimeouts,
+    getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist,
+    updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById,
+    getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById,
+    getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users,
+    getRemainingUsers, getNumOfUsers, searchUsersByKeyword, getAllBetsForUser, getAllBetsForUserWithMatchData};
