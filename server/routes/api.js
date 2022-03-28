@@ -217,9 +217,10 @@ router.get("/user/rest", async (req, res) => {
         } else if (req.query.count){
             res.json(await dbFetch.getNumOfUsers());
         } else {
-            res.sendStatus(404);
+            res.sendStatus(404, "second not found");
         }
     } catch(e) {
+        console.log(e);
         res.sendStatus(404);
     }
 })
@@ -269,6 +270,14 @@ router.get("/allbets/:id", async (req, res) => {
         res.sendStatus(404);
     }
 });
+
+router.get("/allbets/matchdata/:id", async (req, res) => {
+    try {
+        res.json(await dbFetch.getAllBetsForUserWithMatchData(req.params.id));
+    } catch(e){
+        res.sendStatus(404);
+    }
+})
 
 router.get("/teams/history/:id", async (req, res) => {
     try {

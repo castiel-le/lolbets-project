@@ -89,6 +89,17 @@ class Leaderboard extends Component {
 
     render(){
         // Styling
+        let rank1Wins = 0;
+        let rank1Losses = 0;
+        let rank1WinRate = 0;
+        if (!this.state.top5NotLoaded){
+            rank1Wins = this.state.top5[0].wins;
+            rank1Losses = this.state.top5[0].losses;
+            
+            if (rank1Wins + rank1Losses !== 0){
+                rank1WinRate = Math.round(rank1Wins / (rank1Wins + rank1Losses) * 10000) / 100;
+            }
+        }
         const rank1CardStyle = {height:'100px', borderRadius: '5px', padding: '10px', margin: '10px 0', width: '60%', backgroundImage: `url(${john})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'};
         const rankBoxStyle = {width: '75px', mr: '10px', alignItems: 'center', borderRadius: '10px', backgroundColor: 'rgba(255, 155, 0, 0.3)'};
         const ranks2To5ContainerStyle = {width:'100%', mx:'auto', margin: '10px 0', justifyContent: 'space-between', padding: '10px', backgroundColor: 'rgba(19, 60, 121, 0.96)', borderRadius: '5px', height: '120px', alignItems: 'center'};
@@ -96,7 +107,7 @@ class Leaderboard extends Component {
         const rank1UsernameStyle = {margin: 'auto 0'};
         const coinsAndWinrateStyle = {alignItems: 'center', margin: 'auto 0 auto 75px', width: '125px'}
         const lossesBar = {width: '100%', backgroundColor: 'rgb(238, 90, 82)', height: '10px', borderRadius: '5px'};
-        const winsBar = {width: '75%', backgroundColor: 'rgb(61, 149, 229)', borderTopLeftRadius: '5px', borderBottomLeftRadius: '5px'};
+        const winsBar = {width: `${rank1WinRate}%`, backgroundColor: 'rgb(61, 149, 229)', borderRadius: '5px'};
 
 
         // eslint-disable-next-line no-extra-parens
@@ -124,7 +135,7 @@ class Leaderboard extends Component {
                                 <TypographyMedium>{this.state.top5[0].coins}</TypographyMedium>
                                 <DiamondIcon sx={{ fontSize: '1rem', my: 'auto', color: 'lightblue', pl: '3px'}}/>
                             </FlexBoxRow>
-                            <TypographyLight>15W - 5L | 75%</TypographyLight>
+                            <TypographyLight>{rank1Wins}W - {rank1Losses}L | {rank1WinRate}%</TypographyLight>
                             <FlexBoxRow style={lossesBar}>
                                 <FlexBoxRow style={winsBar} />
                             </FlexBoxRow>
