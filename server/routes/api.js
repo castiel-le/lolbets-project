@@ -109,13 +109,9 @@ router.delete("/bets/delete", async (req, res) => {
 router.get("/matches", async (req, res) => {
     try {
         if (req.query.after){
-            //console.log(req.query.after);
-            //res.json({"date": parseInt(req.query.after)});
             res.json(await dbFetch.getMatchesAfter(parseInt(req.query.after), parseInt(req.query.page)));
         } else if (req.query.afterthis && req.query.beforethis){
             res.json(await dbFetch.getMatchesBetween(parseInt(req.query.afterthis), parseInt(req.query.beforethis)));
-        } else if (Object.keys(req.query).length === 0){
-            res.json(await dbFetch.getMatches());
         } else {
             res.sendStatus(404);
         }
