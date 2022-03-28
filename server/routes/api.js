@@ -279,6 +279,56 @@ router.get("/allbets/matchdata/:id", async (req, res) => {
     }
 })
 
+//get all custom bets for a user with match data
+router.get("/custombets/:id", async (res, req) => {
+    try {
+        res.json(await dbFetch.getAllCustomBetsForUserWithMatchData(req.params.id));
+    } catch (e){
+        res.sendStatus(404);
+    }
+});
+
+//create a new custom bet or edit existing bet
+router.put("/custombets", async (req, res) => {
+    try {
+        if (!req.body) {
+            res.sendStatus(404);
+        }
+
+        if (req.body.creator_id && req.body.category_id && req.body.match_id && req.body.win_conditions) {
+            const response = await dbFetch.createCustomBet(req.body.creator_id, req.body.category_id, req.body.match_id, req.body.win_conditions);
+            res.sendStatus(response ? 200 : 404);
+        } else if (req.body.bet_id && req.body.category_id && req.body.win_conditions) {
+            const response = await dbFetch.editExistingCustomBet(req.body.bet_id, req.body.category_id, req.body.win_conditions);
+            res.sendStatus(response ? 200 : 404);
+        }
+        else {
+            res.sendStatus(404);
+        }
+    } catch(e){
+        res.sendStatus(404);
+    }
+})
+
+//delete existing custom bet
+router.delete("/custombets", async (req, res) => {
+    try {
+        if (!req.body) {
+            res.sendStatus(404);
+        }
+
+        if (req.body.bet_id) {
+            const response = await dbFetch.destroyExistingCustomBet(req.body.bet_id);
+            res.sendStatus(response ? 200 : 404);
+        }
+        else {
+            res.sendStatus(404);
+        }
+    } catch (e){
+        res.sendStatus(404);
+    }
+})
+
 router.get("/teams/history/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getMatchHistory(req.params.id, req.query.page));
