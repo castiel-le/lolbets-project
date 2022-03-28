@@ -137,9 +137,28 @@ async function getTop5Users() {
     const users = await models.User.findAll({
         limit: 5,
         order: [
-            ["coins", "DESC"]
+            ["coins", "DESC"],
+            ["date_created", "ASC"]
         ]
     });
+    for (let i = 0; i < users.length; i++){
+        let wins = 0;
+        let losses = 0;
+        const bets = await this.getAllBetsForUserWithMatchData(users[i].dataValues.user_id);
+        if (bets.length !== 0) {
+            for (let j = 0; j < bets.length; j++){
+                if (bets[j].dataValues.match.dataValues.winner_id !== null){
+                    if (bets[j].dataValues.team_betted_on.dataValues.team_id === bets[j].dataValues.match.dataValues.winner_id){
+                        wins++;
+                    } else {
+                        losses++;
+                    }
+                }
+            }
+        }
+        users[i].dataValues.wins = wins;
+        users[i].dataValues.losses = losses;
+    }
     return users;
 }
 
@@ -149,9 +168,28 @@ async function getRemainingUsers(pageNum) {
         offset: (pageNum - 1) * 10 + 5,
         limit: 10,
         order: [
-            ["coins", "DESC"]
+            ["coins", "DESC"],
+            ["date_created", "ASC"]
         ]
     });
+    for (let i = 0; i < users.length; i++){
+        let wins = 0;
+        let losses = 0;
+        const bets = await this.getAllBetsForUserWithMatchData(users[i].dataValues.user_id);
+        if (bets.length !== 0) {
+            for (let j = 0; j < bets.length; j++){
+                if (bets[j].dataValues.match.dataValues.winner_id !== null){
+                    if (bets[j].dataValues.team_betted_on.dataValues.team_id === bets[j].dataValues.match.dataValues.winner_id){
+                        wins++;
+                    } else {
+                        losses++;
+                    }
+                }
+            }
+        }
+        users[i].dataValues.wins = wins;
+        users[i].dataValues.losses = losses;
+    }
     return users;
 }
 
@@ -265,6 +303,14 @@ async function getUserBetsById(id, page, limit) {
     return await populateTeamOnBets(bets);
 }
 
+async function getAllBetsForUserWithMatchData(id) {
+    const allBets = await models.BetParticipant.findAll({
+        where: {
+            user_id: id,
+        }
+    })
+    return await populateTeamOnBets(allBets);
+}
 /**
  * Helper function to replace team_betted_on to team data.
  * @param {Object} bets Array of BetParticipant models
@@ -387,6 +433,103 @@ async function createFederatedCredentials(provider, profileId, userId) {
         profile_id: profileId,
         user_id: userId
     });
+}
+
+async function getAllCustomBetsForUserWithMatchData(id) {
+    const allBets = await models.BetParticipant.findAll({
+        where: {
+            user_id: id,
+            category_id: {
+                [Op.not]: 1
+            }
+        }
+    });
+    return await populateTeamOnBets(allBets);
+}
+
+/**
+ * Creates a custom bet
+ * @param {Number} creator_id bet creator user id
+ * @param {Number} category_id win category id
+ * @param {Number} match_id match associated to bet id
+ * @param {Array} win_conditions values of win conditions
+ * @returns the created bet
+ */
+async function createCustomBet(creator_id, category_id, match_id, win_conditions) {
+    
+    const existingCustomBet = await models.Bet.findOne({
+        where: {
+            creator_id: creator_id,
+            match_id: match_id
+        }
+    })
+    if (!existingCustomBet){
+        if (win_conditions.length === 1) {
+            const customBetCreated = await models.Bet.create({
+                creator_id: creator_id,
+                category_id: category_id,
+                minimum_coins: 1,
+                maximum_coins: 999,
+                match_id: match_id,
+                bet_locked: false,
+                win_condition: win_conditions[0]
+            });
+            return {customBetCreated, created: true, ok: true};
+        }
+        else {
+            const customBetCreated = await models.Bet.create({
+                creator_id: creator_id,
+                category_id: category_id,
+                minimum_coins: 1,
+                maximum_coins: 999,
+                match_id: match_id,
+                bet_locked: false,
+                win_condition: win_conditions[0],
+                win_condition2: win_conditions[1]
+            });
+            return {customBetCreated, created: true, ok: true};
+        }
+    }
+    return {customBetCreated: [], created: false, ok: true};
+}
+
+/**
+ * Edit an existing custom bet
+ * @param {Number} bet_id id of custom bet to edit
+ * @param {Number} category_id id of category for setting win condition
+ * @param {Array} win_conditions win condition values
+ * @returns 
+ */
+async function editExistingCustomBet(bet_id, category_id, win_conditions) {
+    const existingCustomBet = await models.Bet.findOne({
+        where: {
+            bet_id: bet_id
+        }
+    });
+    existingCustomBet.category_id = category_id;
+    if (win_conditions.length === 1){
+        existingCustomBet.win_condition = win_conditions[0];
+    } else {
+        existingCustomBet.win_condition = win_conditions[0];
+        existingCustomBet.win_condition2 = win_conditions[1];
+    }
+    existingCustomBet.save();
+    return {existingCustomBet, created: false, ok: true};
+}
+
+/**
+ * Delete custom bet
+ * @param {Number} bet_id id of custom bet
+ * @returns destroyed status
+ */
+async function destroyExistingCustomBet(bet_id) {
+    const existingCustomBet = await models.Bet.findOne({
+        where: {
+            bet_id: bet_id
+        }
+    });
+    existingCustomBet.destroy();
+    return {destroyed: true, ok: true};
 }
 
 /**
@@ -570,4 +713,10 @@ async function deleteTimeout(timeoutId) {
 }
 
 // eslint-disable-next-line max-len
-module.exports = { deleteBan, deleteTimeout, createTimeout, createBan, getAllTimeouts, getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist, updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById, getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById, getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users, getRemainingUsers, getNumOfUsers, searchUsersByKeyword};
+module.exports = { deleteBan, deleteTimeout, createTimeout, createBan, getAllTimeouts,
+    getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist,
+    updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById,
+    getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById,
+    getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users,
+    getRemainingUsers, getNumOfUsers, searchUsersByKeyword, getAllBetsForUserWithMatchData,
+    createCustomBet, editExistingCustomBet, destroyExistingCustomBet, getAllCustomBetsForUserWithMatchData};

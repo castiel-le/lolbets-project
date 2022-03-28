@@ -165,8 +165,9 @@ const Bet = sequelize.define("bets", {
     },
     creator_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     },
+
     category_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -189,6 +190,14 @@ const Bet = sequelize.define("bets", {
     bet_locked: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    win_condition: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    win_condition2: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 }, {timestamps: false});
 

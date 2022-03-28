@@ -11,6 +11,7 @@ import '../../fonts/fonts.module.css';
 import { SnackbarContext } from '../Snackbar/SnackbarContext'
 
 import withRouter from '../withRouter';
+import CreateBetButton from './BetCreation/CreateBetButton';
 
 class AllBets extends Component {
 
@@ -29,12 +30,14 @@ class AllBets extends Component {
             fetching: false,
             mounted: true,
             userCurrentBets: [],
+            showCreateBetPopup:false,
         };
         this.toggleOpenBet = this.toggleOpenBet.bind(this);
         this.selectBet = this.selectBet.bind(this);
         this.fetchUpcomingMatches = this.fetchUpcomingMatches.bind(this);
         this.fetchAllUserBets = this.fetchAllUserBets.bind(this);
         this.userHasExistingBet = this.userHasExistingBet.bind(this);
+        this.createBet = this.createBet.bind(this);
     }
 
     componentDidMount() {
@@ -181,8 +184,8 @@ class AllBets extends Component {
      * @param {*} team2 Team 2 of selected bet
      */
     selectBet(betID, team1, team2) {
-         if(this.props.user.id === null) {
-             this.props.navigate("/api/login/federated/google");
+        if(this.props.user.id === null) {
+            this.props.navigate("/api/login/federated/google");
         } else {
             this.setState({
                 selectedBet: {betID: betID, team1: team1, team2: team2},
@@ -214,6 +217,12 @@ class AllBets extends Component {
         if (prevProps.user !== this.props.user) {
             this.fetchAllUserBets(this.props.user.id);
         }
+    }
+
+    createBet() {
+        this.setState({
+            showCreateBetPopup: true,
+        });
     }
 
     render() {
@@ -300,6 +309,8 @@ class AllBets extends Component {
                     user={this.props.user} 
                     existingBets={this.state.userCurrentBets}
                 />
+
+                <CreateBetButton createBet={this.showCreateBetPopup}/>
                 
             </Fragment>
         );
