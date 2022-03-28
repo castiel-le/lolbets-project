@@ -1,5 +1,5 @@
 const models = require("./sqlmodels");
-const { Op, Sequelize } = require("sequelize");
+const {Op} = require("sequelize");
 
 //Function to get all badges
 async function getBadges() {
