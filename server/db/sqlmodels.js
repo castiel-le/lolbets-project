@@ -190,6 +190,14 @@ const Bet = sequelize.define("bets", {
     bet_locked: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    win_condition: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    win_condition2: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 }, {timestamps: false});
 
