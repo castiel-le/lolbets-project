@@ -5,7 +5,6 @@ const { Op, Sequelize } = require("sequelize");
 async function getBadges() {
     const badges = await models.Badge.findAll();
     badges[0].dataValues.randomnewvalue = "hello";
-    console.log(badges[0]);
     return badges;
 }
 
@@ -124,7 +123,6 @@ async function getWins(id){
             winner_id: id
         }
     });
-    console.log(wins);
     return wins;
 }
 

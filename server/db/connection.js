@@ -16,7 +16,8 @@ const sequelize = new Sequelize(
             ssl: {
                 ca: serverCa
             }
-        }
+        },
+        logging: false
     });
 
 module.exports = sequelize;
