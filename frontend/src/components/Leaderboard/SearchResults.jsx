@@ -10,7 +10,8 @@ class SearchResults extends Component {
         super(props);
         this.state = {
             users: [],
-            loading: false
+            loading: false,
+            didFetchUsers: false,
         }
         this.updateUsersState = this.updateUsersState.bind(this);
         this.updateLoadingState = this.updateLoadingState.bind(this);
@@ -18,7 +19,8 @@ class SearchResults extends Component {
 
     updateUsersState(childUsers){
         this.setState({
-            users: childUsers
+            users: childUsers,
+            didFetchUsers: true
         });
     }
 
@@ -34,9 +36,14 @@ class SearchResults extends Component {
                 <SearchBar updateUsersState={this.updateUsersState} updateLoadingState={this.updateLoadingState}/>
                 
                 {!this.state.loading ?
-                    this.state.users.length <= 0 ?
-                        <TypographyLight>no users matched</TypographyLight> :
-                        <SearchedTable remaining={this.state.users}/>
+                    /* Check if there was a search attempt */
+                    this.state.didFetchUsers ?
+                        /* Check if search result returns a result */
+                        this.state.users.length <= 0 ?
+                            <TypographyLight>no users matched</TypographyLight> :
+                            <SearchedTable remaining={this.state.users}/>
+                        /* Display nothing if there was no search yet */
+                        : null
                     : <CircularProgress sx={{ mx:'auto', color: 'white' }}/>
                 }
             </FlexBoxColumn>

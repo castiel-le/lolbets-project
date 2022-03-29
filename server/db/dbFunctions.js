@@ -719,5 +719,4 @@ module.exports = { deleteBan, deleteTimeout, createTimeout, createBan, getAllTim
     updateOrCreateBetParticipant, destroyBetParticipant, getMatchById, getUserBetsById,
     getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById,
     getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users,
-    getRemainingUsers, getNumOfUsers, searchUsersByKeyword, getAllBetsForUserWithMatchData,
-    createCustomBet, editExistingCustomBet, destroyExistingCustomBet, getAllCustomBetsForUserWithMatchData};
+    getRemainingUsers, getNumOfUsers, searchUsersByKeyword, getAllBetsForUserWithMatchData};
