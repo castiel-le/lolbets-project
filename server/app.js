@@ -9,9 +9,6 @@ const dbFetch = require("./db/dbFunctions");
 
 const passport = require("passport");
 
-// Trust proxy to redirect with HTTPS with Google login strategy
-app.enable("trust proxy");
-
 //establish session for Google authentication
 app.use(session({
     secret: "keyboard cat",

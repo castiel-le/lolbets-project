@@ -126,17 +126,4 @@ public class PandaDBHandler {
         Team t2 = tdao.selectByAbbreviation(um.getTeam2Abbreviation());
         return new Match(0, t1, t2, null, um.getDate(), true, 0, um.getPandaScoreId());
     }
-    /**
-     * Returns the tomorrow's date at midnight
-     * @return Tomorrow's date as Date object
-     */
-    private Date getTomorrowDate() {
-        Calendar day = Calendar.getInstance();
-        day.set(Calendar.MILLISECOND, 0);
-        day.set(Calendar.SECOND, 0);
-        day.set(Calendar.MINUTE, 0);
-        day.set(Calendar.HOUR_OF_DAY, 0);
-        day.add(Calendar.DAY_OF_MONTH, 1);
-        return day.getTime();
-    }
 }
