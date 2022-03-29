@@ -9,6 +9,9 @@ const dbFetch = require("./db/dbFunctions");
 
 const passport = require("passport");
 
+// Trust proxy to redirect with HTTPS with Google login strategy
+app.enable("trust proxy");
+
 //establish session for Google authentication
 app.use(session({
     secret: "keyboard cat",
@@ -48,11 +51,6 @@ async function updateUserCoins(req) {
     const user = await dbFetch.getUserById(req.user.id);
     req.user.coins = user.coins;
 }
-
-app.use("/logout", (req, res)=>{
-    req.logout();
-    res.redirect("/");
-})
 
 //Router to redirect back
 app.use("/oauth2/redirect/google", passport.authenticate("google", {

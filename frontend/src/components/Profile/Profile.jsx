@@ -106,11 +106,15 @@ class Profile extends Component {
                     isUserInfoLoading: false,
                     userInfo: await response.json()
                 });
+            // Redirect to 404 if no data found on user page
+            } else if (this.props.params.id) {
+                this.props.navigate("/404")
+            // Redirect to home page when not logged in
+            } else if (this.props.user.isLoaded) {
+                this.props.navigate("/");
             }
         } catch (e) {
-            if (this.props.params.id) {
-                this.props.navigate("/404")
-            } 
+            this.props.navigate("/404");
         }
     }
     render() {
@@ -147,16 +151,20 @@ class Profile extends Component {
                             style={{flexFlow: "row-reverse wrap"}}
                             justifyContent="flex-start"
                             alignItems="flex-start">
-                            <Button variant='contained' startIcon={<AddReactionIcon />} 
-                                sx={{backgroundColor: 'rgb(0,100,100)', 
-                                    ':hover': {backgroundColor: 'rgb(0,200,200)'}, 
-                                    display: {xs: 'none', md: 'inherit'}}}
-                                maxHeight={50}
-                                marginRight={1}>
-                                <TypographyLight >
+                            {this.props.params.id
+                                ?
+                                <Button variant='contained' startIcon={<AddReactionIcon />} 
+                                    sx={{backgroundColor: 'rgb(0,100,100)', 
+                                        ':hover': {backgroundColor: 'rgb(0,200,200)'}, 
+                                        display: {xs: 'none', md: 'inherit'}}}
+                                    maxHeight={50}
+                                    marginRight={1}>
+                                    <TypographyLight >
                                         Follow
-                                </TypographyLight>
-                            </Button>
+                                    </TypographyLight>
+                                </Button>
+                                : null
+                            }
                         </Grid>
                     </Grid>
                     <FlexBoxColumn justifyContent={'center'} 

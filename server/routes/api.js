@@ -67,6 +67,15 @@ passport.deserializeUser(function(user, done){
     });
 });
 
+router.delete("/logout", (req, res)=>{
+    try {
+        req.logout();
+        res.sendStatus(200);
+    } catch (e) {
+        res.sendStatus(404);
+    }
+})
+
 //Route to get all bets (fake data for now)
 router.get("/bets", async (req, res) => {
     try {

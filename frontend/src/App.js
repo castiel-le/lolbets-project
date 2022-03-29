@@ -16,14 +16,11 @@ import UserBetHistory from './components/UserBetHistory/UserBetHistroy';
 import SearchResults from './components/Leaderboard/SearchResults'
 import { SnackbarContainer } from './components/Snackbar/SnackbarContext';
 import SnackbarAlert from './components/Snackbar/SnackbarAlert';
+import Logout from "./components/Logout/Logout"
 
 function App() {
-    // https://www.freecodecamp.org/news/how-to-persist-a-logged-in-user-in-react/
-    // implement fetch and save to local storage when users are done
-    const [user, setUser] = useState({id: null, role: null, coins: 0});
+    const [user, setUser] = useState({id: null, role: null, coins: 0, isLoaded: false});
     const location = useLocation();
-
-    //localStorage.setItem("user", user)
     
     /**
      * Function that sets the user state to the currently logged in user.
@@ -38,11 +35,11 @@ function App() {
         
         if(userVerified.ok) {
             const fetchedUser = await userVerified.json();
-            setUser({id: fetchedUser.id, role: fetchedUser.role, coins: fetchedUser.coins});
+            setUser({id: fetchedUser.id, role: fetchedUser.role, coins: fetchedUser.coins, isLoaded: true});
             return;
         }
 
-        setUser({id: null, role: null, coins: 0});
+        setUser({id: null, role: null, coins: 0, isLoaded: true});
     }
 
     /**
@@ -81,7 +78,9 @@ function App() {
                         <Route path='/teams/:id' element={<Team  user={user} />} />
                         <Route path='/user/search' element={<SearchResults />} />
                         <Route path='/teams/search/:teamname' element={<h1> Search Team </h1>} />
-                        <Route path='*' element={<h1> Not Found </h1>} />
+                        <Route path='/logout' element={<Logout />} />
+                        <Route path='/404' element={<h1 style={{color: "white"}}> Not Found </h1>} />
+                        <Route path='*' element={<h1 style={{color: "white"}}> Not Found </h1>} />
                     </Routes>
                 </Suspense>
             </div>

@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Container, Typography, Grid } from "@mui/material";
 import TeamCard from "./Card/TeamCard";
 import DynamicAutoSearchBar from "./Search/DynamicAutoSearchBar";
+import { SnackbarContext } from "../Snackbar/SnackbarContext";
 const theme = createTheme();
 
 /**
@@ -10,6 +11,8 @@ const theme = createTheme();
  * a specific team's information
  */
 export default class Teams extends Component {
+    static contextType = SnackbarContext;
+
     constructor(props) {
         super(props);
         this.state = { teams: [], filterName: "" };
@@ -29,9 +32,12 @@ export default class Teams extends Component {
 
             if (response.ok) {
                 this.setState({ teams: await response.json() });
+            } else {
+                this.context.setSnackbar(true, "No teams available", "error");
             }
         } catch (e) {
-            console.log(e);
+            this.context.setSnackbar(true, "Cannot get teams. Please try again", "error");
+            console.log("Cannot get teams");
         }
     }
 

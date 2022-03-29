@@ -1,2 +1,2 @@
-export const pages = ['Bets', 'Teams', 'Leaderboard'];
-export const pageLinks = ['/bets', '/teams', '/leaderboard']
+export const pages = ['Bets', 'Teams', 'Leaderboard', 'Search'];
+export const pageLinks = ['/bets', '/teams', '/leaderboard', '/user/search']
