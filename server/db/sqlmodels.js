@@ -141,7 +141,7 @@ const BetParticipant = sequelize.define("bet_participants", {
     },
     team_betted_on: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         defaultValue: false
     },
     amount_bet: {
@@ -281,5 +281,23 @@ const Timeout = sequelize.define("timeouts", {
     },
 }, {timestamps: false});
 
+const Category = sequelize.define("categories", {
+    category_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    category_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: false
+    },
+    category_description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: false
+    }
+}, {timestamps: false});
 
-module.exports = {Timeout, Ban, FederatedCredentials, Badge, Team, Match, User, BetParticipant, Bet};
+module.exports = {Timeout, Ban, FederatedCredentials, Badge, Team, Match, User, BetParticipant, Bet, Category};
