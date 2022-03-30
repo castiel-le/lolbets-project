@@ -1,18 +1,17 @@
-import { Component, Fragment, forwardRef, useContext } from "react";
+import { Component, Fragment, forwardRef } from "react";
 
-import { Button, Dialog, DialogTitle, DialogContent, 
-    DialogActions, Divider, Slide, Avatar, 
-    FormControl, InputAdornment, TextField } from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, Divider, Slide, Avatar, DialogActions } from '@mui/material';
 import { styled } from '@mui/system';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 import { FlexBoxRow, HorizontalDivider, TypographyBold } from "../../customUIComponents";
 
-import DiamondIcon from "@mui/icons-material/Diamond";
+import DeleteIcon from "@mui/icons-material/Delete"
 
 import './BetPopup.module.css';
-import ConfirmBet from "./ConfirmBet";
 import { SnackbarContext } from '../../Snackbar/SnackbarContext'
+import CancelAndSubmitButtons from "./CancelAndSubmitButtons";
+import ConfirmationBox from "./ConfirmationBox";
+import UserInputForBetAmount from "./UserInputForBetAmount";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -40,38 +39,18 @@ const LogoButton = styled(Button)((props) => ({
     border: props.selectedTeam === props.avatarTeam ? '1px solid rgb(0,100,100)' : 'inherit',
 }));
 
-// Styled Buttons for all the quick bets
-const QuickBetButton = styled(Button)({
-    borderRadius: 16,
-    minWidth: '42px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    backgroundColor: 'rgb(0,100,100)',
-    justifyContent:'center',
-    ":hover": {
-        backgroundColor: 'rgb(0,200,200)'
-    }
-});
-
-// Options at the bottom of the dialog box for increasing or decreasing the bet amount
-// Keep max: it is used to max out the bet to the users total credits
-const coinIncreaseButtonAmounts = [-10, -5, +5, +10, 'max']
-
 export default class PlaceBetPopup extends Component {
-
-    static contextType = SnackbarContext;
 
     constructor(props) {
         super(props);
         this.state = {
             selectedTeam: null,
-            betAmount: 0,
             openConfirmation: false,
             existingBet: false,
+            validInput: false,
+            betAmount: 0
         };
         this.closeDialog = this.closeDialog.bind(this);
-        this.betAmountChangeTextField = this.betAmountChangeTextField.bind(this);
-        this.addQuickBetAmount = this.addQuickBetAmount.bind(this);
         this.openConfirmationBox = this.openConfirmationBox.bind(this);
         this.submitBet = this.submitBet.bind(this);
         this.fillInEditBet = this.fillInEditBet.bind(this);
@@ -93,65 +72,18 @@ export default class PlaceBetPopup extends Component {
     }
 
     /**
-     * Used to avoid the user inputing a negative bet amount
-     * And does not allow the user to input a value higher than their account balance
-     * @param {Number} amount Amount the user just input
-     */
-    betAmountChangeTextField(amount) {
-        if (amount < 0) {
-            this.setState({
-                betAmount: 0
-            });
-        } else if (amount > this.props.user.coins)  {
-            this.setState({
-                betAmount: this.props.user.coins
-            });
-        } else {
-            this.setState({
-                betAmount: amount
-            });
-        }
-    }
-
-    /**
-     * Adds a quick bet amount to this users current bet amount
-     * @param {Number} amount amount to be added to the current bet amount
-     */
-    addQuickBetAmount(amount) {
-        if (amount === 'max') {
-            this.setState({
-                betAmount: this.props.user.coins
-            });
-        } else if (this.state.betAmount + amount > this.props.user.coins) {
-            this.setState({
-                betAmount: this.props.user.coins
-            });
-        } else if (this.state.betAmount + amount > 0) {
-            this.setState({
-                betAmount: this.state.betAmount + amount
-            });
-        } else {
-            this.setState({
-                betAmount: 0
-            });
-        }
-    }
-
-    /**
      * Logic needed when the user clicks the place bet button inside the button
      */
     openConfirmationBox() {
         // if the bet is between 1 and max, show the confirmation box and the user selected a team
-        if (this.state.betAmount > 0 && 
-            this.state.betAmount <= this.props.user.coins && 
-            this.state.selectedTeam !== null) {
+        if (this.state.selectedTeam !== null && this.state.betAmount > 0 && this.state.betAmount <= this.props.user.coins) {
             this.setState({
                 openConfirmation: true,
             });
         } else if (this.state.selectedTeam === null) {
             this.context.setSnackbar(true, 'Select a team first', 'error');
         } else {
-            this.context.setSnackbar(true, 'Enter a bet amount first', 'error');
+            this.context.setSnackbar(true, 'Enter a bet amount first ', 'error');
         }
     }
 
@@ -172,7 +104,7 @@ export default class PlaceBetPopup extends Component {
             
         }
         this.setState({
-            openConfirmation: false
+            openConfirmation: false,
         })
 
     }
@@ -290,58 +222,16 @@ export default class PlaceBetPopup extends Component {
                         </FlexBoxRow>
                         {/* End Team Selection */}
                         
-                        {/* Enter Bet Amount */}
-                        <FlexBoxRow>
-                            <FormControl sx={{ my: 2, width: '96px', mx:'auto' }}>
-                                <TextField
-                                    id="standard-number"
-                                    type="number"
-                                    variant="standard"
-                                    value={this.state.betAmount}
-                                    required
-                                    sx={{
-                                        input: {
-                                            color: '#f9f9f9', 
-                                            justifyContent: 'center', 
-                                            textAlign: 'end'
-                                        }
-                                    }}
-                                    InputProps={{
-                                        startAdornment: 
-                                      <InputAdornment position="start" sx={{color: '#f9f9f9'}}>
-                                          <DiamondIcon />
-                                      </InputAdornment>,
-                                    }}
-                                    onChange={(event) => {
-                                        this.betAmountChangeTextField(event.target.valueAsNumber);
-                                    }}
-                                />
-                            </FormControl>
-                        </FlexBoxRow>
-                        {/* End Enter Bet Amount */}
-                        
-                        {/* Quick Bet Buttons */}
-                        <FlexBoxRow width='100%' sx={{justifyContent: 'center', my: 1}}>
-                            {coinIncreaseButtonAmounts.map((amount, index) => {
-                                return (
-                                    <QuickBetButton 
-                                        key={index}
-                                        onClick={() => {
-                                            this.addQuickBetAmount(amount);
-                                        }}
-                                    >
-                                        <TypographyBold fontSize={10} sx={{color: '#111111'}}>
-                                            {amount}
-                                        </TypographyBold>
-                                    </QuickBetButton>
-                                );
-                            })}
-                        </FlexBoxRow>
-                        {/* End Quick Bet Buttons */}
+                        <UserInputForBetAmount 
+                            betAmount={this.state.betAmount} 
+                            updateBetAmount={(amount) => this.setState({betAmount: amount})}
+                            user={this.props.user}
+                            variant={"quickBet"}
+                        />
 
                     </DialogContent>
-            
-                    <DialogActions>
+
+                    <DialogActions >
                         {this.state.existingBet
                             ? <Button onClick={() => {
                                 this.deleteBetParticipant(this.props.bet.betID);
@@ -350,53 +240,25 @@ export default class PlaceBetPopup extends Component {
                             </Button>
                             : null
                         }
-                        <Button onClick={() => {
-                            this.closeDialog(false);
-                        }}
-                        >
-                            <TypographyBold fontSize={12} 
-                                sx={{
-                                    borderRadius: 16,
-                                    p: 1,
-                                    ":hover": {
-                                        textDecoration: 'underline',
-                                        backgroundColor: '#e18b8b',
-                                        color: '#111111'
-                                    }}}
-                            >
-                                Cancel
-                            </TypographyBold>
-                        </Button>
-                        <Button onClick={() => {
-                            this.openConfirmationBox();
-                        }}
-                        >
-                            <TypographyBold fontSize={12} 
-                                sx={{
-                                    borderRadius: 16,
-                                    p: 1,
-                                    ":hover": {
-                                        textDecoration: 'underline',
-                                        backgroundColor: '#f9f9f9',
-                                        color: '#111111'
-                                    }}}
-                            >
-                                Confirm
-                            </TypographyBold>
-                        </Button>
+                        <CancelAndSubmitButtons cancel={() => this.closeDialog(false)} submit={() => this.openConfirmationBox()}/>
                     </DialogActions>
+            
                 </Dialog>
 
-                <ConfirmBet 
+                <ConfirmationBox
                     open={this.state.openConfirmation} 
-                    onClose={(accepted) => {
-                        this.submitBet(accepted, this.props.bet.betID, this.props.user.id, this.state.selectedTeam, this.state.betAmount);
-                    }}
-                    amount={this.state.betAmount}
-                    team={this.state.selectedTeam === 1 ? this.props.bet.team1 : this.props.bet.team2}
+                    selectNo={
+                        () => this.submitBet(false, this.props.bet.betID, this.props.user.id, this.state.selectedTeam, this.state.betAmount)
+                    }
+                    selectYes={
+                        () => this.submitBet(true, this.props.bet.betID, this.props.user.id, this.state.selectedTeam, this.state.betAmount)
+                    }
+                    confirmationMessage={`Bet ${this.state.betAmount} on ${this.state.selectedTeam === 1 ? this.props.bet.team1.team_name : this.props.bet.team2.team_name}?`}
                 />
 
             </Fragment>
         );
     }
 }
+
+PlaceBetPopup.contextType = SnackbarContext;

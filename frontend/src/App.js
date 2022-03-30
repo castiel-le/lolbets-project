@@ -1,9 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 
-import AllBets from './components/Bets/AllBets';
-import SignInForm from './components/Login/SignInForm'
-import Signup from './components/Signup/CreateAccountForm'
+import BetsPage from './components/Bets/BetsPage';
 import NavBar from "./components/NavBar/NavBar"
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Team from "./components/Team/Team"
@@ -63,10 +61,10 @@ function App() {
                                     <img src={logo} width="64" className="App-logo" alt="logo" />
                                 </div>
                                 <p id="desc">
-                Based page of LoLBets
+                                    Based page of LoLBets
                                 </p>
                             </header>} />
-                        <Route path='/bets' element={<AllBets user={user} updateUser={verifyUser}/>} />
+                        <Route path='/bets' element={<BetsPage user={user} updateUser={verifyUser}/>} />
                         <Route path='/bets/:id' element={<h1> Bet Number </h1>} />
                         <Route path='/bets/create' element={<h1> Create Bet </h1>} />
                         <Route path='/bets/edit/:id' element={<h1> Edit Bet Number </h1>} />
