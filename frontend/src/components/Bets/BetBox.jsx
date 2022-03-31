@@ -7,6 +7,8 @@ import { BetAccordion, TimeBox, TeamBox } from './styledElements';
 import BetButton from './BetCreation/BetButton';
 import BetDetails from './BetDetails';
 import { FlexBoxRow, TypographyLight } from '../customUIComponents';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { grey } from '@mui/material/colors';
 
 export default class BetBox extends Component {
 
@@ -55,10 +57,10 @@ export default class BetBox extends Component {
                             <AccordionSummary
                                 aria-controls="panel1bh-content"
                                 id="panel1bh-header"
+                                expandIcon={<ExpandMoreIcon sx={{color: grey[400]}}/>}
                                 sx={{ 
-                                    display: 'flex',
                                     borderRadius: 2,
-                                    ":hover": { backgroundColor: this.state.expanded ? 'inherit' : '#1E2A32', borderRadius: 1 } 
+                                    ":hover": { backgroundColor: this.state.expanded ? 'inherit' : '#1E2A32', borderRadius: 1 },
                                 }}
                             >
                                 <FlexBoxRow width='100%'>
@@ -96,6 +98,8 @@ export default class BetBox extends Component {
                                     date={this.props.date} 
                                     team1={this.props.team1} 
                                     team2={this.props.team2}
+                                    totalBet={this.props.totalBet}
+                                    team1Bet={this.props.team1Bet}
                                 />
                             </AccordionDetails>
 

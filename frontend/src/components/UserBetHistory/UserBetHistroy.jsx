@@ -3,10 +3,14 @@ import withRouter from "../withRouter";
 import BetHistortyBox from "./BetHistortyBox"
 import { InView } from 'react-intersection-observer'
 import { Loading, TypographyLight } from "../customUIComponents"; 
+import { SnackbarContext } from "../Snackbar/SnackbarContext";
+
 /**
  * Contains all the bet history of a specific user.
  */
 class UserBetHistory extends Component {
+    static contextType = SnackbarContext;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -47,7 +51,7 @@ class UserBetHistory extends Component {
                 });
             }
         } catch (e) {
-            console.log(e);
+            this.context.setSnackbar(true, "Something went wrong. Please try again later", "error")
         }
     }
     render() {
@@ -57,7 +61,7 @@ class UserBetHistory extends Component {
                     ? <Loading />
                     : this.state.bets.length > 0
                         ? this.state.bets.map(bet =>
-                            <BetHistortyBox bet={bet} key={bet.bet_participant_id} />)
+                            bet.match ? <BetHistortyBox bet={bet} key={bet.bet_participant_id}/> : null)
                         : <TypographyLight variant="h4" marginTop={1} marginBottom={1}
                             style={{opacity: "50%"}}>
                     No Bets Found

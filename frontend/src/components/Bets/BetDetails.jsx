@@ -35,10 +35,10 @@ export default class BetDetails extends Component {
                             </TypographyBold>
                             <FlexBoxRow width='100%' my={'auto'}>
                                 <TypographyMedium fontSize={16} mx='auto'>
-                                  1.35x
+                                    {(Math.round(this.props.team1.wins / this.props.team1.losses * 100) / 100).toFixed(2)}x
                                 </TypographyMedium>
                                 <TypographyMedium fontSize={16} mx='auto'>
-                                  2.45x
+                                    {(Math.round(this.props.team2.wins / this.props.team2.losses * 100) / 100).toFixed(2)}x
                                 </TypographyMedium>
                             </FlexBoxRow>
                         </FlexBoxColumn>
@@ -46,9 +46,19 @@ export default class BetDetails extends Component {
           
                     <FlexBoxRow width='20%' >
                         <FlexBoxColumn width='100%' justifyContent='center' alignItems='center'>
-                            <BetComparisonBar 
-                                team1Percent={60} 
-                                width='100%' 
+                            <BetComparisonBar
+                            /* 
+                            Set team 1 percent to result of team 1 bet divided by total bet.
+                            Otherwise, set to 0 
+                            */
+                                team1Percent={this.props.totalBet
+                                    ? this.props.team1Bet
+                                        ? Math.round(this.props.team1Bet / this.props.totalBet * 100)
+                                        : 0
+                                    : 0
+                                } 
+                                width='100%'
+                                visibility={this.props.totalBet}
                             />
                             <TypographyLight fontSize={10} marginTop='12px'>
                               Current Pool:
@@ -61,7 +71,7 @@ export default class BetDetails extends Component {
                             >
                                 <SavingsIcon />
                                 <TypographyLight fontSize={12} marginLeft='5px'>
-                                  1000
+                                    {this.props.totalBet ? this.props.totalBet : 0}
                                 </TypographyLight>
                             </FlexBoxRow>
                         </FlexBoxColumn>
