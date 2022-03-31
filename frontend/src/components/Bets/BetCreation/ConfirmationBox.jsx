@@ -16,7 +16,7 @@ const StyledModal = styled(Modal)`
   height: 100%;
 `;
 
-export default class ConfirmBet extends Component {
+export default class ConfirmationBox extends Component {
 
     render() {
         return(
@@ -28,19 +28,20 @@ export default class ConfirmBet extends Component {
                     <FlexBoxColumn
                         sx={{
                             backgroundColor: '#111111',
-                            p: 3
+                            p: 3,
+                            maxWidth: '30%'
                         }}
                     >
                         <TypographyMedium>
-                        Bet {this.props.amount} on {this.props.team.team_name}?
+                            {this.props.confirmationMessage}
                         </TypographyMedium>
 
                         <FlexBoxRow sx={{justifyContent:'center', py: 1}}>
-                            <Button onClick={() => this.props.onClose(false)}>
-                            No
+                            <Button onClick={this.props.selectNo}>
+                                No
                             </Button>
-                            <Button onClick={() => this.props.onClose(true)}>
-                            Yes
+                            <Button onClick={this.props.selectYes}>
+                                Yes
                             </Button>
                         </FlexBoxRow>
                         

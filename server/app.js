@@ -49,11 +49,6 @@ async function updateUserCoins(req) {
     req.user.coins = user.coins;
 }
 
-app.use("/logout", (req, res)=>{
-    req.logout();
-    res.redirect("/");
-})
-
 //Router to redirect back
 app.use("/oauth2/redirect/google", passport.authenticate("google", {
     successRedirect: "/",

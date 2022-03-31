@@ -6,6 +6,7 @@ import { Box } from "@mui/material";
 import TeamSection from "./details/TeamSection";
 import MatchHistory from "./history/MatchHistory";
 import { Loading } from '../customUIComponents';
+import { SnackbarContext } from "../Snackbar/SnackbarContext";
 
 const theme = createTheme();
 
@@ -14,6 +15,8 @@ const theme = createTheme();
  * a specific team's information
  */
 class Team extends Component {
+    static contextType = SnackbarContext;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -27,6 +30,7 @@ class Team extends Component {
             },
             teamNotLoaded: true,
             matchNotLoaded: true,
+            pageNotLoaded: true,
             matches: [],
             page: 1,
             rowsPerPage: 15
@@ -60,7 +64,7 @@ class Team extends Component {
                 this.setState({ page: page, matches: this.state.matches.concat(newMatches), 
                     matchNotLoaded: false })
             } catch (e) {
-                console.log("no matches for page " + page);
+                this.context.setSnackbar(true, `Cannot retrieve match history. Please try again`, "error")
             }
         }
     }
@@ -92,7 +96,7 @@ class Team extends Component {
         try {
             this.setState({matches: await this.getMatches(page), matchNotLoaded: false});
         } catch (e) {
-            console.log(e);
+            this.context.setSnackbar(true, `No matches found in page ${page}`, "error")
         }
     }
 
@@ -107,17 +111,20 @@ class Team extends Component {
             const responseTeam = await fetch(urlTeam + this.props.params.id);
 
             if (responseTeam.ok) {
-                this.setState({ team: await responseTeam.json(), teamNotLoaded: false});
+                await this.setMatches(1);
+                this.setState({ team: await responseTeam.json(), teamNotLoaded: false, pageNotLoaded: false});
+            } else {
+                this.props.navigate("/404");
             }
         } catch (e) {
-            console.log(e);
+            this.props.navigate("/");
         }
     }
     render() {
         return (
             <ThemeProvider theme={theme}>
                 
-                {this.state.isTeamNotLoaded ?
+                {this.state.pageNotLoaded ?
                     <Loading />
                     :
                     <Box display="flex" flexDirection="row" columnGap={2}>

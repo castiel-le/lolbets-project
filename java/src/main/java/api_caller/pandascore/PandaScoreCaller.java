@@ -92,19 +92,23 @@ public class PandaScoreCaller {
         JsonNode matchData;
         int i = 0;
         while ((matchData = jsonArray.get(i)) != null) {
-            // Get match date
-            String strDate = matchData.get("scheduled_at").asText();
-            Date date = getDate(strDate);
+            try {
+                // Get match date
+                String strDate = matchData.get("scheduled_at").asText();
+                Date date = getDate(strDate);
 
-            // Get teams in the match
-            String team1 = matchData.get("opponents").get(0).get("opponent").get("acronym").asText();
-            String team2 = matchData.get("opponents").get(1).get("opponent").get("acronym").asText();
+                // Get teams in the match
+                String team1 = matchData.get("opponents").get(0).get("opponent").get("acronym").asText();
+                String team2 = matchData.get("opponents").get(1).get("opponent").get("acronym").asText();
 
-            // Get PandaScore match id
-            int id = matchData.get("id").asInt();
+                // Get PandaScore match id
+                int id = matchData.get("id").asInt();
 
-            // Add match to list
-            upcomingMatches.add(new UpcomingMatch(date, team1, team2, id));
+                // Add match to list
+                upcomingMatches.add(new UpcomingMatch(date, team1, team2, id));
+            } catch(NullPointerException e) {
+                System.out.println("Skipped: " + matchData);
+            }
             i++;
         }
         return upcomingMatches;
@@ -192,16 +196,20 @@ public class PandaScoreCaller {
         JsonNode teamData;
         int i = 0;
         while ((teamData = jsonArray.get(i)) != null) {
-            // Only get team that matches the country, or any if cc is empty
-            if (teamData.get("location").asText().equals(cc) || cc.isEmpty()) {
-                teams.add(new Team(
-                        0,
-                        teamData.get("name").asText(),
-                        teamData.get("image_url").asText(),
-                        teamData.get("acronym").asText(),
-                        0,
-                        0
-                ));
+            try {
+                // Only get team that matches the country, or any if cc is empty
+                if (teamData.get("location").asText().equals(cc) || cc.isEmpty()) {
+                    teams.add(new Team(
+                            0,
+                            teamData.get("name").asText(),
+                            teamData.get("image_url").asText(),
+                            teamData.get("acronym").asText(),
+                            0,
+                            0
+                    ));
+                }
+            } catch (NullPointerException e) {
+                System.out.println("Skipped:" + teamData);
             }
             i++;
         }

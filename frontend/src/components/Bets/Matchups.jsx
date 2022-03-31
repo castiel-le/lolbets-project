@@ -4,7 +4,7 @@ import { getFormattedDate, getGameStartTimeObject, sortMatchesByDate } from './h
 
 import BetBox from './BetBox'
 import PlaceBetPopup from './BetCreation/PlaceBetPopup';
-import { Box, ListItem, List } from '@mui/material';
+import { Box, ListItem, List, Tab, TabsContext } from '@mui/material';
 import { DateText } from './styledElements';
 import { HorizontalDivider, Loading, TypographyBold } from '../customUIComponents';
 import '../../fonts/fonts.module.css';
@@ -12,10 +12,9 @@ import { SnackbarContext } from '../Snackbar/SnackbarContext'
 
 import withRouter from '../withRouter';
 import CreateBetButton from './BetCreation/CreateBetButton';
+import CreateBetPopup from './BetCreation/CreateBetPopup';
 
-class AllBets extends Component {
-
-    static contextType = SnackbarContext;
+class Matchups extends Component {
 
     constructor(props) {
         super(props);
@@ -26,7 +25,7 @@ class AllBets extends Component {
             upcomingMatchesByDate: [],
             noUpcomingGames: false,
             allFetchedDates: [0],
-            lastFetchedDate: new Date().setHours(0, 0, 0, 0),
+            lastFetchedDate: new Date(1648184400000).setHours(0, 0, 0, 0),
             fetching: false,
             mounted: true,
             userCurrentBets: [],
@@ -211,7 +210,7 @@ class AllBets extends Component {
         return false;
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
         // mitigates a refresh bug
         // If this is not here then when the user refreshes their current bets won't show
         if (prevProps.user !== this.props.user) {
@@ -285,6 +284,8 @@ class AllBets extends Component {
                                                             selectBet={this.selectBet}
                                                             betID={betID}
                                                             existingBet={existingBet}
+                                                            team1Bet={match.team1Total}
+                                                            totalBet={match.total_bet}
                                                         />
                                                     </ListItem>
                                                 )
@@ -310,11 +311,20 @@ class AllBets extends Component {
                     existingBets={this.state.userCurrentBets}
                 />
 
-                <CreateBetButton createBet={this.showCreateBetPopup}/>
-                
+                <CreateBetButton createBet={this.createBet}/>
+
+                <CreateBetPopup 
+                    open={this.state.showCreateBetPopup} 
+                    closeCreateBet={() => this.setState({showCreateBetPopup: false})}
+                    dates={this.state.upcomingMatchesByDate}
+                    user={this.props.user}
+                />
+
             </Fragment>
         );
     }
 }
 
-export default withRouter(AllBets);
+Matchups.contextType = SnackbarContext;
+
+export default withRouter(Matchups);

@@ -12,7 +12,9 @@ export default class AllBets extends Component {
                 </TypographyMedium>
                 <Grid container>
                     {this.props.bets.map(bet => 
-                        <BetHistoryBox bet={bet} key={bet.bet_participant_id} />
+                        bet.match ?
+                            <BetHistoryBox bet={bet} key={bet.bet_participant_id} />
+                            : null
                     )}
 
                 </Grid >

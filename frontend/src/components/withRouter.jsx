@@ -10,7 +10,7 @@ export default function withRouter( Child ) {
     // eslint-disable-next-line react/display-name
     return ( props ) => {
         const params = useParams();
-        const navigate = useNavigate();
+        let navigate = useNavigate();
         return <Child { ...props } params ={ params } navigate={navigate} />;
     }
 }

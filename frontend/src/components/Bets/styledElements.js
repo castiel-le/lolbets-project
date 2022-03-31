@@ -164,10 +164,10 @@ export function TimeBox(props) {
 export function BetComparisonBar(props) {
   
     return (
-        <FlexBoxRow width='100%' height={26}>
+        <FlexBoxRow width='100%' height={26} sx={{visibility: props.visibility ? "visible" : "hidden"}}>
             <FlexBoxRow 
                 backgroundColor='#900A22' 
-                width={props.team1Percent + '%'}
+                width={props.team1Percent !== 0 ? props.team1Percent + '%' : "auto"}
                 sx={{
                     borderTopLeftRadius: '25px', 
                     borderBottomLeftRadius: '25px', 
@@ -176,20 +176,21 @@ export function BetComparisonBar(props) {
                 }}
             >
                 <TypographyLight fontSize={14}>
-                    {props.team1Percent}
+                    {props.team1Percent}%
                 </TypographyLight>
             </FlexBoxRow>
             <FlexBoxRow 
                 backgroundColor='#445BC1' 
                 flexGrow={1} 
+                width={props.team1Percent !== 100 ? 100 - props.team1Percent + '%' : "auto"}
                 sx={{
                     borderTopRightRadius: '25px', 
                     borderBottomRightRadius: '25px', 
-                    justifyContent: 'center', 
+                    justifyContent: 'center',
                     alignItems: 'center'
                 }}>
                 <TypographyLight fontSize={14}>
-                    {100 - props.team1Percent}
+                    {100 - props.team1Percent}%
                 </TypographyLight>
             </FlexBoxRow>
         </FlexBoxRow>

@@ -144,6 +144,7 @@ router.get("/user/top5", async (req, res) => {
     try {
         res.json(await dbFetch.getTop5Users());
     } catch(e){
+        console.log(e);
         res.sendStatus(404);
     }
 });
@@ -233,16 +234,14 @@ router.put("/custombets", async (req, res) => {
         if (!req.body) {
             res.sendStatus(404);
         }
-
         if (req.body.creator_id && req.body.category_id && req.body.match_id && req.body.win_conditions) {
-            const response = await dbFetch.createCustomBet(req.body.creator_id, req.body.category_id, req.body.match_id, req.body.win_conditions);
-            res.sendStatus(response ? 200 : 404);
-        } else if (req.body.bet_id && req.body.category_id && req.body.win_conditions) {
-            const response = await dbFetch.editExistingCustomBet(req.body.bet_id, req.body.category_id, req.body.win_conditions);
-            res.sendStatus(response ? 200 : 404);
-        }
-        else {
-            res.sendStatus(404);
+            const response = await dbFetch.createCustomBet(
+                req.body.creator_id, 
+                req.body.category_id, 
+                req.body.match_id, 
+                req.body.win_conditions
+            );
+            response.ok ? res.sendStatus(200) : res.sendStatus(404);
         }
     } catch(e){
         res.sendStatus(404);
@@ -259,8 +258,7 @@ router.delete("/custombets", async (req, res) => {
         if (req.body.bet_id) {
             const response = await dbFetch.destroyExistingCustomBet(req.body.bet_id);
             res.sendStatus(response ? 200 : 404);
-        }
-        else {
+        } else {
             res.sendStatus(404);
         }
     } catch (e){
@@ -387,6 +385,26 @@ router.delete("/bans", async (req, res) => {
             res.sendStatus(404);
         }
     } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+router.get("/categories", async (req, res) => {
+    try {
+        res.json(await dbFetch.getCategories());
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+router.get("/payout", async (req, res) => {
+    if (!req.query.time1 || !req.query.amount) {
+        res.sendStatus(404);
+    }
+    try {
+        res.json(await dbFetch.getPayoutPercentageCustomBet(req.query.time1, req.query.amount, req.query.time2));
+    } catch (e){
+        console.log(e);
         res.sendStatus(404);
     }
 })

@@ -86,13 +86,7 @@ test("Gets all bets from a user with match data", async () => {
     expect(response.type).toMatch("application/json");
     expect(response.body[0].team_betted_on).toBeTruthy;
 })
-// Await for custom bets feature to work
-// test("Gets all CUSTOM bets from a user with match data", async () => {
-//     const response = await request.get("/api/custombets/28");
-//     expect(response.status).toBe(200);
-//     expect(response.type).toMatch("application/json");
-//     console.log(response.body[0]);
-// })
+
 
 test("Gets teams history matches by id endpoint", async () => {
     const response = await request.get("/api/teams/history/819?page=1");

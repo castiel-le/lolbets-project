@@ -17,7 +17,6 @@ CREATE TABLE `users` (
   `banned` tinyint(1) DEFAULT (false),
   `user_role` varchar(20) NOT NULL DEFAULT 'user',
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
 );
 
