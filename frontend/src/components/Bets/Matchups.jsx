@@ -284,6 +284,8 @@ class Matchups extends Component {
                                                             selectBet={this.selectBet}
                                                             betID={betID}
                                                             existingBet={existingBet}
+                                                            team1Bet={match.team1Total}
+                                                            totalBet={match.total_bet}
                                                         />
                                                     </ListItem>
                                                 )

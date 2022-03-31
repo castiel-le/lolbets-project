@@ -1,7 +1,9 @@
 import { Component } from "react";
-import minorStyling from "./minorStyling.css";
+import { SnackbarContext } from "../Snackbar/SnackbarContext";
 
 class Search extends Component {
+    static contextType = SnackbarContext;
+
     constructor(props){
         super(props);
         this.state = {
@@ -20,18 +22,28 @@ class Search extends Component {
     }
 
     setLoadingToTrue(){
-        this.props.updateLoadingState(true);
+        // check if string is not all whitespace
+        if (this.state.keyword.replace(/\s/g, '').length > 0) {
+            this.props.updateLoadingState(true);
+        } else {
+            this.context.setSnackbar(true, "Cannot search with an empty input", "error");
+        }
     }
 
     async submit(event){
         event.preventDefault();
-        let searchURL = "/api/user/search";
-        let searchResults = await fetch(searchURL + "?keyword=" + this.state.keyword);
-        if (searchResults.ok){
-            this.props.updateUsersState(await searchResults.json());
-            this.props.updateLoadingState(false);
-        } else {
-            console.error("Something went wrong.");
+
+        // check if string is not all whitespace
+        if (this.state.keyword.replace(/\s/g, '').length > 0) {
+            let searchURL = "/api/user/search";
+            let searchResults = await fetch(searchURL + "?keyword=" + this.state.keyword);
+            if (searchResults.ok){
+                this.props.updateUsersState(await searchResults.json());
+                this.props.updateLoadingState(false);
+            } else {
+                console.error("Something went wrong.");
+                this.context.setSnackbar(true, "Something went wrong. Please try searching again", "error");
+            }
         }
     }
 

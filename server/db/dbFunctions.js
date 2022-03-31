@@ -98,7 +98,7 @@ async function getMatchesBetween(afterthis, beforethis) {
             ["match_start_time", "ASC"]
         ]
     });
-    return await swapTeamData(await getBetIDForMatches(matches));
+    return await getBetAmount(await swapTeamData(await getBetIDForMatches(matches)));
 }
 
 //Function to get total number of matches played for a specific team
@@ -278,18 +278,6 @@ async function getAllBetsForUser(userID) {
     return allBets;
 }
 
-async function getBetIDForMatches(matches) {
-    for (let i = 0; i < matches.length; i++) {
-        const betID = await models.Bet.findOne({
-            where: {
-                match_id: matches[i].dataValues.match_id,
-            }
-        });
-        matches[i].dataValues.bet = betID;
-    }
-    return matches;
-}
-
 //Function to get user's bets history by id and with pagination
 async function getUserBetsById(id, page, limit) {
     const limitNum = parseInt(limit);
@@ -298,7 +286,10 @@ async function getUserBetsById(id, page, limit) {
         offset: limitNum * (pageNum - 1),
         limit: limitNum,
         where: {
-            user_id: id
+            user_id: id,
+            team_betted_on: {
+                [Op.not]: null
+            }
         },
         order: [
             ["creation_date", "DESC"]
@@ -351,6 +342,42 @@ async function swapTeamData(matches){
         let team2string = await getTeamById(matches[i].dataValues.team2_id);
         matches[i].dataValues.team1_id = team1string;
         matches[i].dataValues.team2_id = team2string;
+    }
+    return matches;
+}
+
+async function getBetIDForMatches(matches) {
+    for (let i = 0; i < matches.length; i++) {
+        const betID = await models.Bet.findOne({
+            where: {
+                match_id: matches[i].dataValues.match_id,
+            }
+        });
+        matches[i].dataValues.bet = betID;
+    }
+    return matches;
+}
+
+// Helper function to get total bet amount and total bet amount in team 1
+async function getBetAmount(matches) {
+    for (let i = 0; i < matches.length; i++) {
+        try {
+            const total = await models.BetParticipant.sum("amount_bet", {
+                where: {
+                    bet_id: matches[i].dataValues.bet.dataValues.bet_id
+                } 
+            });
+            const team1Total = await models.BetParticipant.sum("amount_bet", {
+                where: {
+                    team_betted_on: matches[i].dataValues.team1_id.dataValues.team_id,
+                    bet_id: matches[i].dataValues.bet.dataValues.bet_id
+                }
+            })
+            matches[i].dataValues.total_bet = total;
+            matches[i].dataValues.team1Total = team1Total;
+        } catch (e) {
+            continue;
+        }
     }
     return matches;
 }
