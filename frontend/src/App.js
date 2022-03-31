@@ -68,8 +68,8 @@ function App() {
                         <Route path='/bets/:id' element={<h1> Bet Number </h1>} />
                         <Route path='/bets/create' element={<h1> Create Bet </h1>} />
                         <Route path='/bets/edit/:id' element={<h1> Edit Bet Number </h1>} />
-                        <Route path='/profile' element={<Profile user={user} />} />
-                        <Route path='/user/:id' element={<Profile user={user} />} />
+                        <Route path='/profile' element={<Profile user={user} key="profile"/>} />
+                        <Route path='/user/:id' element={<Profile user={user} key="user"/>} />
                         <Route path='/user/:id/history' element={<UserBetHistory  user={user} />} />
                         <Route path='/leaderboard' element={<Leaderboard  user={user} />} />
                         <Route path='/teams' element={<Teams  user={user} />} />
