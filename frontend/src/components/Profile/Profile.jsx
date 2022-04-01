@@ -13,6 +13,7 @@ import defaultBanner from "./images/defaultBanner.png";
 import BetHistory from "./BetsHistory/BetHistory";
 import UserInfo from "./UserInfo/UserInfo";
 import ModButtons from "./ModButtons/ModButtons";
+import { Loading } from "../customUIComponents";
 
 class Profile extends Component {
     constructor(props) {
@@ -47,15 +48,22 @@ class Profile extends Component {
     }
 
     /**
-     * Checks if previous prop's user changed. If it changed, update
+     * Checks if previous prop's user changed. If it changed, update    
      * the state of this component.
      * @param {*} prevProps previous props
      * @param {*} prevState previous state
      */
     async componentDidUpdate(prevProps, prevState) {
+        if (prevProps.key !== this.props.key) {
+            setUserInfoLoading(true);
+        }
         if (prevProps.user !== this.props.user) {
             await this.updateState();
         }
+    }
+
+    setUserInfoLoading(status) {
+        this.setState({isUserInfoLoading: status})
     }
 
     async updateState() {
@@ -133,85 +141,89 @@ class Profile extends Component {
 
         return (
             <Fragment>
-                <FlexBoxColumn width='82%' mx='auto' backgroundColor='#1E2A32'>
-                    <Paper variant="outlined">
-                        <img src={this.state.banner} alt="banner" height='256px'/>
-                    </Paper>
-                    <Grid container maxHeight={128}>
-                        <Grid item xs={4}>
-                            {/*Space*/}
-                        </Grid>
-                        <Grid item xs={4} display="flex" justifyContent="center">
-                            <Avatar src={this.state.userInfo.profile_pic}
-                                sx={{width: '256px', height: '256px', 
-                                    mx: 'auto', transform: 'translate(1px, -128px)'}}
-                            />
-                        </Grid>
-                        <Grid item xs={4} display="flex" 
-                            style={{flexFlow: "row-reverse wrap"}}
-                            justifyContent="flex-start"
-                            alignItems="flex-start">
-                            {this.props.params.id
-                                ?
-                                <Button variant='contained' startIcon={<AddReactionIcon />} 
-                                    sx={{backgroundColor: 'rgb(0,100,100)', 
-                                        ':hover': {backgroundColor: 'rgb(0,200,200)'}, 
-                                        display: {xs: 'none', md: 'inherit'}}}
-                                    maxHeight={50}
-                                    marginRight={1}>
-                                    <TypographyLight >
+                {this.state.isUserInfoLoading
+                    ? <Loading />
+                    :
+                    <FlexBoxColumn width='82%' mx='auto' backgroundColor='#1E2A32'>
+                        <Paper variant="outlined">
+                            <img src={this.state.banner} alt="banner" height='256px'/>
+                        </Paper>
+                        <Grid container maxHeight={128}>
+                            <Grid item xs={4}>
+                                {/*Space*/}
+                            </Grid>
+                            <Grid item xs={4} display="flex" justifyContent="center">
+                                <Avatar src={this.state.userInfo.profile_pic}
+                                    sx={{width: '256px', height: '256px', 
+                                        mx: 'auto', transform: 'translate(1px, -128px)'}}
+                                />
+                            </Grid>
+                            <Grid item xs={4} display="flex" 
+                                style={{flexFlow: "row-reverse wrap"}}
+                                justifyContent="flex-start"
+                                alignItems="flex-start">
+                                {this.props.params.id
+                                    ?
+                                    <Button variant='contained' startIcon={<AddReactionIcon />} 
+                                        sx={{backgroundColor: 'rgb(0,100,100)', 
+                                            ':hover': {backgroundColor: 'rgb(0,200,200)'}, 
+                                            display: {xs: 'none', md: 'inherit'}}}
+                                        maxHeight={50}
+                                        marginRight={1}>
+                                        <TypographyLight >
                                         Follow
-                                    </TypographyLight>
-                                </Button>
-                                : null
-                            }
+                                        </TypographyLight>
+                                    </Button>
+                                    : null
+                                }
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <FlexBoxColumn justifyContent={'center'} 
-                        my='24px' width={'fit-content'} height="32px" mx='auto'>
-                        <TypographyBold fontSize='32px'>
-                            {this.state.userInfo.username}
-                        </TypographyBold>
-                        <HorizontalDivider width='100%' />
-                    </FlexBoxColumn>
-                    {showModActions
-                        ?
-                        <FlexBoxRow my="auto" 
-                            alignSelf="center" marginTop={1} marginBottom={1}>
-                            <ModButtons 
-                                userInfo={this.state.userInfo} 
-                                fetchUserInfo={this.fetchUserInfo} />
-                        </FlexBoxRow>  
-                        : null
-                    }    
-                    {this.state.userInfo.banned
-                        ? 
-                        <FlexBoxColumn my="auto" alignSelf="center" marginTop={1} marginBottom={1}>
-                            <TypographyBold fontSize='32px' align="center" style={styleBanText}>
+                        <FlexBoxColumn justifyContent={'center'} 
+                            my='24px' width={'fit-content'} height="32px" mx='auto'>
+                            <TypographyBold fontSize='32px'>
+                                {this.state.userInfo.username}
+                            </TypographyBold>
+                            <HorizontalDivider width='100%' />
+                        </FlexBoxColumn>
+                        {showModActions
+                            ?
+                            <FlexBoxRow my="auto" 
+                                alignSelf="center" marginTop={1} marginBottom={1}>
+                                <ModButtons 
+                                    userInfo={this.state.userInfo} 
+                                    fetchUserInfo={this.fetchUserInfo} />
+                            </FlexBoxRow>  
+                            : null
+                        }    
+                        {this.state.userInfo.banned
+                            ? 
+                            <FlexBoxColumn my="auto" alignSelf="center" marginTop={1} marginBottom={1}>
+                                <TypographyBold fontSize='32px' align="center" style={styleBanText}>
                                 Banned: {this.state.userInfo.banned.reason}
-                            </TypographyBold>
-                        </FlexBoxColumn>
-                        : null
-                    } 
-                    {this.state.userInfo.timeout
-                        ? 
-                        <FlexBoxColumn my="auto" alignSelf="center" marginTop={1} marginBottom={1}>
-                            <TypographyBold fontSize='32px' color="red" align="center" style={styleTimeoutText}>
+                                </TypographyBold>
+                            </FlexBoxColumn>
+                            : null
+                        } 
+                        {this.state.userInfo.timeout
+                            ? 
+                            <FlexBoxColumn my="auto" alignSelf="center" marginTop={1} marginBottom={1}>
+                                <TypographyBold fontSize='32px' color="red" align="center" style={styleTimeoutText}>
                                     Timeout: {this.state.userInfo.timeout.reason}
-                            </TypographyBold>
-                            <TypographyBold fontSize='32px' color="red" align="center" style={styleTimeoutText}>
+                                </TypographyBold>
+                                <TypographyBold fontSize='32px' color="red" align="center" style={styleTimeoutText}>
                                     Duration: {new Date(this.state.userInfo.timeout.end_date).toLocaleDateString()}
-                            </TypographyBold>
-                        </FlexBoxColumn>
-                        : null
-                    }
+                                </TypographyBold>
+                            </FlexBoxColumn>
+                            : null
+                        }
                     
-                    <UserInfo userInfo={this.state.userInfo} />
-                    <HorizontalDivider width='100%' />
-                    <BetHistory bets={this.state.bets}
-                        id={this.state.userInfo.user_id}
-                        isBetsInfoLoading={this.state.isBetsInfoLoading} />
-                </FlexBoxColumn>
+                        <UserInfo userInfo={this.state.userInfo} />
+                        <HorizontalDivider width='100%' />
+                        <BetHistory bets={this.state.bets}
+                            id={this.state.userInfo.user_id}
+                            isBetsInfoLoading={this.state.isBetsInfoLoading} />
+                    </FlexBoxColumn>
+                }
             </Fragment>
         );
     }
