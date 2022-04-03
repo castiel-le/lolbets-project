@@ -479,6 +479,71 @@ router.get("/payout", async (req, res) => {
     }
 })
 
+//route to check if a user is following another user
+router.get("/follow/check", async (req, res) => {
+    try {
+        if (req.query.follower_id && req.query.following_id) {
+            res.json(await dbFetch.checkIfFollowing(req.query.follower_id, req.query.following_id));
+        } else {
+            res.sendStatus(404);
+        }
+    } catch(e){
+        res.sendStatus(404);
+    }
+})
+
+//route to get all people the given user is following
+router.get("/follow/:id", async (req, res) => {
+    try {
+        res.json(await dbFetch.getAllFollowing(req.params.id));
+    } catch(e){
+        res.sendStatus(404);
+    }
+})
+
+//route to follow
+router.put("/follow", async (req, res) => {
+    try {
+        if (!req.body){
+            res.sendStatus(404);
+        }
+        if (req.body.follower_id && req.body.following_id){
+            const response = await dbFetch.followUser(req.body.follower_id, req.body.following_id);
+            res.sendStatus(response ? 200 : 404);
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+//route to unfollow
+router.delete("/follow", async (req, res) => {
+    try {
+        if (!req.body){
+            res.sendStatus(404);
+        }
+        if (req.body.follower_id && req.body.following_id){
+            const response = await dbFetch.unfollowUser(req.body.follower_id, req.body.following_id);
+            res.sendStatus(response ? 200 : 404);
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
+//route to get the most recent bet from all the people a user is following
+router.get("/user/:id/recent", async (req, res) => {
+    try {
+        if (req.params.id) {
+            res.json(await dbFetch.getAllFollowingRecentBet(req.params.id));
+        } else {
+            res.sendStatus(404);
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+})
+
 module.exports = [
     router,
 ]

@@ -785,6 +785,121 @@ async function getPayoutPercentageCustomBet(time1, amount, time2) {
     return returnObject;
 }
 
+/**
+ * Makes a user follow another user
+ * @param {Number} follower_id Person who's following id
+ * @param {Number} following_id Person followed id
+ * @returns Followed row
+ */
+async function followUser(follower_id, following_id) {
+    const follow = await models.Follow.create({
+        follower_id: follower_id,
+        following_id: following_id
+    });
+    return follow;
+}
+
+/**
+ * Unfollow a user
+ * @param {Number} follower_id Person who's following id
+ * @param {Number} following_id Person followed id
+ * @returns Unfollowed row
+ */
+async function unfollowUser(follower_id, following_id) {
+    const unfollow = await models.Follow.destroy({
+        where: {
+            follower_id: follower_id,
+            following_id: following_id
+        }
+    });
+    return unfollow;
+}
+
+/**
+ * Get all users a user is following
+ * @param {Number} follower_id Person who follows
+ * @returns All Following users
+ */
+async function getAllFollowing(follower_id) {
+    const follows = await models.Follow.findAll({
+        where: {
+            follower_id: follower_id
+        }
+    });
+    return follows;
+}
+
+/**
+ * Check if a user is following another user
+ * @param {Number} follower_id 
+ * @param {Number} following_id 
+ * @returns 
+ */
+async function checkIfFollowing(follower_id, following_id) {
+    try {
+        const checkFollow = await models.Follow.findAll({
+            where: {
+                follower_id: follower_id,
+                following_id: following_id
+            }
+        });
+        if (checkFollow.length > 0) {
+            return {"result": true};
+        } else {
+            return {"result": false};
+        }
+    } catch(e) {
+        res.sendStatus(404);
+    }
+}
+
+/**
+ * Gets a user's most recent bet
+ * @param {Number} user_id User to get most recent bet
+ * @returns Given user's most recent bet
+ */
+async function getUserMostRecentBet(user_id) {
+    const recentBet = await models.BetParticipant.findOne({
+        where: {
+            user_id: user_id,
+            team_betted_on: {
+                [Op.not]: null
+            }
+        },
+        order: [
+            ["creation_date", "DESC"]
+        ]
+    })
+    return recentBet;
+}
+
+async function getMatchByBetId(bet_id) {
+    const bet = await models.Bet.findOne({
+        where: {
+            bet_id: bet_id
+        }
+    });
+    const match = await this.getMatchById(bet.dataValues.match_id);
+    return match;
+}
+
+/**
+ * Gets all following's most recent bet, with match data
+ * @param {Number} follower_id Follower to get all following's recent bets
+ * @returns Most recent following bets
+ */
+async function getAllFollowingRecentBet(follower_id) {
+    const follows = await this.getAllFollowing(follower_id);
+    for (let i = 0; i < follows.length; i++) {
+        follows[parseInt(i)].dataValues.mostRecentBet = await this.getUserMostRecentBet(follows[parseInt(i)].dataValues.following_id);
+        follows[parseInt(i)].dataValues.following_id = await this.getUserById(follows[parseInt(i)].dataValues.following_id); 
+        if (follows[parseInt(i)].dataValues.mostRecentBet !== null) {
+            follows[parseInt(i)].dataValues.mostRecentBet.dataValues.matchData = await this.getMatchByBetId(follows[parseInt(i)].dataValues.mostRecentBet.dataValues.bet_id);
+        }
+    }
+    return follows;
+}
+
 // eslint-disable-next-line max-len
 module.exports = { deleteBan, deleteTimeout, createTimeout, createBan, getAllTimeouts,
     getAllBans, getAllBetsForUser, createFederatedCredentials, createUser, isUserExist,
@@ -793,4 +908,5 @@ module.exports = { deleteBan, deleteTimeout, createTimeout, createBan, getAllTim
     getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users,
     getRemainingUsers, getNumOfUsers, searchUsersByKeyword, getAllBetsForUserWithMatchData,
     createCustomBet, destroyExistingCustomBet, getAllCustomBetsForUserWithMatchData,
-    getCategories, getPayoutPercentageCustomBet};
+    getCategories, getPayoutPercentageCustomBet, followUser, unfollowUser, getAllFollowing,
+    checkIfFollowing, getUserMostRecentBet, getAllFollowingRecentBet};
