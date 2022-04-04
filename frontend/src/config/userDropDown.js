@@ -1,2 +1,2 @@
-export const settings = ['Profile', 'Friends', 'Bet History', 'Logout'];
-export const settingLink = ['/profile', '/friends', '/user/:id/history', '/logout']
+export const settings = ['Profile', 'Bet History', 'Logout'];
+export const settingLink = ['/profile', '/user/:id/history', '/logout']

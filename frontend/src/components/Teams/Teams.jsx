@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Container, Typography, Grid } from "@mui/material";
+import { Loading } from "../customUIComponents";
 import TeamCard from "./Card/TeamCard";
 import DynamicAutoSearchBar from "./Search/DynamicAutoSearchBar";
 import { SnackbarContext } from "../Snackbar/SnackbarContext";
@@ -15,7 +16,7 @@ export default class Teams extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { teams: [], filterName: "" };
+        this.state = { teams: [], filterName: "", isFetching: true };
         this.onSearch = this.onSearch.bind(this);
     }
 
@@ -31,12 +32,14 @@ export default class Teams extends Component {
             const response = await fetch(url);
 
             if (response.ok) {
-                this.setState({ teams: await response.json() });
+                this.setState({ teams: await response.json(), isFetching: false });
             } else {
                 this.context.setSnackbar(true, "No teams available", "error");
+                this.setState({isFetching: false});
             }
         } catch (e) {
             this.context.setSnackbar(true, "Cannot get teams. Please try again", "error");
+            this.setState({isFetching: false});
             console.log("Cannot get teams");
         }
     }
@@ -56,19 +59,22 @@ export default class Teams extends Component {
     
         return (
             <ThemeProvider theme={theme}>
-                <Container>     
-                    <Typography variant="h4" component="h2" style={styleLabel}>All Teams</Typography>
-                    <DynamicAutoSearchBar onSearch={this.onSearch} teams={this.state.teams} />
-                    <Grid container spacing={4} marginTop={2}>
-                        {this.state.teams.filter(team => team.team_name.toLowerCase().
-                            includes(this.state.filterName.toLowerCase())).
-                            map((team) =>
-                                <Grid item xs={12} sm={6} md={4} key={team.team_id}>
-                                    <TeamCard team={team} />
-                                </Grid>
-                            )}
-                    </Grid>
-                </Container>
+                {this.state.isFetching
+                    ? <Loading />
+                    :<Container>     
+                        <Typography variant="h4" component="h2" style={styleLabel}>All Teams</Typography>
+                        <DynamicAutoSearchBar onSearch={this.onSearch} teams={this.state.teams} />
+                        <Grid container spacing={4} marginTop={2}>
+                            {this.state.teams.filter(team => team.team_name.toLowerCase().
+                                includes(this.state.filterName.toLowerCase())).
+                                map((team) =>
+                                    <Grid item xs={12} sm={6} md={4} key={team.team_id}>
+                                        <TeamCard team={team} />
+                                    </Grid>
+                                )}
+                        </Grid>
+                    </Container>
+                }
             </ThemeProvider>
         );
     }

@@ -826,8 +826,13 @@ async function getAllFollowing(follower_id) {
             follower_id: follower_id
         }
     });
+    for (let i = 0; i < follows.length; i++) {
+        follows[i].dataValues.user = await getUserById(follows[i].dataValues.following_id);
+    }
     return follows;
 }
+
+
 
 /**
  * Check if a user is following another user
