@@ -1,17 +1,16 @@
 import { Component } from "react";
 import {Link} from "react-router-dom";
-import { Typography, CardMedia, Card, CardContent } from "@mui/material";
+import { CardMedia, Card, CardContent } from "@mui/material";
+import { TypographyBold } from "../../customUIComponents";
 
 export default class TeamCard extends Component {
     render() {
     // styling
         const stylingCard = { height: '100%', display: 'flex', 
             flexDirection: 'column', boxShadow: 10, 
-            backgroundColor: "#223039",
-            ":hover": { backgroundColor: "#1E2A32" }
+            backgroundColor: "#334653",
+            ":hover": { backgroundColor: "#465f71" }
         };
-        const textColor = "#d1cdc7";
-        const styleLabel = {fontWeight: "bold", color: textColor};
         const styleLink = {textDecoration: "none"};
 
         // team's team page url
@@ -28,9 +27,9 @@ export default class TeamCard extends Component {
                         alt="no logo" />
 
                     <CardContent sx={{ flexGrow: 1 }}>
-                        <Typography variant="h5" component="h2" style={styleLabel}>
+                        <TypographyBold variant="h5">
                             {this.props.team.team_name}
-                        </Typography>
+                        </TypographyBold>
                     </CardContent>
                 </Card>
             </Link>

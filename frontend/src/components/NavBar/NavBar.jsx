@@ -21,6 +21,8 @@ import { Google, Menu as MenuIcon } from '@mui/icons-material';
 
 import DiamondIcon from "@mui/icons-material/Diamond";
 import {FlexBoxColumn, FlexBoxRow, HorizontalDivider, TypographyMedium} from '../customUIComponents';
+import GroupsIcon from '@mui/icons-material/Groups';
+import Following from "../Following/Following";
 
 // Custom components imports
 import SideDrawer from "./SideDrawer";
@@ -119,6 +121,7 @@ class NavBar extends Component {
             openUserMenu: false,
             sideMenuOpen: false,
             userInfo: null,
+            followingOpen: false,
         };
 
         this.handleOpenUserMenu = this.handleOpenUserMenu.bind(this);
@@ -244,10 +247,13 @@ class NavBar extends Component {
                                     </NavLink>
                                 )}
                             </Box>
-
                             {this.props.user.id && this.state.userInfo !== null
                                 ?
                                 <Fragment>
+                                    <Following open={this.state.followingOpen} onClose={() => this.setState({followingOpen: false})} user={this.props.user}/>
+                                    <Button sx={{color: "unset"}} onClick={() => this.setState({followingOpen: true})}>
+                                        <GroupsIcon />
+                                    </Button>
                                     <AccountBalance user={this.props.user}/>
                                     <UserAvatar 
                                         openUserMenu={this.state.openUserMenu} 

@@ -14,7 +14,7 @@ import UserBetHistory from './components/UserBetHistory/UserBetHistroy';
 import SearchResults from './components/Leaderboard/SearchResults'
 import { SnackbarContainer } from './components/Snackbar/SnackbarContext';
 import SnackbarAlert from './components/Snackbar/SnackbarAlert';
-import Logout from "./components/Logout/Logout"
+import Logout from "./components/Logout/Logout";
 
 function App() {
     const [user, setUser] = useState({id: null, role: null, coins: 0, isLoaded: false});

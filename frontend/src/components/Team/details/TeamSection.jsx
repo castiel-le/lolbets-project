@@ -9,11 +9,10 @@ export default class TeamSection extends Component {
     render() {
     // Styling
         const textColor = "#d1cdc7";
-        const styleHeader = {backgroundColor: "#6d530b", fontWeight: "bold", color: textColor};
+        const styleHeader = {backgroundColor: "#977623", fontWeight: "bold", color: textColor};
         const styleLabel = {fontWeight: "bold", color: textColor};
         const styleInfo = {color: textColor}
-        const styleBody = {backgroundColor: "#223039"};
-        const styleGrid = {backgroundColor: "#1e2a32"};
+        const styleBody = {backgroundColor: "rgb(36, 53, 64)"};
 
         return(
             <Box display="flex" flexDirection="column" style={styleBody} alignSelf="flex-start">
@@ -21,11 +20,11 @@ export default class TeamSection extends Component {
                 <img src={this.props.team.logo} 
                     alt="logo" width={400} height={400} loading="lazy"/>
                 <Typography variant="h5" noWrap style={styleHeader}>Team Information</Typography>
-                <Grid container columnSpacing={1} style={styleGrid}>
+                <Grid container columnSpacing={1} style={styleBody}>
                     <Grid item xs={6} justifyContent="flex-end" display="flex">
                         <Typography variant="p1" noWrap style={styleLabel}>Abbreviation:</Typography>
                     </Grid>
-                    <Grid item xs={6} justifyContent="flex-start" display="flex">
+                    <Grid item xs={6} justifyContent="flex-start" display="flex" >
                         <Typography variant="p1" noWrap align="left" style={styleInfo}>
                             {this.props.team.abbreviation}
                         </Typography>
