@@ -3,19 +3,21 @@
 }
 
 .App-logo {
+  margin-top: 50px;
   animation: jump 1s linear alternate infinite;
 }
 
 
 .App-header {
-  background-color: #282c34;
+  /*background-image: url("https://cdnb.artstation.com/p/assets/images/images/015/759/391/original/artur-sadlos-doublelift-unstoppable-league-of-legends-001.gif?1549533079&dl=1");*/
+  background-color: #0f1519;
   min-height: calc(100vh - 68.5px);
+  min-width: calc(100vh - 30px);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+
 }
 
 .App-link {
@@ -35,12 +37,48 @@
 }
 
 #desc {
-  margin: 2em 2em 0;
+  margin: 1em 1em 0;
+  margin-bottom: 2em;
   text-align: center;
   vertical-align: middle;
+  font-family:'Lemon-Milk-Medium';
+  font-size: 35px;
+  color:#917526;
+}
+
+#showcase {
+  margin: 1em 1em 0;
+  margin-top: 2em;
+  text-align: center;
+  vertical-align: middle;
+  font-family: 'Lemon-Milk-Medium';
+  color:#917526;
+  font-size: 25px;
 }
 
 body {
   text-align: center;
   background-color: #0f1519;
 }
+
+.slider {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  height: 30vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  max-height: 100%;
+
+}
+
+.image {
+  width: 100px;
+  border-radius: 10px;
+  margin-top: 2rem;
+  /*box-shadow: 0 0 8px 8px gray;*/
+  ;
+}
+

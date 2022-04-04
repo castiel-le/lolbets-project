@@ -300,4 +300,23 @@ const Category = sequelize.define("categories", {
     }
 }, {timestamps: false});
 
-module.exports = {Timeout, Ban, FederatedCredentials, Badge, Team, Match, User, BetParticipant, Bet, Category};
+const Follow = sequelize.define("follows", {
+    follow_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    follower_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false
+    },
+    following_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: false
+    }
+}, {timestamps: false})
+
+module.exports = {Timeout, Ban, FederatedCredentials, Badge, Team, Match, User, BetParticipant, Bet, Category, Follow};

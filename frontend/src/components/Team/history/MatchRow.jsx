@@ -1,18 +1,25 @@
 import { Component } from "react";
-import { TableRow, TableCell, Typography, Box, Grid } from "@mui/material";
+import { TableRow, TableCell, Box } from "@mui/material";
+import { TypographyBold, TypographyLight, FlexBoxRow, FlexBoxColumn } from "../../customUIComponents";
+
 /**
  * Component for displaying a row in MatchHistory.
  */
 export default class MatchRow extends Component {
     render() {
+        const result = this.props.column.winner_id === this.props.id
+            ? "Win"
+            : !this.props.column.winner_id
+                ? "Ongoing"
+                : "Lose";
         // Styling
         const textColor = "#d1cdc7";
         const styleInfo = { color: textColor };
         const styleCell = {borderBottom: 0};
-        const styleRow = this.props.column.winner_id === this.props.id ?
-            {borderColor: "darkGreen" }
-            : this.props.column.winner_id === null ?
-                {border: 0} : {borderColor: "darkRed" };
+        const resultColor = this.props.column.winner_id === this.props.id ?
+            "#04ff04" 
+            : !this.props.column.winner_id ?
+                "inherit" : "red";
 
         const team1IsCurrent = this.props.column.team1_id.team_id === this.props.id;
         
@@ -36,42 +43,38 @@ export default class MatchRow extends Component {
         }
         
         return (
-            <TableRow>
+            <TableRow style ={ this.props.changeBackground ? { background : "rgb(36, 53, 64)" } : { background : "inherit" }}>
                 <TableCell align="center" style={styleCell}>
-                    <Typography variant="p" style={styleInfo}>
-                        {new Date(this.props.column.match_start_time).toLocaleString()}
-                    </Typography>
+                    <TypographyBold sx={{color: resultColor}}>
+                        {result}
+                    </TypographyBold>
                 </TableCell>
-                <TableCell align="center" sx={styleRow}>
-                    <Grid container >
-                        <Grid item xs={2.25}>
-                            {/*padding*/}
-                        </Grid>
-                        <Grid item xs={1.5} justifyContent="flex-start" display="flex">
+                <TableCell align="center" style={{borderBottom: 0, marginLeft: 1}}>
+                    <FlexBoxRow width="100%">
+                        <FlexBoxColumn width="40%" alignItems="center" justifyContent="center">
                             <img src={currentTeamLogo}
                                 alt="logo" width={30} height={30} loading="lazy" />
-                        </Grid>
-                        <Grid item xs={1.5} justifyContent="flex-start" display="flex">
-                            <Typography variant="p" style={styleInfo}>
+                            <TypographyLight style={styleInfo}>
                                 {currentTeamAbbreviation}
-                            </Typography>                        </Grid>
-                        <Grid item xs={1.5} justifyContent="flex-start" display="flex">
-                            <Typography variant="p" style={styleInfo}>VS</Typography>
-                        </Grid>
-                        <Grid item xs={1.5} justifyContent="flex-start" display="flex">
-                            <Typography variant="p" style={styleInfo}>
-                                {opponentAbbreviation}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={1.5} justifyContent="flex-start" display="flex">
+                            </TypographyLight>   
+                        </FlexBoxColumn>
+                        <FlexBoxColumn width="20%" alignItems="center" justifyContent="center">
+                            <TypographyLight style={styleInfo}>VS</TypographyLight>
+                        </FlexBoxColumn>
+                        <FlexBoxColumn width="40%" alignItems="center" justifyContent="center">
                             <img src={opponentLogo}
                                 alt="logo" width={30} height={30} loading="lazy" />
-                        </Grid>
-                        
-                        
-                    
-                    </Grid>
+                            <TypographyLight style={styleInfo}>
+                                {opponentAbbreviation}
+                            </TypographyLight>
+                        </FlexBoxColumn>
+                    </FlexBoxRow>
                 </TableCell>
+                <TableCell style={styleCell}>
+                    <TypographyLight style={styleInfo} align="center">
+                        {new Date(this.props.column.match_start_time).toDateString()}
+                    </TypographyLight>
+                </TableCell> 
             </TableRow>
         );
     }

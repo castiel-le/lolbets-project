@@ -41,7 +41,7 @@ export default class MatchHistory extends Component {
     render() {
         // Styling
         const textColor = "#d1cdc7";
-        const styleHeader = {color: textColor, fontWeight: "bold", backgroundColor: "#6d530b"};
+        const styleHeader = {color: textColor, fontWeight: "bold", backgroundColor: "#977623"};
         const stylePagination = {color: textColor, backgroundColor: "#223039"};
         const styleCell = {borderBottom: 0};
         const styleBody = {backgroundColor: "#1e2a32"};
@@ -73,7 +73,7 @@ export default class MatchHistory extends Component {
                             <TableRow >
                                 <TableCell align="center" style={styleCell}>
                                     <Typography variant="h5" fontWeight="bold" color={textColor}>
-                                    Date
+                                    Result
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="center" style={styleCell}>
@@ -81,13 +81,18 @@ export default class MatchHistory extends Component {
                                     Match Detail
                                     </Typography>
                                 </TableCell>
+                                <TableCell align="center" style={styleCell}>
+                                    <Typography variant="h5" fontWeight="bold" color={textColor}>
+                                    Date
+                                    </Typography>
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody size="string" style={styleBody}>
                             {this.props.matches.slice(start, end).
-                                map(column =>  
+                                map((column, index) =>  
                                     <MatchRow column={column} 
-                                        id={this.props.id} key={column.match_id} />
+                                        id={this.props.id} key={column.match_id} changeBackground={index % 2 === 0}/>
                                 )}
                         </TableBody>
                     </Table>

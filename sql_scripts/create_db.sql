@@ -127,14 +127,16 @@ CREATE TABLE `bet_participants` (
   CONSTRAINT `bet_participants_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 );
 
-CREATE TABLE `friend_list` (
-  `user_id` int NOT NULL,
-  `friend_id` int NOT NULL,
-  `confirmed` tinyint(1) DEFAULT (false),
-  KEY `user_id` (`user_id`),
-  KEY `friend_id` (`friend_id`),
-  CONSTRAINT `friend_list_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
-  CONSTRAINT `friend_list_ibfk_2` FOREIGN KEY (`friend_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+CREATE TABLE `follows` (
+  `follow_id` int NOT NULL AUTO_INCREMENT,
+  `follower_id` int NOT NULL,
+  `following_id` int NOT NULL,
+  PRIMARY KEY (`follow_id`),
+  KEY `follow_id` (`follow_id`),
+  KEY `follower_id` (`follower_id`),
+  KEY `following_id` (`following_id`),
+  CONSTRAINT `follows_ibfk_1` FOREIGN KEY (`follower_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  CONSTRAINT `follows_ibfk_2` FOREIGN KEY (`following_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 );
 
 CREATE TABLE `user_badges` (
