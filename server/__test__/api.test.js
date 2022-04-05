@@ -18,6 +18,15 @@ describe("Gets matchs information endpoint", () => {
     })
 })
 
+test("PUT join/edit bet endpoint", async () => {
+    const response = await request.put("/api/bets/join?bet=101&user=35&team=677&amount=250");
+    expect(response.status).toBe(200);
+})
+
+test("DELETE a bet endpoint", async () => {
+    const response = await request.delete("/api/bets/delete?bet=101&user=35");
+    expect(response.status).toBe(200);
+})
 
 test("GET teams endpoint", async () => {
     const response = await request.get("/api/teams");
@@ -82,13 +91,20 @@ test("GET all bets from a user endpoint", async () => {
     expect(response.body[0].amount_bet).toEqual(1000);
 })
 
-test("GET all bets from a user with match data", async () => {
+test("GET all bets from a user with match data endpoint", async () => {
     const response = await request.get("/api/allbets/matchdata/30");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body[0].team_betted_on).toBeTruthy;
 })
 
+test("GET all custom bets from an user endpoint", async () => {
+    const response = await request.get("/api/custombets/23");
+    expect(response.status).toBe(200);
+    expect(response.type).toMatch("application/json");
+    expect(response.body[0].betInfo).toBeTruthy();
+    expect(response.body[0].matchInfo).toBeTruthy();
+})
 
 test("GET teams history matches by id endpoint", async () => {
     const response = await request.get("/api/teams/history/819?page=1");
