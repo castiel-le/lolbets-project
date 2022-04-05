@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Slide } from "@mui/material";
 import { HorizontalDivider, TypographyBold } from "../../customUIComponents";
 import CancelAndSubmitButtons from "./CancelAndSubmitButtons";
+import CustomDialogButton from "./CustomDialogButton";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -34,10 +35,16 @@ export default function CustomDialog({open, onClose, onSubmit, title, children})
                 {children}
             </DialogContent>
 
-            <DialogActions >
-                <CancelAndSubmitButtons cancel={onClose} submit={onSubmit}/>
-            </DialogActions>
-
+            {onSubmit 
+                ?
+                <DialogActions >
+                    <CancelAndSubmitButtons cancel={onClose} submit={onSubmit}/>
+                </DialogActions>
+                :
+                <DialogActions>
+                    <CustomDialogButton onClick={onClose} text={"Close"} hoverBgColor={"#CC0000"} />
+                </DialogActions>
+            }
         </Dialog>
     );
 }

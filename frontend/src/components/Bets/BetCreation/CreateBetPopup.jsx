@@ -1,11 +1,10 @@
-import { FormControl, InputLabel, Slide, Select, MenuItem, Avatar, List, ListItemButton, TextField, Divider, ThemeProvider, Tooltip, CircularProgress} from '@mui/material';
-import {Component, forwardRef} from 'react';
-import { FlexBoxColumn, FlexBoxRow, TypographyLight, TypographyBold, HorizontalDivider, TypographyMedium } from '../../customUIComponents';
+import { FormControl, InputLabel, Select, MenuItem, Avatar, List, ListItemButton, TextField, Divider, ThemeProvider, Tooltip} from '@mui/material';
+import {Component} from 'react';
+import { FlexBoxColumn, FlexBoxRow, TypographyLight, TypographyBold, HorizontalDivider} from '../../customUIComponents';
 import { SnackbarContext } from '../../Snackbar/SnackbarContext';
-import ConfirmationBox from './ConfirmationBox';
+import ConfirmationBox from '../../ReusedComponents/ConfirmationBox';
 import InfoIcon from '@mui/icons-material/Info';
 import { createTheme } from '@mui/material';
-import Diamond from '@mui/icons-material/Diamond';
 import CustomDialog from '../../ReusedComponents/CustomDialog/CustomDialog';
 import Payout from './Payout';
 
@@ -44,10 +43,6 @@ const theme = createTheme({
             },
         },
     }
-});
-
-const Transition = forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default class CreateBetPopup extends Component {

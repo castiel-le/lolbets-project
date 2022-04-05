@@ -1,18 +1,14 @@
-import { Component, Fragment, forwardRef } from "react";
+import { Component, Fragment } from "react";
 
-import { Button, Divider, Slide, Avatar} from '@mui/material';
+import { Button, Divider, Avatar} from '@mui/material';
 import { styled } from '@mui/system';
 import { FlexBoxRow } from "../../customUIComponents";
 
 import './BetPopup.module.css';
 import { SnackbarContext } from '../../Snackbar/SnackbarContext';
-import ConfirmationBox from "./ConfirmationBox";
+import ConfirmationBox from "../../ReusedComponents/ConfirmationBox";
 import UserInputForBetAmount from "./UserInputForBetAmount";
 import CustomDialog from "../../ReusedComponents/CustomDialog/CustomDialog";
-
-const Transition = forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
 // style applied to the team avatar that the user selects
 const LogoAvatar = styled(Avatar)((props) => ({

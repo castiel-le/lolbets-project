@@ -1,15 +1,14 @@
-import { ArrowBack, ExpandMore, Square, Diamond } from '@mui/icons-material';
-import { Collapse, Drawer, List, ListItem, Button, Dialog, ListItemButton, TextField, Tooltip, Box, ThemeProvider, createTheme } from '@mui/material';
+import { ExpandMore, Square} from '@mui/icons-material';
+import { Collapse, List, ListItem, Button, ListItemButton, TextField, ThemeProvider, createTheme } from '@mui/material';
 import { Fragment, useEffect, useState, useContext } from 'react';
 import { FlexBoxColumn, FlexBoxRow, TypographyMedium, TypographyLight, TypographyBold, Loading } from '../customUIComponents';
 import CustomDialog from '../ReusedComponents/CustomDialog/CustomDialog';
 import { LoginButton } from '../ReusedComponents/LoginButton';
-import ConfirmationBox from './BetCreation/ConfirmationBox';
+import ConfirmationBox from '../ReusedComponents/ConfirmationBox';
 import CreateBetButton from './BetCreation/CreateBetButton';
 import CreateBetPopup from './BetCreation/CreateBetPopup';
 import BetDetails from './BetDetails';
 import { SnackbarContext } from '../Snackbar/SnackbarContext';
-import InfoIcon from '@mui/icons-material/Info';
 import Payout from './BetCreation/Payout';
 
 const theme = createTheme({
