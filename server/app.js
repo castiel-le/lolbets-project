@@ -28,9 +28,13 @@ app.get("/", (req, res) => {
 });
 
 app.use("/userinfo", async (req, res) => {
-    await updateUserCoins(req);
+    await updateUser(req);
     if (req.user !== undefined) {
-        res.json(req.user);
+        const user = req.user;
+        if (user.banned || user.timeout) {
+            req.logout();
+        }
+        res.json(user);
     } else {
         res.sendStatus(401);
     }
@@ -41,12 +45,14 @@ app.use("/userinfo", async (req, res) => {
  * @param {Request} req request object from fetch request
  * @returns only returns if user is undefined ( do not continue if user is undefined )
  */
-async function updateUserCoins(req) {
+async function updateUser(req) {
     if (req.user === undefined) {
         return;
     }
     const user = await dbFetch.getUserById(req.user.id);
     req.user.coins = user.coins;
+    req.user.banned = user.dataValues.banned;
+    req.user.timeout = user.dataValues.timeout;
 }
 
 //Router to redirect back

@@ -181,7 +181,7 @@ async function getRemainingUsers(pageNum) {
         const bets = await this.getAllBetsForUserWithMatchData(users[i].dataValues.user_id);
         if (bets.length !== 0) {
             for (let j = 0; j < bets.length; j++){
-                if(bets[j].dataValues.team_betted_on === null){
+                if (bets[j].dataValues.team_betted_on === null) {
                     continue;
                 }
                 if (bets[j].dataValues.match.dataValues.winner_id !== null){
@@ -316,6 +316,9 @@ async function getAllBetsForUserWithMatchData(id) {
 async function populateTeamOnBets(bets) {
     for (let i = 0; i < bets.length; i++){
         // Get team data of team betted on
+        if (!bets[i].dataValues) {
+            continue;
+        }
         const teamId = bets[i].dataValues.team_betted_on;
         if (teamId === null) {
             continue;
@@ -332,7 +335,17 @@ async function populateTeamOnBets(bets) {
         const matchData = await getMatchById(betOfBetParticipant.dataValues.match_id)
         bets[i].dataValues.match = matchData;
     }
-    return bets;
+
+    const results = [];
+
+    // remove empty results
+    bets.forEach(element => {
+        if (element.length !== 0) {
+            results.push(element);
+        }
+    });
+    
+    return results;
 }
 
 //Helper function to put team data inside of matches
@@ -382,6 +395,59 @@ async function getBetAmount(matches) {
         }
     }
     return matches;
+}
+
+/**
+ * Gets all a users custom bets and the info about those bets
+ * @param {*} id user id
+ * @returns JSON filled with all info about each custom bet
+ */
+async function getCustomBetInfoByUserID(id) {
+
+    // find all the bets that have a custom category
+    const allBets = await models.Bet.findAll({
+        where: {
+            creator_id: id,
+            category_id: {
+                [Op.not]: 1
+            },
+        },
+        order: [
+            ["match_id", "DESC"]
+        ]
+    });
+
+    let allBetsInfo = [];
+    for (let i = 0; i < allBets.length; i++) {
+        const betInfo = await models.BetParticipant.findOne({
+            where: {
+                bet_id: allBets[i].bet_id
+            }
+        })
+        // if the bet does not have a bet participant, ignore it
+        if (!betInfo) {
+            continue;
+        }
+        const match = await getMatchById(allBets[i].dataValues.match_id);
+        // if the match is already done, don't return it
+        if (match.in_progress === false) {
+            continue;
+        }
+        match.dataValues.team1_id = await getTeamById(match.team1_id);
+        match.dataValues.team2_id = await getTeamById(match.team2_id);
+
+        let payout = await getPayoutPercentageCustomBet(allBets[i].dataValues.win_condition * 60, betInfo.amount_bet, allBets[i].dataValues.win_condition2 ? allBets[i].dataValues.win_condition2 * 60 : undefined);
+        if (allBets[i].dataValues.category_id === 2) {
+            payout = payout.before;
+        } else if (allBets[i].dataValues.category_id === 3) {
+            payout = payout.after;
+        } else {
+            payout = payout.between;
+        }
+        allBetsInfo.push({betInfo: betInfo, matchInfo: match, payout: payout, win_condition: [allBets[i].dataValues.win_condition, allBets[i].dataValues.win_condition2], category: allBets[i].dataValues.category_id});
+    }
+
+    return allBetsInfo;
 }
 
 //Function to get match by id
@@ -471,18 +537,6 @@ async function createFederatedCredentials(provider, profileId, userId) {
     });
 }
 
-async function getAllCustomBetsForUserWithMatchData(id) {
-    const allBets = await models.BetParticipant.findAll({
-        where: {
-            user_id: id,
-            category_id: {
-                [Op.not]: 1
-            }
-        }
-    });
-    return await populateTeamOnBets(allBets);
-}
-
 /**
  * Creates a custom bet
  * @param {Number} creator_id bet creator user id
@@ -502,7 +556,7 @@ async function createCustomBet(creator_id, category_id, match_id, win_conditions
 
     // If bet exists, modify it
     if (existingCustomBet) {
-        existingCustomBet.category_id = category_id;
+        existingCustomBet.category_id = parseInt(category_id);
         existingCustomBet.win_condition = parseInt(win_conditions[0]);
         existingCustomBet.win_condition2 = win_conditions.length === 2 ? parseInt(win_conditions[1]) : null;
         existingCustomBet.save();
@@ -587,8 +641,8 @@ async function updateOrCreateBetParticipant(bet_id, user_id, team, amount) {
             const betAdded = await models.BetParticipant.create({
                 bet_id: bet_id,
                 user_id: user_id,
-                team_betted_on: typeof team === "number" ? team : null,
-                amount_bet: typeof amount === "number" ? amount : 100,
+                team_betted_on: parseInt(team) ? team : null,
+                amount_bet: parseInt(amount) ? amount : 100,
                 creation_date: Date.now()   
             });
             console.log(betAdded)
@@ -914,6 +968,6 @@ module.exports = { deleteBan, deleteTimeout, createTimeout, createBan, getAllTim
     getBadges, getTeams, getTeamById, getTeamByName, getMatches, getUsers, getUserById,
     getMatchHistory, getMatchesAfter, getMatchesBetween, getTotalMatches, getWins, getTop5Users,
     getRemainingUsers, getNumOfUsers, searchUsersByKeyword, getAllBetsForUserWithMatchData,
-    createCustomBet, destroyExistingCustomBet, getAllCustomBetsForUserWithMatchData,
-    getCategories, getPayoutPercentageCustomBet, followUser, unfollowUser, getAllFollowing,
+    createCustomBet, destroyExistingCustomBet, getCategories, getPayoutPercentageCustomBet, getCustomBetInfoByUserID,
+    followUser, unfollowUser, getAllFollowing,
     checkIfFollowing, getUserMostRecentBet, getAllFollowingRecentBet};

@@ -62,8 +62,7 @@ export function Loading(){
         <Box sx={{ 
             display: 'flex', 
             justifyContent: 'center', 
-            height:'90vh', 
-            my: 'auto', 
+            mt: '10%', 
             alignItems: 'center'}} 
         >
             <CircularProgress />

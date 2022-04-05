@@ -9,6 +9,7 @@ import BetDetails from './BetDetails';
 import { FlexBoxRow, TypographyLight } from '../customUIComponents';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { grey } from '@mui/material/colors';
+import TeamVSTeamLogos from '../ReusedComponents/TeamVSTeamLogos';
 
 export default class BetBox extends Component {
 
@@ -33,9 +34,11 @@ export default class BetBox extends Component {
 
     /**
    * Determines whether or not the bet should show details
+   * If you click a button, or an icon inside a button, the accordion won't expand
    */
     handleExpand(event) {
-        if (event.target.tagName.toLowerCase() !== "button") {
+        const tag = event.target.tagName.toLowerCase();
+        if ( tag !== 'button' && tag !== 'path' && tag !== 'svg') {
             this.setState({
                 expanded: !this.state.expanded
             })
@@ -64,26 +67,16 @@ export default class BetBox extends Component {
                                 }}
                             >
                                 <FlexBoxRow width='100%'>
+                                    <FlexBoxRow width='24px' />
 
                                     <TimeBox time={this.props.time} />
 
-                                    <TeamBox left={true} team={this.props.team1} />
-
-                                    <TypographyLight
-                                        fontSize='14px'
-                                        mx='32px'
-                                        textAlign={'center'}
-                                        my='auto'
-                                        sx={{ display: 'flex', width: '2%', justifyContent: 'center' }}
-                                    >
-                                        VS
-                                    </TypographyLight>
-                                    
-                                    <TeamBox left={false} team={this.props.team2} />
+                                    <TeamVSTeamLogos team1={this.props.team1} team2={this.props.team2} />
 
                                     <BetButton 
                                         expanded={this.state.expanded} 
-                                        selectBet={this.props.selectBet} 
+                                        selectBet={this.props.selectBet}
+                                        delete={this.props.deleteBetParticipant}
                                         betID={this.props.betID} 
                                         team1={this.props.team1} 
                                         team2={this.props.team2} 

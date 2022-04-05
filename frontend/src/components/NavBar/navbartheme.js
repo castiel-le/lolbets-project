@@ -17,17 +17,4 @@ export const theme = createTheme({
             default: '#0f1519',
         },
     },
-    components: {
-        // Name of the component
-        MuiButton: {
-            styleOverrides: {
-                // Name of the slot
-                root: {
-                    // Some CSS
-                    fontSize: '14px',
-                    borderRadius: 16,
-                    fontFamily: "Lemon-Milk-Light"
-                },
-            },
-        },
-    }});
+});
