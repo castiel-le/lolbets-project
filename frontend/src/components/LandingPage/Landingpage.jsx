@@ -8,6 +8,7 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { TypographyMedium, TypographyLight, FlexBoxRow, FlexBoxColumn } from '../customUIComponents';
 import { SliderData } from '../SliderData';
 import { Component } from 'react';
+import { Link } from "react-router-dom";
 
 export default class LandingPage extends Component {
 
@@ -25,7 +26,7 @@ export default class LandingPage extends Component {
 
                     <ImageSlider slides={SliderData} />
                     <FlexBoxRow width='100%'>
-                        <FlexBoxColumn width='33%' sx={{mx: 'auto', marginLeft:'150px'}}>
+                        <FlexBoxColumn width='33%' sx={{mx: 'auto', marginLeft:'150px'}}>        
                             <Card sx={{ maxWidth: 345, backgroundColor: '#1E2A32', marginTop: '50px' }}>
                                 <CardContent>
                                     <TypographyMedium gutterBottom variant="h5" component="div" sx={{ color: '#917526' }}>
@@ -36,9 +37,9 @@ export default class LandingPage extends Component {
                                     </TypographyLight>
                                 </CardContent>
                                 <CardActions sx={{}}>
-                                    <Button size="large" style={{ marginLeft: "auto" }} onClick={function redirectTeams() {
-                                        window.location.href = "https://lolbets-project-staging.herokuapp.com/bets";
-                                    }}>click here <ArrowRightIcon /></Button>
+                                    <Link to="/bets" style={{ marginLeft: "auto" }}>
+                                        <Button size="large">To bets <ArrowRightIcon /></Button>
+                                    </Link>
                                 </CardActions>
                             </Card>
                         </FlexBoxColumn>
@@ -54,9 +55,9 @@ export default class LandingPage extends Component {
                                     </TypographyLight>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="large" style={{ marginLeft: "auto" }} onClick={function redirectTeams() {
-                                        window.location.href = "https://lolbets-project-staging.herokuapp.com/teams";
-                                    }}>click here <ArrowRightIcon /></Button>
+                                    <Link to="/teams" style={{ marginLeft: "auto" }}>
+                                        <Button size="large">To teams <ArrowRightIcon /></Button>
+                                    </Link>
                                 </CardActions>
                             </Card>
                         </FlexBoxColumn>
@@ -72,9 +73,9 @@ export default class LandingPage extends Component {
                                     </TypographyLight>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="large" style={{ marginLeft: "auto" }} onClick={function redirectLeaderboard() {
-                                        window.location.href = "https://lolbets-project-staging.herokuapp.com/leaderboard";
-                                    }} >click here <ArrowRightIcon /></Button>
+                                    <Link to="/leaderboard" style={{ marginLeft: "auto" }}>
+                                        <Button size="large">To leaderboard <ArrowRightIcon /></Button>
+                                    </Link>
                                 </CardActions>
                             </Card>
                         </FlexBoxColumn>
