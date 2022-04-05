@@ -1,67 +1,41 @@
 import { Component, Fragment } from 'react';
 import { InView } from 'react-intersection-observer'
-import { getFormattedDate, getGameStartTimeObject, sortMatchesByDate } from './helperFunctions';
+import { getFormattedDate, getGameStartTimeObject } from './helperFunctions';
 
 import BetBox from './BetBox'
 import PlaceBetPopup from './BetCreation/PlaceBetPopup';
-import { Box, ListItem, List, Tab, TabsContext } from '@mui/material';
+import { Box, ListItem, List} from '@mui/material';
 import { DateText } from './styledElements';
 import { HorizontalDivider, Loading, TypographyBold } from '../customUIComponents';
 import '../../fonts/fonts.module.css';
 import { SnackbarContext } from '../Snackbar/SnackbarContext'
 
 import withRouter from '../withRouter';
-import CreateBetButton from './BetCreation/CreateBetButton';
-import CreateBetPopup from './BetCreation/CreateBetPopup';
 
 class Matchups extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
             selectedBet: null,
-            upcomingMatches: [],
-            upcomingMatchesByDate: [],
-            noUpcomingGames: false,
-            allFetchedDates: [0],
-            lastFetchedDate: new Date(1648184400000).setHours(0, 0, 0, 0),
-            fetching: false,
-            mounted: true,
-            userCurrentBets: [],
-            showCreateBetPopup:false,
+            userCurrentBets: []
         };
         this.toggleOpenBet = this.toggleOpenBet.bind(this);
         this.selectBet = this.selectBet.bind(this);
-        this.fetchUpcomingMatches = this.fetchUpcomingMatches.bind(this);
         this.fetchAllUserBets = this.fetchAllUserBets.bind(this);
         this.userHasExistingBet = this.userHasExistingBet.bind(this);
-        this.createBet = this.createBet.bind(this);
+        this.deleteBetParticipant = this.deleteBetParticipant.bind(this);
     }
 
     componentDidMount() {
-        this.fetchUpcomingMatches(1);
         // if user is logged in, fetch their bets
         if (Object.keys(this.props.user).length !== 0) {
             this.fetchAllUserBets(this.props.user.id);
         }
-        // fetch all matches starting from today
-        this.setState({
-            allFetchedDates: [this.state.lastFetchedDate]
-        });
-        
-    }
-
-    componentWillUnmount() {
-        this.setState({
-            mounted: false
-        })
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.state.loading === true && nextState.loading === false) {
-            return true;
-        } else if (this.state.upcomingMatchesByDate !== nextState.upcomingMatchesByDate) {
+        if (this.props.upcomingMatchesByDate !== nextProps.upcomingMatchesByDate) {
             return true;
         }
         if (this.state.selectedBet !== nextState.selectBet) {
@@ -86,67 +60,6 @@ class Matchups extends Component {
         } else {
             console.error('unable to fetch user bets for current user');
         }
-    }
-
-    /**
-     * This fetches fetch a certain number of days worth of games from the database
-     * Default start day is today
-     * If there is no result from the initial fetch,
-     * then the fetch will try for the next set of days
-     * Will stop trying to fetch if the fetch for 2 weeks from now has not returned anything
-     * @param {number} days The number of days you want to fetch data for.
-     * @returns returns if there was an error in the fetch
-     */
-    async fetchUpcomingMatches(days) {
-        if (this.state.allFetchedDates.includes(this.state.lastFetchedDate)) {
-            return;
-        }
-        let nextDay = this.state.lastFetchedDate + days * 86400 * 1000;
-        let response = await fetch(`/api/matches?afterthis=${this.state.lastFetchedDate}&beforethis=${nextDay}`);
-        if (!response.ok) {
-            console.error("Error fetching matches: " + response.status);
-            // TODO: add other error logic
-            return;
-        }
-        this.setState({
-            allFetchedDates: [...this.state.allFetchedDates, this.state.lastFetchedDate]
-        },
-        async () => {
-            // This was added to solve a memory leak
-            // If you delete it, the application will freeze
-            if (this.state.mounted) {
-                let matches = await response.json();
-                // If the result set of the fetch is 0 data, fetch the next n days
-                if (Object.keys(matches).length === 0) {
-                    let today = new Date().setHours(0, 0, 0, 0);
-                    // If we have tried fetching for over 2 weeks of data, 
-                    // and nothing has returned, 
-                    // display that their are no upcoming games
-                    if (nextDay - today < 28 * 86400 * 1000) {
-                        this.setState({
-                            lastFetchedDate: nextDay
-                        },
-                        () => this.fetchUpcomingMatches(1));
-                    } else {
-                        this.setState({
-                            loading: false,
-                            noUpcomingGames: true,
-                        });
-                    }
-                } else {
-                    this.setState({
-                        loading: false,
-                        upcomingMatches: [...this.state.upcomingMatches, ...matches],
-                        upcomingMatchesByDate: [
-                            ...this.state.upcomingMatchesByDate, 
-                            ...sortMatchesByDate(matches)
-                        ],
-                        lastFetchedDate: nextDay,
-                        fetching: false,
-                    });
-                }
-            }
-        });
     }
 
     /**
@@ -210,6 +123,31 @@ class Matchups extends Component {
         return false;
     }
 
+    /**
+     * Deletes a users current bet on a match
+     * Displays an error message if the response was not ok
+     * If Delete worked it displays an info notification to the user to let them know
+     * @param {Number} betID the id for the bet that will be deleted
+     */
+    async deleteBetParticipant(betID) {
+        const response = await fetch(`/api/bets/delete?bet=${betID}&user=${this.props.user.id}`, {method: 'DELETE'});
+        if (response.ok) {
+            this.context.setSnackbar(true, `Bet Removed Successfully`, 'info');
+            for (let i = 0; i < this.state.userCurrentBets.length; i++) {
+                if (this.state.userCurrentBets[i].bet_id === betID) {
+                    // remove the bet that was just deleted without fetching from the db
+                    const newUserBets = this.state.userCurrentBets;
+                    newUserBets.splice(i, 1);
+                    this.setState({
+                        userCurrentBets: newUserBets
+                    });
+                }
+            }
+        } else {
+            this.context.setSnackbar(true, 'Unable to Remove Bet', 'error');
+        }
+    }
+
     componentDidUpdate(prevProps) {
         // mitigates a refresh bug
         // If this is not here then when the user refreshes their current bets won't show
@@ -218,15 +156,9 @@ class Matchups extends Component {
         }
     }
 
-    createBet() {
-        this.setState({
-            showCreateBetPopup: true,
-        });
-    }
-
     render() {
     // return that there are no upcoming games if none were fetched
-        if (this.state.noUpcomingGames && this.state.upcomingMatchesByDate === []) {
+        if (this.props.upcomingMatchesByDate === [] && this.props.countDatesFetched > 14) {
             return (
                 <TypographyBold sx={{ marginTop: '10%' }}>
                     No Upcoming Games in the next 2 weeks
@@ -235,11 +167,11 @@ class Matchups extends Component {
         }
         return (
             <Fragment >
-                {!this.state.loading
+                {this.props.upcomingMatchesByDate.length > 0
                 // if upcoming matches are set, render a bet box for each match by date
                     ?
 
-                    this.state.upcomingMatchesByDate.map((date, index, {length}) => {
+                    this.props.upcomingMatchesByDate.map((date, index, {length}) => {
                         let matchDate = new Date(date[0].match_start_time);
                         let formattedDate = getFormattedDate(matchDate);
                         return (
@@ -251,22 +183,18 @@ class Matchups extends Component {
                                     <HorizontalDivider width='85%' />
                                     <InView 
                                         as={'div'}
-                                        initialInView={true}
+                                        initialInView={false}
                                         onChange={(inView) => {
                                             // if you are currently looking at the 
                                             // last date on the current page
                                             // fetch the next date
                                             if ( inView && 
-                                                !this.state.fetching && 
                                                 index + 1 === length
                                             ) {
-                                                this.setState({
-                                                    fetching: true
-                                                },
-                                                () => this.fetchUpcomingMatches(1)
-                                                );
+                                                this.props.fetchUpcomingMatches(1)
                                             }
-                                        }}
+                                        }
+                                        }
                                     >
                                         <List >
                                             {date.map(match => {
@@ -282,6 +210,7 @@ class Matchups extends Component {
                                                             team1={match.team1_id}
                                                             team2={match.team2_id}
                                                             selectBet={this.selectBet}
+                                                            deleteBetParticipant={this.deleteBetParticipant}
                                                             betID={betID}
                                                             existingBet={existingBet}
                                                             team1Bet={match.team1Total}
@@ -309,16 +238,7 @@ class Matchups extends Component {
                     toggleOpenBet={this.toggleOpenBet}
                     user={this.props.user} 
                     existingBets={this.state.userCurrentBets}
-                />
-
-                <CreateBetButton createBet={this.createBet}/>
-
-                <CreateBetPopup 
-                    open={this.state.showCreateBetPopup} 
-                    closeCreateBet={() => this.setState({showCreateBetPopup: false})}
-                    dates={this.state.upcomingMatchesByDate}
-                    user={this.props.user}
-                />
+                /> 
 
             </Fragment>
         );

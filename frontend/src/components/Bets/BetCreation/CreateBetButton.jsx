@@ -18,7 +18,7 @@ export default class CreateBetButton extends Component {
                 <Fab 
                     variant='extended'
                     aria-label="Create Bet" 
-                    sx={{position: 'fixed', bottom: '1rem', right: '1rem', p: 2, color:'#f9f9f9', lineHeight: '0'}} 
+                    sx={{p: 2, color:'#f9f9f9', lineHeight: '0', m: 1}} 
                     onMouseEnter={() => this.setState({collapseAddButton: false})}
                     onMouseLeave={() => this.setState({collapseAddButton: true})}
                     onClick={() => this.props.createBet()}

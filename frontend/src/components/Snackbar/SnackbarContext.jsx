@@ -11,13 +11,14 @@ export const SnackbarContainer = ({ children }) => {
     const [snackbar, setSnackbar] = useState({
         open: false,
         message: '',
-        type: ''
+        type: '',
+        title: undefined
     });
 
     // other components will be able to set snackbar
-    const handleSnackbarSet = (open, message, type) => {
+    const handleSnackbarSet = (open, message, type, title) => {
         setSnackbar({
-            open, message, type
+            open, message, type, title
         })
     };
 

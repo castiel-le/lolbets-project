@@ -1,17 +1,14 @@
 import { Component, Fragment, forwardRef } from "react";
 
-import { Button, Dialog, DialogTitle, DialogContent, Divider, Slide, Avatar, DialogActions } from '@mui/material';
+import { Button, Divider, Slide, Avatar} from '@mui/material';
 import { styled } from '@mui/system';
-
-import { FlexBoxRow, HorizontalDivider, TypographyBold } from "../../customUIComponents";
-
-import DeleteIcon from "@mui/icons-material/Delete"
+import { FlexBoxRow } from "../../customUIComponents";
 
 import './BetPopup.module.css';
-import { SnackbarContext } from '../../Snackbar/SnackbarContext'
-import CancelAndSubmitButtons from "./CancelAndSubmitButtons";
+import { SnackbarContext } from '../../Snackbar/SnackbarContext';
 import ConfirmationBox from "./ConfirmationBox";
 import UserInputForBetAmount from "./UserInputForBetAmount";
+import CustomDialog from "../../ReusedComponents/CustomDialog/CustomDialog";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -46,7 +43,6 @@ export default class PlaceBetPopup extends Component {
         this.state = {
             selectedTeam: null,
             openConfirmation: false,
-            existingBet: false,
             validInput: false,
             betAmount: 0
         };
@@ -54,7 +50,6 @@ export default class PlaceBetPopup extends Component {
         this.openConfirmationBox = this.openConfirmationBox.bind(this);
         this.submitBet = this.submitBet.bind(this);
         this.fillInEditBet = this.fillInEditBet.bind(this);
-        this.deleteBetParticipant = this.deleteBetParticipant.bind(this);
     }
 
     /**
@@ -114,34 +109,13 @@ export default class PlaceBetPopup extends Component {
      * If they do have a bet, set the state of the popup to be the same as their previous bet
      */
     fillInEditBet() {
-        // reset existing bet state
-        this.setState({
-            existingBet: false,
-        })
         for (let i = 0; i < this.props.existingBets.length; i++) {
             if (this.props.existingBets[i].bet_id === this.props.bet.betID && this.props.bet.betID !== null) {
                 this.setState({
                     betAmount: this.props.existingBets[i].amount_bet,
                     selectedTeam: this.props.existingBets[i].team_betted_on === this.props.bet.team1.team_id ? 1 : 2,
-                    existingBet: true
                 })
             }
-        }
-    }
-
-    /**
-     * Deletes a users current bet on a match
-     * Displays an error message if the response was not ok
-     * If Delete worked it displays an info notification to the user to let them know
-     * @param {Number} betID the id for the bet that will be deleted
-     */
-    async deleteBetParticipant(betID) {
-        const selectedTeamName = this.state.selectedTeam === 1 ? this.props.bet.team1.team_name : this.props.bet.team2.team_name;
-        const response = await fetch(`/api/bets/delete?bet=${betID}&user=${this.props.user.id}`, {method: 'DELETE'});
-        if (response.ok) {
-            this.closeDialog(true, 'info', `Bet for ${selectedTeamName} Removed`)
-        } else {
-            this.context.setSnackbar(true, 'Unable to Remove Bet', 'error');
         }
     }
 
@@ -161,97 +135,70 @@ export default class PlaceBetPopup extends Component {
         }
         return(
             <Fragment>
-                <Dialog
-                    open={this.props.open}
-                    TransitionComponent={Transition}
-                    keepMounted
-                    onClose={() => this.closeDialog(false)}
-                    aria-describedby="alert-dialog-slide-description"
-                    PaperProps={{
-                        style: {
-                            backgroundColor: '#223039',
-                            boxShadow:'0 0px 10px #f9f9f9',
-                            width: '300px',
-                            p: 1
-                        },
-                    }}
+                <CustomDialog 
+                    open={this.props.open} 
+                    onClose={() => this.closeDialog(false)} 
+                    onSubmit={() => this.openConfirmationBox()}
+                    title={"Place Bet"}
                 >
 
-                    <DialogTitle>
-                        <TypographyBold fontSize={20}>
-                            {this.state.existingBet ? "Edit Bet" : "Place Bet"}
-                        </TypographyBold>    
-                        <HorizontalDivider width='100%' />
-                    </DialogTitle>
-
-                    <DialogContent sx={{py: 0}}>
-
-                        {/* Team Selection */}
-                        <FlexBoxRow 
-                            sx={{justifyContent: 'space-between', 
-                                height: '84px', 
-                                my: 'auto'}} 
+                    {/* Team Selection */}
+                    <FlexBoxRow 
+                        sx={{justifyContent: 'space-between', 
+                            height: '84px', 
+                            my: 'auto'}} 
+                    >
+                        <LogoButton 
+                            onClick={() => this.setState({selectedTeam: 1})}
+                            selectedTeam={this.state.selectedTeam}
+                            avatarTeam={1}
                         >
-                            <LogoButton 
-                                onClick={() => this.setState({selectedTeam: 1})}
+                            <LogoAvatar  
+                                src={this.props.bet.team1.logo}
+                                alt={this.props.bet.team1.team_name}
                                 selectedTeam={this.state.selectedTeam}
                                 avatarTeam={1}
-                            >
-                                <LogoAvatar  
-                                    src={this.props.bet.team1.logo}
-                                    alt={this.props.bet.team1.team_name}
-                                    selectedTeam={this.state.selectedTeam}
-                                    avatarTeam={1}
-                                />
-                            </LogoButton>
+                            />
+                        </LogoButton>
                         
-                            <Divider orientation="vertical" sx={{borderColor: 'rgb(0,100,100)'}}/>
+                        <Divider orientation="vertical" sx={{borderColor: 'rgb(0,100,100)'}}/>
 
-                            <LogoButton
-                                onClick={() => this.setState({selectedTeam: 2})}
+                        <LogoButton
+                            onClick={() => this.setState({selectedTeam: 2})}
+                            selectedTeam={this.state.selectedTeam}
+                            avatarTeam={2}
+                        >
+                            <LogoAvatar  
+                                src={this.props.bet.team2.logo}
+                                alt={this.props.bet.team2.team_name}
                                 selectedTeam={this.state.selectedTeam}
                                 avatarTeam={2}
-                            >
-                                <LogoAvatar  
-                                    src={this.props.bet.team2.logo}
-                                    alt={this.props.bet.team2.team_name}
-                                    selectedTeam={this.state.selectedTeam}
-                                    avatarTeam={2}
-                                />
-                            </LogoButton>
-                        </FlexBoxRow>
-                        {/* End Team Selection */}
+                            />
+                        </LogoButton>
+                    </FlexBoxRow>
+                    {/* End Team Selection */}
                         
-                        <UserInputForBetAmount 
-                            betAmount={this.state.betAmount} 
-                            updateBetAmount={(amount) => this.setState({betAmount: amount})}
-                            user={this.props.user}
-                            variant={"quickBet"}
-                        />
+                    <UserInputForBetAmount 
+                        betAmount={this.state.betAmount} 
+                        updateBetAmount={(amount) => this.setState({betAmount: amount})}
+                        user={this.props.user}
+                        variant={"quickBet"}
+                    />
 
-                    </DialogContent>
-
-                    <DialogActions >
-                        {this.state.existingBet
-                            ? <Button onClick={() => {
-                                this.deleteBetParticipant(this.props.bet.betID);
-                            }}>
-                                <DeleteIcon sx={{color: 'white'}}/>
-                            </Button>
-                            : null
-                        }
-                        <CancelAndSubmitButtons cancel={() => this.closeDialog(false)} submit={() => this.openConfirmationBox()}/>
-                    </DialogActions>
-            
-                </Dialog>
+                </CustomDialog>
 
                 <ConfirmationBox
                     open={this.state.openConfirmation} 
-                    selectNo={
-                        () => this.submitBet(false, this.props.bet.betID, this.props.user.id, this.state.selectedTeam, this.state.betAmount)
+                    selectNo={() => this.submitBet(false)}
+                    selectYes={() => {
+                        this.submitBet(
+                            true, 
+                            this.props.bet.betID, 
+                            this.props.user.id, 
+                            this.state.selectedTeam, 
+                            this.state.betAmount
+                        )
                     }
-                    selectYes={
-                        () => this.submitBet(true, this.props.bet.betID, this.props.user.id, this.state.selectedTeam, this.state.betAmount)
                     }
                     confirmationMessage={`Bet ${this.state.betAmount} on ${this.state.selectedTeam === 1 ? this.props.bet.team1.team_name : this.props.bet.team2.team_name}?`}
                 />
