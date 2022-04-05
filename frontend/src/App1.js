@@ -19,6 +19,9 @@ import LandingPage from './components/LandingPage/Landingpage'
 
 function App1() {
     const [user, setUser] = useState({id: null, role: null, coins: 0, isLoaded: false});
+    useEffect(() => {
+        document.title = "LoLBets"
+    }, []);
     const location = useLocation();
     const Snackbar = useContext(SnackbarContext);
     

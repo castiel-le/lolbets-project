@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "LoLBets",
+  "name": "League of Legends LCS Betting with fake currency",
   "icons": [
     {
       "src": "favicon.ico",

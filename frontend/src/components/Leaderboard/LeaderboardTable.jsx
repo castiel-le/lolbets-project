@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Table
 import DiamondIcon from "@mui/icons-material/Diamond"
 import { FlexBoxColumn, FlexBoxRow, TypographyLight } from "../customUIComponents";
 import './leaderboardTable.css';
-import poro from "./images/poro.png";
+import poro2 from './images/poro2.png';
 import minorStyling from './minorStyling.css';
 import {Link} from 'react-router-dom';
 
@@ -92,7 +92,7 @@ class LeaderboardTable extends Component {
                                         <TableCell>
                                             <Link to={`/user/${testerrr.user_id}`}>
                                                 <Box sx={{ display: 'flex', flexDirection: 'row'}}>
-                                                    <img src={poro} style={{height: '30px', width: '30px', margin: '0 5px', borderRadius: '5px' }}/>
+                                                    <img src={poro2} style={{height: '30px', width: '30px', margin: '0 5px', borderRadius: '5px' }}/>
                                                     <TypographyLight sx={{ pl: '10px', my: 'auto'}}>{testerrr.username}</TypographyLight>
                                                 </Box>
                                             </Link>
