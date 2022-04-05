@@ -213,7 +213,6 @@ router.get("/custombets/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getCustomBetInfoByUserID(req.params.id));
     } catch (e){
-        console.log(e)
         res.sendStatus(404);
     }
 });

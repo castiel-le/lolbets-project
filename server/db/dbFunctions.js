@@ -645,7 +645,6 @@ async function updateOrCreateBetParticipant(bet_id, user_id, team, amount) {
                 amount_bet: parseInt(amount) ? amount : 100,
                 creation_date: Date.now()   
             });
-            console.log(betAdded)
             return {betAdded, created: true, ok: true}
         } catch (e) {
             console.log(e);
