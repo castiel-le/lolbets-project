@@ -24,41 +24,6 @@ export const DateText = styled(Typography)({
 });
 
 /**
- * Bet button in bet view styled
- */
-export const BetButtonStyle = styled(Button)({
-    variant: 'contained',
-    margin: 'auto',
-    textDecoration: 'underline',
-    boxShadow: 'unset',
-    borderRadius: 16,
-    backgroundColor: 'unset',
-    color: '#f9f9f9',
-    fontFamily: 'Lemon-Milk-Bold',
-    height: '45px',
-    width: '85px',
-    fontSize: '26px',
-    marginLeft: 'auto',
-    ":hover": {
-        textDecoration: 'underline',
-        backgroundColor: '#f9f9f9',
-        color: '#111111'
-    }
-});
-
-/**
- * Styling of the bet button when the bet details are shown
- */
-export const BetButtonStyleExpanded = styled(BetButtonStyle)({
-    margin: 'inherit, 0px',
-    backgroundColor: '#f9f9f9',
-    color: '#111111',
-    ":hover": {
-        backgroundColor: 'gray',
-    }
-});
-
-/**
  * Used to create the custom time display at the top left of every bet
  * @param {*} props must include hour, minute, and period within an object called time
  * @returns A styled custom time component

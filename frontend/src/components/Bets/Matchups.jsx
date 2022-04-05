@@ -97,7 +97,7 @@ class Matchups extends Component {
      */
     selectBet(betID, team1, team2) {
         if(this.props.user.id === null) {
-            this.props.navigate("/api/login/federated/google");
+            window.location.href = "/api/login/federated/google";
         } else {
             this.setState({
                 selectedBet: {betID: betID, team1: team1, team2: team2},

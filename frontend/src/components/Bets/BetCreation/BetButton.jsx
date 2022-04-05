@@ -1,15 +1,48 @@
 import {Component} from 'react';
-import {BetButtonStyleExpanded, BetButtonStyle} from '../styledElements';
 import { FlexBoxColumn, FlexBoxRow } from '../../customUIComponents';
 import EditAndDeleteButtons from './EditAndDeleteButtons';
+import {styled, Button} from '@mui/material';
+
+/**
+ * Bet button in bet view styled
+ */
+const BetButtonStyle = styled(Button)({
+    variant: 'contained',
+    margin: 'auto',
+    textDecoration: 'underline',
+    boxShadow: 'unset',
+    borderRadius: 16,
+    backgroundColor: 'unset',
+    color: '#f9f9f9',
+    fontFamily: 'Lemon-Milk-Bold',
+    height: '45px',
+    width: '85px',
+    fontSize: '26px',
+    marginLeft: 'auto',
+    ":hover": {
+        textDecoration: 'underline',
+        backgroundColor: '#f9f9f9',
+        color: '#111111'
+    }
+});
+
+/**
+ * Styling of the bet button when the bet details are shown
+ */
+const BetButtonStyleExpanded = styled(BetButtonStyle)({
+    margin: 'inherit, 0px',
+    backgroundColor: '#f9f9f9',
+    color: '#111111',
+    ":hover": {
+        backgroundColor: 'gray',
+    }
+});
 
 export default class BetButton extends Component {
 
     render() {
         return (
             <FlexBoxRow width='10%'>
-                
-                
                 {this.props.existingBet
                     ? 
                     <FlexBoxColumn sx={{mx: 'auto'}}>
