@@ -40,7 +40,6 @@ passport.use(new GoogleStrategy({
             cb(null, jsonUser);
         }
     } catch (e) {
-        console.log(e);
         cb(e);
     }
 }));
@@ -79,7 +78,6 @@ router.put("/bets/join", async (req, res) => {
         }
     } catch (exception) {
         res.status(404).send(exception.message);
-        console.error(exception.message);
     }
 });
 
@@ -144,7 +142,6 @@ router.get("/user/top5", async (req, res) => {
     try {
         res.json(await dbFetch.getTop5Users());
     } catch(e){
-        console.log(e);
         res.sendStatus(404);
     }
 });
@@ -160,7 +157,6 @@ router.get("/user/nontop5", async (req, res) => {
             res.sendStatus(404, "second not found");
         }
     } catch(e) {
-        console.log(e);
         res.sendStatus(404);
     }
 })
@@ -196,7 +192,6 @@ router.get("/user/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getUserById(req.params.id)); 
     } catch(e) {
-        console.log(e);
         res.sendStatus(404);
     }
 })
@@ -206,7 +201,6 @@ router.get("/allbets/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getAllBetsForUser(req.params.id));
     } catch(e) {
-        console.log(e)
         res.sendStatus(404);
     }
 });
@@ -278,7 +272,6 @@ router.get("/user/history/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getUserBetsById(req.params.id, req.query.page, req.query.limit));
     } catch (e) {
-        console.log(e)
         res.sendStatus(404);
     }
 })
@@ -404,7 +397,6 @@ router.get("/payout", async (req, res) => {
     try {
         res.json(await dbFetch.getPayoutPercentageCustomBet(req.query.time1, req.query.amount, req.query.time2));
     } catch (e){
-        console.log(e);
         res.sendStatus(404);
     }
 })
@@ -455,19 +447,6 @@ router.delete("/follow", async (req, res) => {
         if (req.body.follower_id && req.body.following_id){
             const response = await dbFetch.unfollowUser(req.body.follower_id, req.body.following_id);
             res.sendStatus(response ? 200 : 404);
-        }
-    } catch(e) {
-        res.sendStatus(404);
-    }
-})
-
-//route to get the most recent bet from all the people a user is following
-router.get("/user/:id/recent", async (req, res) => {
-    try {
-        if (req.params.id) {
-            res.json(await dbFetch.getAllFollowingRecentBet(req.params.id));
-        } else {
-            res.sendStatus(404);
         }
     } catch(e) {
         res.sendStatus(404);

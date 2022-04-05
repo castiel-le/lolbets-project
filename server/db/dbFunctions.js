@@ -181,6 +181,9 @@ async function getRemainingUsers(pageNum) {
         const bets = await this.getAllBetsForUserWithMatchData(users[i].dataValues.user_id);
         if (bets.length !== 0) {
             for (let j = 0; j < bets.length; j++){
+                if(bets[j].dataValues.team_betted_on === null){
+                    continue;
+                }
                 if (bets[j].dataValues.match.dataValues.winner_id !== null){
                     if (bets[j].dataValues.team_betted_on.dataValues.team_id === bets[j].dataValues.match.dataValues.winner_id){
                         wins++;

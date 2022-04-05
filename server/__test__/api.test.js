@@ -1,15 +1,16 @@
 const router = require("../app");
 const supertest = require("supertest");
 const request = supertest(router);
+jest.setTimeout(10000);
 
 describe("Gets matchs information endpoint", () => {
-    test("Gets matches after specific date", async () => {
-        const response = await request.get("/api/matches?after=1640998800&page=1");
+    test("GET matches after specific date", async () => {
+        const response = await request.get("/api/matches?after=1648184400000&page=1");
         expect(response.status).toBe(200);
         expect(response.type).toMatch("application/json");
         expect(response.body[0].match_id).toBeTruthy();
     })
-    test("Gets matches between 2 specific dates", async () => {
+    test("GET matches between 2 specific dates", async () => {
         const response = await request.get("/api/matches?afterthis=1648184400000&beforethis=1648270800000")
         expect(response.status).toBe(200);
         expect(response.type).toMatch("application/json");
@@ -17,7 +18,8 @@ describe("Gets matchs information endpoint", () => {
     })
 })
 
-test("Gets teams endpoint", async () => {
+
+test("GET teams endpoint", async () => {
     const response = await request.get("/api/teams");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
@@ -38,49 +40,49 @@ test("Specific team does not exist", async () => {
     expect(response.text).toMatch("Not Found");
 })
 
-test("Gets top 5 users endpoint", async () => {
+test("GET top 5 users endpoint", async () => {
     const response = await request.get("/api/user/top5");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body[1].username).toBeTruthy();
 })
 
-test("Gets non-top 5 users endpoint", async () => {
-    const response = await request.get("/api/user/nontop5?page=2&count=1");
+test("GET non-top 5 users endpoint", async () => {
+    const response = await request.get("/api/user/nontop5?page=1&count=1");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body[5].username).toBeTruthy();
 })
 
-test("Gets search user endpoint", async () => {
+test("GET search user endpoint", async () => {
     const response = await request.get("/api/user/search?keyword=bingchilling");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body[0].username).toMatch("bingchilling");
 })
 
-test("Gets all users endpoint", async () => {
+test("GET all users endpoint", async () => {
     const response = await request.get("/api/user/all");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body[13].username).toMatch("iliketomyumsoup");
 })
 
-test("Gets user by id endpoint", async () => {
+test("GET user by id endpoint", async () => {
     const response = await request.get("/api/user/1");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body.email).toBe("bob@notrealemail.com");
 })
 
-test("Gets all bets from a user endpoint", async () => {
+test("GET all bets from a user endpoint", async () => {
     const response = await request.get("/api/allbets/29");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body[0].amount_bet).toEqual(1000);
 })
 
-test("Gets all bets from a user with match data", async () => {
+test("GET all bets from a user with match data", async () => {
     const response = await request.get("/api/allbets/matchdata/30");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
@@ -88,21 +90,21 @@ test("Gets all bets from a user with match data", async () => {
 })
 
 
-test("Gets teams history matches by id endpoint", async () => {
+test("GET teams history matches by id endpoint", async () => {
     const response = await request.get("/api/teams/history/819?page=1");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect([response.body[0].team1_id.team_id, response.body[0].team2_id.team_id]).toContain(819);
 })
 
-test("Gets user history bets by id endpoint", async () => {
+test("GET user history bets by id endpoint", async () => {
     const response = await request.get("/api/user/history/30?page=1&limit=5");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body[0].team_betted_on).toBeTruthy();
 })
 
-test("Gets all bans", async () => {
+test("GET all bans endpoint", async () => {
     const response = await request.get("/api/bans");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
@@ -110,10 +112,56 @@ test("Gets all bans", async () => {
     expect(response.body[0].reason).toBeTruthy();
 })
 
-test("Gets all timeouts", async () => {
+test("GET all timeouts endpoint", async () => {
     const response = await request.get("/api/timeouts");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body[0].timeouts_id).toBeTruthy();
     expect(response.body[0].reason).toBeTruthy();
+})
+
+test("GET categories endpoint", async () => {
+    const response = await request.get("/api/categories");
+    expect(response.status).toBe(200);
+    expect(response.type).toMatch("application/json");
+    expect(response.body[1].category_name).toMatch("Match After");
+})
+
+describe("Gets payout for custom bet", () => {
+    test("GET payout before/after time endpoint", async () => {
+        const response = await request.get("/api/payout?time1=20&amount=200");
+        expect(response.status).toBe(200);
+        expect(response.type).toMatch("application/json");
+        expect(response.body.before).toBeTruthy();
+        expect(response.body.after).toBeTruthy();
+    })
+    test("GET payout between 2 times endpoint", async() => {
+        const response = await request.get("/api/payout?time1=20&amount=300&time2=25");
+        expect(response.status).toBe(200);
+        expect(response.type).toMatch("application/json");
+        expect(response.body.between).toBeTruthy();
+    })
+})
+
+describe("Checks if a user is following another", () => {
+    test("GET follower-following check endpoint", async() => {
+        const response = await request.get("/api/follow/check?follower_id=35&following_id=28");
+        expect(response.status).toBe(200);
+        expect(response.type).toMatch("application/json");
+        expect(response.body.result).toBe(true);
+    })
+    test("An user not following the specified other", async () => {
+        const response = await request.get("/api/follow/check?follower_id=1&following_id=69");
+        expect(response.status).toBe(200);
+        expect(response.type).toMatch("application/json");
+        expect(response.body.result).toBe(false);
+    })
+})
+
+test("GET all following users of a specific user endpoint", async () => {
+    const response = await request.get("/api/follow/28");
+    expect(response.status).toBe(200);
+    expect(response.type).toMatch("application/json");
+    expect(response.body[0].follower_id).toBe(28);
+    expect(response.body[0].user).toBeTruthy();
 })
