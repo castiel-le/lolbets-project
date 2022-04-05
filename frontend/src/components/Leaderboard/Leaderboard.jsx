@@ -5,11 +5,12 @@ import LeaderboardTable from "./LeaderboardTable";
 import LeaderboardRank2To5 from "./LeaderboardRank2To5";
 import { CircularProgress} from "@mui/material";
 import poro2 from './images/poro2.png';
+import stretchedcena from './images/stretchedcena.PNG';
 import john from './images/gigascuffed.PNG';
 import DiamondIcon from "@mui/icons-material/Diamond";
 import { Link } from "react-router-dom";
 import minorStyling from './minorStyling.css';
-import { FlexBoxColumn, FlexBoxRow, TypographyBold, TypographyLight, TypographyMedium } from "../customUIComponents";
+import { FlexBoxColumn, FlexBoxRow, TypographyBold, TypographyLight, TypographyMedium, Loading } from "../customUIComponents";
 
 class Leaderboard extends Component {
     constructor(props){
@@ -123,7 +124,7 @@ class Leaderboard extends Component {
                             <TypographyMedium sx={{ my:'auto', color: '#ff9b00', fontSize: '40px', borderBottom: '2px #ff9b00 solid', width: '40%'}}>1</TypographyMedium>
                         </FlexBoxColumn>
                         <FlexBoxColumn sx={{ my: 'auto', mx: '20px', color: 'white'}}>
-                            <img src={poro2} style={rank1IconStyle}/>
+                            <img src={stretchedcena} style={rank1IconStyle}/>
                         </FlexBoxColumn>
                         <FlexBoxColumn>
                             <Link to={`/user/${this.state.top5[0].user_id}`} style={rank1UsernameStyle}>
@@ -159,7 +160,7 @@ class Leaderboard extends Component {
                     changeUsersNotLoaded={this.changeUsersNotLoaded}
                 />
             </FlexBoxColumn>
-        ) : <CircularProgress />;
+        ) : <Loading />;
     }
 }
 

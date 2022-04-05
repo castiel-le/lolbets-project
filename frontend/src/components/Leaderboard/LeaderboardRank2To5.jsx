@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { Component } from "react";
 import { FlexBoxColumn, FlexBoxRow, TypographyLight, TypographyMedium } from "../customUIComponents";
-import poro from "./images/poro.png";
+import poro2 from './images/poro2.png';
 import DiamondIcon from "@mui/icons-material/Diamond";
 import {Link} from "react-router-dom";
 import minorStyling from './minorStyling.css';
@@ -30,7 +30,7 @@ class LeaderboardRank2To5 extends Component {
             <FlexBoxColumn style={cardContainerStyle}>
                 <FlexBoxRow style={rankIconNameStyle}>
                     <TypographyMedium style={rankStyle}>{this.props.rank}</TypographyMedium>
-                    <img src={poro} style={iconStyle}/>
+                    <img src={poro2} style={iconStyle}/>
                     <Link to={`/user/${this.props.user.user_id}`} style={usernameStyle}>
                         <TypographyLight noWrap>{this.props.user.username}</TypographyLight>
                     </Link>
