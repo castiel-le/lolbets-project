@@ -3,6 +3,7 @@ import {Component, forwardRef} from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { SnackbarContext } from './SnackbarContext';
+import { AlertTitle } from '@mui/material';
 
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -24,10 +25,15 @@ export default class SnackbarAlert extends Component {
                     <Snackbar 
                         open={value.snackbar.open} 
                         autoHideDuration={4000} 
-                        onClose={() => value.setSnackbar(false, value.snackbar.message, value.snackbar.type)} 
+                        onClose={() => value.setSnackbar(false, value.snackbar.message, value.snackbar.type, value.snackbar.title)} 
                         anchorOrigin={{ vertical, horizontal }}
                     >
-                        <Alert severity={value.snackbar.type} sx={{ width: '100%' }}>
+                        <Alert severity={value.snackbar.type} sx={{ width: '100%', whiteSpace: 'pre', textAlign: 'left' }}>
+                            {value.snackbar.title &&
+                            <AlertTitle sx={{textAlign: 'left', mb: 1}}>
+                                {value.snackbar.title}
+                            </AlertTitle>
+                            }
                             {value.snackbar.message}
                         </Alert>
                     </Snackbar>

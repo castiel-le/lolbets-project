@@ -60,29 +60,3 @@ export async function fetchTeamInfo(teamID) {
     let team = await response.json();
     return team;
 }
-
-/**
- * Sorts the matches into arrays , seperated by date
- * @param {*} matches all matches fetched from fb
- * @returns array of matches by date
- */
-export function sortMatchesByDate(matches) {
-    let matchesCurrentDate = [];
-    let allDates = [];
-
-    matches.forEach(element => {
-        if (matchesCurrentDate.length === 0 
-        || new Date(matchesCurrentDate[0].match_start_time).getDate() 
-        === new Date(element.match_start_time).getDate()
-        ) {
-            matchesCurrentDate.push(element);
-        } else {
-            allDates.push(matchesCurrentDate);
-            matchesCurrentDate = [];
-        }
-    });
-    if (matchesCurrentDate.length > 0) {
-        allDates.push(matchesCurrentDate);
-    }
-    return allDates;
-}

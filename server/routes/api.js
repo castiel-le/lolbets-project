@@ -30,12 +30,7 @@ passport.use(new GoogleStrategy({
             // If record exist, return user
             // Otherwise, return false to callback
             if (user) {
-                // Check if user is banned or have an ongoing timeout
-                if (user.dataValues.banned || user.dataValues.timeout) {
-                    cb(null, false);
-                } else {
-                    cb(null, user.toJSON());
-                } 
+                cb(null, user.toJSON());
             } else {
                 cb(null, false);
             }
@@ -57,7 +52,7 @@ passport.use(new GoogleStrategy({
 //configure Passport to manage login session
 passport.serializeUser(function(user, done){
     process.nextTick(function(){
-        done(null, {id: user.user_id, role: user.user_role, coins: user.coins});
+        done(null, {id: user.user_id, role: user.user_role, coins: user.coins, banned: user.banned, timeout: user.timeout});
     });
 });
 
@@ -166,8 +161,6 @@ router.post("/signup", async (req, res) => {
 router.get("/matches", async (req, res) => {
     try {
         if (req.query.after){
-            //console.log(req.query.after);
-            //res.json({"date": parseInt(req.query.after)});
             res.json(await dbFetch.getMatchesAfter(parseInt(req.query.after), parseInt(req.query.page)));
         } else if (req.query.afterthis && req.query.beforethis){
             res.json(await dbFetch.getMatchesBetween(parseInt(req.query.afterthis), parseInt(req.query.beforethis)));
@@ -290,10 +283,11 @@ router.get("/allbets/matchdata/:id", async (req, res) => {
 })
 
 //get all custom bets for a user with match data
-router.get("/custombets/:id", async (res, req) => {
+router.get("/custombets/:id", async (req, res) => {
     try {
-        res.json(await dbFetch.getAllCustomBetsForUserWithMatchData(req.params.id));
+        res.json(await dbFetch.getCustomBetInfoByUserID(req.params.id));
     } catch (e){
+        console.log(e)
         res.sendStatus(404);
     }
 });

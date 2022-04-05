@@ -14,10 +14,9 @@ import {
     Button, 
     Tooltip, 
     MenuItem, 
-    Stack
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import { Google, Menu as MenuIcon } from '@mui/icons-material';
+import { Menu as MenuIcon } from '@mui/icons-material';
 
 import DiamondIcon from "@mui/icons-material/Diamond";
 import {FlexBoxColumn, FlexBoxRow, HorizontalDivider, TypographyMedium} from '../customUIComponents';
@@ -31,6 +30,7 @@ import { theme } from './navbartheme';
 
 import { pages, pageLinks } from '../../config/pages';
 import { settings, settingLink } from '../../config/userDropDown';
+import { LoginButton } from '../ReusedComponents/LoginButton';
 
 const Hamburger = (props) => {
     return (
@@ -263,40 +263,7 @@ class NavBar extends Component {
                                         user={this.state.userInfo}
                                     />
                                 </Fragment>
-                                : <Stack direction="row" spacing={1}>
-                                    <a href={"/api/login/federated/google"} style={{all: "inherit", cursor: "pointer"}}>
-                                        <Button 
-                                            variant="contained" 
-                                            startIcon={<Google />}
-                                            color='secondary' 
-                                            sx={{
-                                                color: "#0f1519", 
-                                                display: {xs: "none", md: "inherit"},
-                                                '&:hover': {
-                                                    backgroundColor: "rgb(0, 200, 200)",
-                                                }}}
-                                        >
-                                            <TypographyMedium sx={{color: 'unset'}}>
-                                                Login
-                                            </TypographyMedium>
-                                        </Button>
-                                    </a>
-                                    <NavLink to={"/api/login/federated/google"} style={{all: "inherit", cursor: "pointer"}}>
-                                        <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            sx={{
-                                                color: "#0f1519", 
-                                                display: {xs: "inherit", md: "none"},
-                                                padding: "3px",
-                                                '&:hover': {
-                                                    backgroundColor: "rgb(0, 200, 200)",
-                                                }}}
-                                        >
-                                            <Google />
-                                        </Button>
-                                    </NavLink>
-                                </Stack>
+                                : <LoginButton />
                             }
                         </Toolbar>
                     </Container>

@@ -8,16 +8,15 @@ const ButtonText = styled(TypographyBold)({
     color: 'inherit'
 });
 
-const DialogButton = styled(Button)(({buttonHoverColor}) => ({
+const DialogButton = styled(Button)({
     borderRadius: 16,
     color: '#f9f9f9',
     ":hover": {
         transition: 'background-color 0.3s ease',
         textDecoration: 'underline',
-        backgroundColor: buttonHoverColor,
         color: '#111111'
     }
-}));
+});
 
 export default class CancelAndSubmitButtons extends Component {
 
@@ -25,7 +24,7 @@ export default class CancelAndSubmitButtons extends Component {
         return (
             <Fragment>
                 <DialogButton 
-                    buttonHoverColor="#e18b8b"
+                    sx={{':hover': {backgroundColor: '#CC0000'}}}
                     onClick={() => {
                         this.props.cancel();
                     }}
@@ -33,7 +32,7 @@ export default class CancelAndSubmitButtons extends Component {
                     <ButtonText>Cancel</ButtonText>
                 </DialogButton>
                 <DialogButton 
-                    buttonHoverColor="#f9f9f9"
+                    sx={{':hover': {backgroundColor: '#f9f9f9'}}}
                     onClick={() => {
                         this.props.submit();
                     }}

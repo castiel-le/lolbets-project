@@ -1,8 +1,6 @@
 import { styled } from '@mui/system';
-import { Button, Accordion, Typography, Avatar} from '@mui/material';
-import { FlexBoxRow, FlexBoxColumn, TypographyLight } from '../customUIComponents';
-import Countdown from 'react-countdown';
-import {Link} from 'react-router-dom'
+import { Button, Accordion, Typography} from '@mui/material';
+import { FlexBoxRow, TypographyLight } from '../customUIComponents';
 
 /**
  * Accordion element styled with color options specific to the bet view
@@ -24,35 +22,6 @@ export const DateText = styled(Typography)({
     flexDirection: "row",
     margin: 'inherit auto'
 });
-
-/**
- * Styled Avatar with specific size for the team logos
- */
-export const TeamLogo = styled(Avatar)({
-    height: '72px',
-    width: '72px',
-    ':hover': {
-        cursor: 'help'
-    }
-});
-
-/**
- * Style used for the team names in bet view
- */
-export const TeamName = styled(Typography)({
-    fontFamily: 'Lemon-Milk-Medium',
-    margin: 'auto 24px',
-    fontSize: '20px'
-});
-
-/**
- * Team win loss ratio displayed in bet view
- */
-export const TeamWinLoss = styled(Typography)({
-    fontFamily: 'Lemon-Milk-Light',
-    margin: '10px 30px',
-    fontSize: '14px'
-})
 
 /**
  * Bet button in bet view styled
@@ -88,55 +57,6 @@ export const BetButtonStyleExpanded = styled(BetButtonStyle)({
         backgroundColor: 'gray',
     }
 });
-
-/**
- * React Countdown styled
- */
-export const CustomCountdown = styled(Countdown)({
-    fontFamily: 'Lemon-Milk-Bold',
-    fontSize: 24
-})
-
-/**
- * Used to create a team flex box with all the team info
- * @param {*} props props needs a team json with team_name, wins, losses, and logo inside
- * @returns A Box with all the styled team Elements
- */
-export function TeamBox(props) {
-    if (props.left) {
-        return (
-            <FlexBoxRow width='40%' sx={{ alignItems: 'center' }}>
-                <FlexBoxColumn sx={{ alignContent: 'center', marginLeft: 'auto' }}>
-                    <TeamName textAlign={'right'} >
-                        {props.team.team_name}
-                    </TeamName>
-                    <TeamWinLoss textAlign={'right'} >
-                        {props.team.wins} - {props.team.losses}
-                    </TeamWinLoss>
-                </FlexBoxColumn>
-                <Link to={`/teams/${props.team.team_id}`}>
-                    <TeamLogo my='auto' src={props.team.logo} />
-                </Link>
-            </FlexBoxRow>
-        );
-    } else {
-        return (
-            <FlexBoxRow width='40%' sx={{ alignItems: 'center' }}>
-                <Link to={`/teams/${props.team.team_id}`}>
-                    <TeamLogo my='auto' src={props.team.logo} />
-                </Link>
-                <FlexBoxColumn sx={{ alignContent: 'center', marginRight: 'auto' }}>
-                    <TeamName textAlign={'left'} >
-                        {props.team.team_name}
-                    </TeamName>
-                    <TeamWinLoss textAlign={'left'}>
-                        {props.team.wins} - {props.team.losses}
-                    </TeamWinLoss>
-                </FlexBoxColumn>
-            </FlexBoxRow>
-        );
-    }
-}
 
 /**
  * Used to create the custom time display at the top left of every bet
