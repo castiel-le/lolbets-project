@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 import { SliderData } from './SliderData';
 import { Box } from '@mui/material';
 
@@ -36,10 +37,13 @@ export default class ImageSlider extends Component {
 
                 {this.state.teams.map((team, index) => {
                     
-                    return (<Box key={team.logo} sx={{ backgroundColor: SliderData[index].color, ':hover': { backgroundColor: '#917526' }, height: '300px', width: '150px' }}>
-                        <img src={team.logo} alt='team-image' className='image' style={{ marginTop: '80px' }} />
-
-                    </Box>)
+                    return  <Link to={"/teams/" + team.team_id} key={team.team_id}
+                        style={{ height: '300px', width: '150px' }}>
+                        <Box sx={{':hover': { backgroundColor: '#917526'}, 
+                            backgroundColor: SliderData[index].color, width: "100%", height: "100%"}}>
+                            <img src={team.logo} alt='team-image' className='image' style={{ marginTop: '80px' }} />
+                        </Box>
+                    </Link>
 
                 })}
 

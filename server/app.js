@@ -10,10 +10,14 @@ const dbFetch = require("./db/dbFunctions");
 const passport = require("passport");
 
 //establish session for Google authentication
+app.set("trust proxy", 1)
 app.use(session({
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === "production" ? true : false
+    }
 }));
 
 app.use(passport.authenticate("session"));
