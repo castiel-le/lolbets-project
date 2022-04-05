@@ -1,9 +1,10 @@
 import { Component } from "react";
-import {CircularProgress, Dialog, DialogTitle, DialogContent, List, ListItem } from "@mui/material";
-import {FlexBoxColumn, TypographyBold, TypographyLight } from '../customUIComponents';
+import {CircularProgress, List, ListItem } from "@mui/material";
+import {FlexBoxColumn, TypographyLight } from '../customUIComponents';
 import { SnackbarContext } from "../Snackbar/SnackbarContext";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import FollowingItem from "./FollowingItem";
+import CustomDialog from '../ReusedComponents/CustomDialog/CustomDialog';
 
 export default class Following extends Component {
     static contextType = SnackbarContext;
@@ -77,24 +78,14 @@ export default class Following extends Component {
         }
     }
 
-    // static contextType = SnackbarContext;
     render() {
         return(
-            <Dialog open={this.props.open} onClose={this.props.onClose}
-                PaperProps={{
-                    style: {
-                        backgroundColor: '#223039',
-                        boxShadow:'0 0px 10px #f9f9f9',
-                        width: '400px',
-                        height: '400px',
-                        p: 1
-                    },
-                }}>
-                <DialogTitle>
-                    <TypographyBold>{this.state.following.length} following</TypographyBold>
-                </DialogTitle>
-                <DialogContent>
-                    {this.state.isFetching
+            <CustomDialog
+            open={this.props.open} 
+            onClose={this.props.onClose}
+            title={`${this.state.following.length} following`} 
+            >
+                {this.state.isFetching
                         ? <FlexBoxColumn alignItems="center" justifyContent="center" height="90%" width="100%">
                             <CircularProgress />
                         </FlexBoxColumn>
@@ -115,8 +106,7 @@ export default class Following extends Component {
                                 </TypographyLight>
                             </FlexBoxColumn>
                     }
-                </DialogContent>
-            </Dialog>
+            </CustomDialog>
         )
     }
 }

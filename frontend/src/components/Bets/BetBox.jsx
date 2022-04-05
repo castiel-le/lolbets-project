@@ -3,10 +3,10 @@ import { Component, Fragment } from 'react';
 
 import { Box, AccordionDetails, AccordionSummary } from '@mui/material';
 import { getTeamObject, fetchTeamInfo } from './helperFunctions';
-import { BetAccordion, TimeBox, TeamBox } from './styledElements';
+import { BetAccordion, TimeBox } from './styledElements';
 import BetButton from './BetCreation/BetButton';
 import BetDetails from './BetDetails';
-import { FlexBoxRow, TypographyLight } from '../customUIComponents';
+import { FlexBoxRow } from '../customUIComponents';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { grey } from '@mui/material/colors';
 import TeamVSTeamLogos from '../ReusedComponents/TeamVSTeamLogos';

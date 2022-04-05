@@ -1,6 +1,7 @@
 import { Component, Fragment } from "react";
-import {Avatar, Grid, Typography, Link, Button, Dialog, DialogTitle, DialogActions} from "@mui/material";
+import {Avatar, Grid, Typography, Link, Button, DialogTitle} from "@mui/material";
 import { TypographyBold } from "../customUIComponents";
+import ConfirmationBox from "../ReusedComponents/ConfirmationBox";
 
 export default class FollowingItem extends Component {
     constructor(props) {
@@ -36,27 +37,19 @@ export default class FollowingItem extends Component {
                     </Grid>
                 </Grid>
 
-                <Dialog open={this.state.dialogOpen}
+                <ConfirmationBox
+                    open={this.state.dialogOpen}
                     onClose={() => this.setState({dialogOpen: false})}
-                    PaperProps={{
-                        style: {
-                            backgroundColor: 'rgb(42, 59, 70)',
-                            boxShadow:'0 0px 10px #f9f9f9',
-                            width: '300px',
-                            p: 1
-                        },
-                    }}>
+                    selectNo={() => this.setState({dialogOpen: false})}
+                    selectYes={() => this.unfollow()}
+                >
                     <DialogTitle display="flex" alignItems="center" flexDirection="column">
                         <Avatar src={this.props.following.profile_pic} sx={{width: 90, height: 90}} />
                         <TypographyBold marginTop={1}>
                             Unfollow {this.props.following.user.username}?
                         </TypographyBold>
                     </DialogTitle>
-                    <DialogActions>
-                        <Button style={{color: "red"}} onClick={this.unfollow}>Unfollow</Button>
-                        <Button  style={{color: "white"}} onClick={() => this.setState({dialogOpen: false})}>Cancel</Button>
-                    </DialogActions>
-                </Dialog>
+                </ConfirmationBox>
             </Fragment>
         )
     }
