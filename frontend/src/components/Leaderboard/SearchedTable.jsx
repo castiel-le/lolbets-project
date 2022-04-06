@@ -59,13 +59,21 @@ class SearchedTable extends Component {
                                             </FlexBoxRow>
                                         </TableCell>
                                         <TableCell>
-                                            <FlexBoxColumn>
-                                                <TypographyLight textAlign = 'center'>71%  |  5W - 2L</TypographyLight>
-                                                <FlexBoxRow sx={{ width: '100%', backgroundColor: 'rgb(238, 90, 82)', height: '10px', borderRadius: '5px'}}>
-                                                    <FlexBoxRow sx={{ width: '70%', backgroundColor: 'rgb(61, 149, 229)', borderTopLeftRadius: '5px', borderBottomLeftRadius: '5px'}} />
-                                                    
-                                                </FlexBoxRow>
-                                            </FlexBoxColumn>
+                                            {testerrr.wins + testerrr.losses !== 0 ? 
+                                                <FlexBoxColumn>
+                                                    <TypographyLight textAlign = 'center'>{Math.round(testerrr.wins / (testerrr.wins + testerrr.losses) * 10000) / 100}%  |  {testerrr.wins}W - {testerrr.losses}L</TypographyLight>
+                                                    <FlexBoxRow sx={{ width: '100%', backgroundColor: 'rgb(238, 90, 82)', height: '10px', borderRadius: '5px'}}>
+                                                        <FlexBoxRow sx={{ width: `${testerrr.wins / (testerrr.wins + testerrr.losses) * 100}%`, backgroundColor: 'rgb(61, 149, 229)', borderRadius: '5px'}} />
+                                                    </FlexBoxRow>
+                                                </FlexBoxColumn>
+                                                :
+                                                <FlexBoxColumn>
+                                                    <TypographyLight textAlign = 'center'>0%  |  0W - 0L</TypographyLight>
+                                                    <FlexBoxRow sx={{ width: '100%', backgroundColor: 'rgb(238, 90, 82)', height: '10px', borderRadius: '5px'}}>
+                                                        <FlexBoxRow sx={{ width: '0%', backgroundColor: 'rgb(61, 149, 229)', borderTopLeftRadius: '5px', borderBottomLeftRadius: '5px'}} />
+                                                    </FlexBoxRow>
+                                                </FlexBoxColumn>
+                                            }
                                         </TableCell>
                                     </TableRow>
                                 )
