@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Link } from "react-router-dom";
 import { SliderData } from './SliderData';
-import { Box } from '@mui/material';
+import { Box, Avatar } from '@mui/material';
+import { FlexBoxColumn, FlexBoxRow, TypographyBold } from './customUIComponents';
 
 
 export default class ImageSlider extends Component {
@@ -33,21 +34,23 @@ export default class ImageSlider extends Component {
     render() {
 
         return (
-            <section className='slider'>
+            <FlexBoxRow sx={{mx: 'auto', justifyContent: 'center'}}>
 
                 {this.state.teams.map((team, index) => {
                     
-                    return  <Link to={"/teams/" + team.team_id} key={team.team_id}
-                        style={{ height: '300px', width: '150px' }}>
-                        <Box sx={{':hover': { backgroundColor: '#917526'}, 
-                            backgroundColor: SliderData[index].color, width: "100%", height: "100%"}}>
-                            <img src={team.logo} alt='team-image' className='image' style={{ marginTop: '80px' }} />
-                        </Box>
-                    </Link>
-
+                    return  (
+                        <Link to={"/teams/" + team.team_id} key={team.team_id}>
+                            <Box sx={{transition: 'transform .1s ease-in-out', ':hover': { backgroundColor: '#917526', transform: 'scale(1.1)'}, backgroundColor: SliderData[index].bgcolor, width: "100%", height: '10em', display: 'flex'}} >
+                                <FlexBoxColumn sx={{my: 'auto'}}>
+                                    <Avatar src={team.logo} alt={team.abbreviation} style={{ height: '100px', width: '100px' }} />
+                                    <TypographyBold fontSize={14} sx={{mx: 'auto', p: 3, color: SliderData[index].color}}>{team.abbreviation}</TypographyBold>
+                                </FlexBoxColumn>
+                            </Box>
+                        </Link>
+                    );
                 })}
 
-            </section>
+            </FlexBoxRow>
         )
     }
 }
