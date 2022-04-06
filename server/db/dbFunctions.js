@@ -503,6 +503,28 @@ async function searchUsersByKeyword(keyword) {
         rank++;
         users[parseInt(i)].dataValues.rank = rank;
     }
+    for (let i = 0; i < users.length; i++){
+        let wins = 0;
+        let losses = 0;
+        const bets = await this.getAllBetsForUserWithMatchData(users[i].dataValues.user_id);
+        if (bets.length !== 0) {
+            for (let j = 0; j < bets.length; j++){
+                if (bets[j].dataValues.team_betted_on === null){
+                    continue;
+                }
+                if (bets[j].dataValues.match.dataValues.winner_id !== null){
+                    if (bets[j].dataValues.team_betted_on.dataValues.team_id === bets[j].dataValues.match.dataValues.winner_id){
+                        wins++;
+                    } else {
+                        losses++;
+                    }
+                }
+            }
+        }
+        users[i].dataValues.wins = wins;
+        users[i].dataValues.losses = losses;
+    }
+    
     return users;
 }
 
