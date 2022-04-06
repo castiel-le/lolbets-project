@@ -1,41 +1,48 @@
 export const SliderData = [
     {
-        color: '#FFFFFF'
+        bgcolor: '#F9F9F9',
+        color: 'black'
     },
     {
-        color: '#000000'
+        bgcolor: 'rgba(17,21,25)',
+        color: '#cc0000'
     },
     {
-        color: '#FFFFFF'
+        bgcolor: '#F9F9F9',
+        color: 'black'
     },
     {
-        color: '#000000'
+        bgcolor: '#000000'
     },
     {
-        color: '#43b324'
+        bgcolor: '#43b324'
     },
     {
-        color: '#FFFFFF '
+        bgcolor: '#F9F9F9',
+        color: 'black'
     },
     {
-        color: '#001A6C'
+        bgcolor: '#001A6C'
     },
     {
-        color: '#000000'
+        bgcolor: '#000000',
     },
     {
-        color: '#FFFFFF'
+        bgcolor: '#F9F9F9',
+        color: 'black'
     },
     {
-        color: '#000000'
+        bgcolor: '#000000'
     },
     {
-        color: '#FFFFFF'
+        bgcolor: '#F9F9F9',
+        color: 'black'
     },
     {
-        color: '#000000'
+        bgcolor: '#000000'
     },
     {
-        color: '#FFFFFF'
+        bgcolor: '#F9F9F9',
+        color: 'black'
     }
 ];

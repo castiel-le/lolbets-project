@@ -7,7 +7,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Team from "./components/Team/Team"
 import { Suspense, useState, useEffect, useContext } from 'react'
 import Profile from './components/Profile/Profile';
-import { Loading } from './components/customUIComponents';
+import { FlexBoxRow, Loading } from './components/customUIComponents';
 import Teams from "./components/Teams/Teams";
 import Leaderboard from "./components/Leaderboard/Leaderboard";
 import UserBetHistory from './components/UserBetHistory/UserBetHistroy';
@@ -19,6 +19,7 @@ import LandingPage from './components/LandingPage/Landingpage'
 
 function App1() {
     const [user, setUser] = useState({id: null, role: null, coins: 0, isLoaded: false});
+
     useEffect(() => {
         document.title = "LoLBets"
     }, []);

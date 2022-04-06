@@ -18,16 +18,15 @@ export default class LandingPage extends Component {
             <header className="App-header">
 
                 <div className="svg-container">
-                    <img src={logo} width="64" className="App-logo" alt="logo" />
 
                     <p id="desc">
                         League of Legends Bets
                     </p>
 
                     <ImageSlider slides={SliderData} />
-                    <FlexBoxRow width='100%'>
-                        <FlexBoxColumn width='33%' sx={{mx: 'auto', marginLeft:'150px'}}>        
-                            <Card sx={{ maxWidth: 345, backgroundColor: '#1E2A32', marginTop: '50px' }}>
+                    <FlexBoxRow width='100%' sx={{justifyContent: 'center'}}>
+                        <FlexBoxColumn width='33%' sx={{mx: 'auto', justifyContent: 'center'}}>        
+                            <Card sx={{ maxWidth: 345, backgroundColor: '#1E2A32', marginTop: '50px', mx: 'auto', }}>
                                 <CardContent>
                                     <TypographyMedium gutterBottom variant="h5" component="div" sx={{ color: '#917526' }}>
                                         Bets
@@ -44,8 +43,8 @@ export default class LandingPage extends Component {
                             </Card>
                         </FlexBoxColumn>
 
-                        <FlexBoxColumn width='33%' sx={{mx: 'auto'}}>
-                            <Card sx={{ maxWidth: 345, backgroundColor: '#1E2A32', marginTop: '50px' }}>
+                        <FlexBoxColumn width='33%' sx={{mx: 'auto', justifyContent: 'center'}}>
+                            <Card sx={{ maxWidth: 345, backgroundColor: '#1E2A32', marginTop: '50px', mx: 'auto', }}>
                                 <CardContent>
                                     <TypographyMedium gutterBottom variant="h5" component="div" sx={{ color: '#917526' }}>
                                         Teams
@@ -62,8 +61,8 @@ export default class LandingPage extends Component {
                             </Card>
                         </FlexBoxColumn>
 
-                        <FlexBoxColumn width='33%' sx={{mx: 'auto'}}>
-                            <Card sx={{ maxWidth: 345, maxHeight: 500, backgroundColor: '#1E2A32', marginTop: '50px' }}>
+                        <FlexBoxColumn width='33%' sx={{mx: 'auto', justifyContent: 'center'}}>
+                            <Card sx={{ maxWidth: 345, maxHeight: 500, backgroundColor: '#1E2A32', marginTop: '50px', mx: 'auto', }}>
                                 <CardContent>
                                     <TypographyMedium gutterBottom variant="h5" component="div" sx={{ color: '#917526' }}>
                                         Leaderboard
