@@ -84,6 +84,8 @@ export default class Following extends Component {
                 open={this.props.open} 
                 onClose={this.props.onClose}
                 title={`${this.state.following.length} following`} 
+                width="400px"
+                height="400px"
             >
                 {this.state.isFetching
                     ? 
