@@ -8,7 +8,7 @@ const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CustomDialog({open, onClose, onSubmit, title, children}) {
+export default function CustomDialog({open, onClose, onSubmit, title, children, width, height}) {
 
     return (
         <Dialog
@@ -20,7 +20,9 @@ export default function CustomDialog({open, onClose, onSubmit, title, children})
                 style: {
                     backgroundColor: '#223039',
                     boxShadow:'0 0px 10px #f9f9f9',
-                    p: 1
+                    p: 1,
+                    width: width ? width : "auto",
+                    height: height ? height : "auto"
                 },
             }}
         >
