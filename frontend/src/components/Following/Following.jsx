@@ -86,26 +86,26 @@ export default class Following extends Component {
                 title={`${this.state.following.length} following`} 
             >
                 {this.state.isFetching
-                ? 
-                <FlexBoxColumn alignItems="center" justifyContent="center" height="90%" width="100%">
-                    <CircularProgress />
-                </FlexBoxColumn>
-                : this.state.following.length > 0
-                    ?
-                    <List sx={{overflow: "auto"}} height="100%">
-                        {this.state.following.map(following => 
-                            <ListItem key={following.follow_id} style={{paddingLeft: 0, paddingRight: 0}}>
-                                <FollowingItem following={following} unfollow={this.unfollow}/>
-                            </ListItem>
-                        )}
-                    </List>
-                    :
+                    ? 
                     <FlexBoxColumn alignItems="center" justifyContent="center" height="90%" width="100%">
-                        <PersonAddIcon sx={{fontSize: 70}} />
-                        <TypographyLight fontSize={12} marginTop={1}>
-                            You&apos;ll see all the people who you follow here
-                        </TypographyLight>
+                        <CircularProgress />
                     </FlexBoxColumn>
+                    : this.state.following.length > 0
+                        ?
+                        <List sx={{overflow: "auto"}} height="100%">
+                            {this.state.following.map(following => 
+                                <ListItem key={following.follow_id} style={{paddingLeft: 0, paddingRight: 0}}>
+                                    <FollowingItem following={following} unfollow={this.unfollow}/>
+                                </ListItem>
+                            )}
+                        </List>
+                        :
+                        <FlexBoxColumn alignItems="center" justifyContent="center" height="90%" width="100%">
+                            <PersonAddIcon sx={{fontSize: 70}} />
+                            <TypographyLight fontSize={12} marginTop={1}>
+                            You&apos;ll see all the people who you follow here
+                            </TypographyLight>
+                        </FlexBoxColumn>
                 }
             </CustomDialog>
         )
