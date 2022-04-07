@@ -1,0 +1,11 @@
+.idea/
+target/*
+db.config
+/src/out/
+/src/lolbets-project.iml
+.idea
+pandascore.config
+DigiCertGlobalRootCA.crt.pem
+frontend
+package-lock.json
+server

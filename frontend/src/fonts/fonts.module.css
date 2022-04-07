@@ -1,0 +1,14 @@
+@font-face {
+    font-family: Lemon-Milk-Light;
+    src: url(./font/LEMONMILK-Light.otf);
+  }
+
+@font-face {
+    font-family: Lemon-Milk-Medium;
+    src: url(./font/LEMONMILK-Medium.otf);
+  }
+
+@font-face {
+  font-family: Lemon-Milk-Bold;
+  src: url(./font/LEMONMILK-Bold.otf);
+}
