@@ -69,7 +69,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.resolve(__dirname, "../frontend/build")));
 
 // all the unknown requests are redirected to the react SPA
-app.use(function (req, res, next) {
+app.use(function (req, res) {
     res.sendFile(path.join(path.resolve(__dirname, "../frontend/build"), "index.html"));
 });
 module.exports = app;

@@ -1,11 +1,10 @@
 const models = require("./sqlmodels");
-const { Op, Sequelize } = require("sequelize");
+const {Op} = require("sequelize");
 
 //Function to get all badges
 async function getBadges() {
     const badges = await models.Badge.findAll();
     badges[0].dataValues.randomnewvalue = "hello";
-    console.log(badges[0]);
     return badges;
 }
 
@@ -668,7 +667,6 @@ async function updateOrCreateBetParticipant(bet_id, user_id, team, amount) {
                 amount_bet: parseInt(amount) ? amount : 100,
                 creation_date: Date.now()   
             });
-            console.log(betAdded)
             return {betAdded, created: true, ok: true}
         } catch (e) {
             console.log(e);

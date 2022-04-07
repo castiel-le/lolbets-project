@@ -4,15 +4,6 @@ const GoogleStrategy = require("passport-google-oidc");
 const router = express.Router({mergeParams:true});
 const dbFetch = require("../db/dbFunctions")
 
-//Route to get only the fields necessary for logging in, most likely be changed later
-router.get("/login", async (req, res) => {
-    return res.json({
-        "user_id":1,
-        "username":"Bob",
-        "password_id":1
-    });
-});
-
 //Route to get authentication from Google
 router.get("/login/federated/google", passport.authenticate("google"));
 
@@ -44,7 +35,6 @@ passport.use(new GoogleStrategy({
             cb(null, jsonUser);
         }
     } catch (e) {
-        console.log(e);
         cb(e);
     }
 }));
@@ -60,42 +50,6 @@ passport.deserializeUser(function(user, done){
     process.nextTick(function(){
         return done(null, user);
     });
-});
-
-router.delete("/logout", (req, res)=>{
-    try {
-        req.logout();
-        res.sendStatus(200);
-    } catch (e) {
-        res.sendStatus(404);
-    }
-})
-
-//Route to get all bets (fake data for now)
-router.get("/bets", async (req, res) => {
-    try {
-        return res.json([{
-            "bet_id":1,
-            "creator_id":1,
-            "category_id":1,
-            "win_condition_id":1,
-            "minimum_coins":10,
-            "maximum_coins":100,
-            "match_id":1,
-            "bet_locked":false
-        }, {
-            "bet_id":2,
-            "creator_id":1,
-            "category_id":1,
-            "win_condition_id":1,
-            "minimum_coins":100,
-            "maximum_coins":1000,
-            "match_id":2,
-            "bet_locked":false
-        }]);
-    } catch(error){
-        return res.json({"Error":error})
-    }
 });
 
 // allows a user to join a bet
@@ -119,7 +73,6 @@ router.put("/bets/join", async (req, res) => {
         }
     } catch (exception) {
         res.status(404).send(exception.message);
-        console.error(exception.message);
     }
 });
 
@@ -145,18 +98,6 @@ router.delete("/bets/delete", async (req, res) => {
     }
 });
 
-//Route to create a user when they signup, non functional yet
-router.post("/signup", async (req, res) => {
-    try {
-        res.send(req.body);
-        console.log("successfully sent!");
-        console.log(req.body);
-    } catch(e){
-        console.log("error occurred");
-    }
-});
-
-
 //Route to get match information
 router.get("/matches", async (req, res) => {
     try {
@@ -164,8 +105,6 @@ router.get("/matches", async (req, res) => {
             res.json(await dbFetch.getMatchesAfter(parseInt(req.query.after), parseInt(req.query.page)));
         } else if (req.query.afterthis && req.query.beforethis){
             res.json(await dbFetch.getMatchesBetween(parseInt(req.query.afterthis), parseInt(req.query.beforethis)));
-        } else if (Object.keys(req.query).length === 0){
-            res.json(await dbFetch.getMatches());
         } else {
             res.sendStatus(404);
         }
@@ -174,15 +113,6 @@ router.get("/matches", async (req, res) => {
     }
 });
 
-
-//Route to get badges
-router.get("/badges", async (req, res) => {
-    try {
-        res.json(await dbFetch.getBadges());
-    } catch(e){
-        res.sendStatus(404);
-    }
-});
 
 //Route to get teams
 router.get("/teams", async (req, res) => {
@@ -207,13 +137,12 @@ router.get("/user/top5", async (req, res) => {
     try {
         res.json(await dbFetch.getTop5Users());
     } catch(e){
-        console.log(e);
         res.sendStatus(404);
     }
 });
 
 //Route to get non top 5 users
-router.get("/user/rest", async (req, res) => {
+router.get("/user/nontop5", async (req, res) => {
     try {
         if (req.query.page){
             res.json(await dbFetch.getRemainingUsers(req.query.page));
@@ -223,7 +152,6 @@ router.get("/user/rest", async (req, res) => {
             res.sendStatus(404, "second not found");
         }
     } catch(e) {
-        console.log(e);
         res.sendStatus(404);
     }
 })
@@ -259,7 +187,6 @@ router.get("/user/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getUserById(req.params.id)); 
     } catch(e) {
-        console.log(e);
         res.sendStatus(404);
     }
 })
@@ -269,7 +196,6 @@ router.get("/allbets/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getAllBetsForUser(req.params.id));
     } catch(e) {
-        console.log(e)
         res.sendStatus(404);
     }
 });
@@ -287,7 +213,6 @@ router.get("/custombets/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getCustomBetInfoByUserID(req.params.id));
     } catch (e){
-        console.log(e)
         res.sendStatus(404);
     }
 });
@@ -342,7 +267,6 @@ router.get("/user/history/:id", async (req, res) => {
     try {
         res.json(await dbFetch.getUserBetsById(req.params.id, req.query.page, req.query.limit));
     } catch (e) {
-        console.log(e)
         res.sendStatus(404);
     }
 })
@@ -468,7 +392,6 @@ router.get("/payout", async (req, res) => {
     try {
         res.json(await dbFetch.getPayoutPercentageCustomBet(req.query.time1, req.query.amount, req.query.time2));
     } catch (e){
-        console.log(e);
         res.sendStatus(404);
     }
 })
@@ -519,19 +442,6 @@ router.delete("/follow", async (req, res) => {
         if (req.body.follower_id && req.body.following_id){
             const response = await dbFetch.unfollowUser(req.body.follower_id, req.body.following_id);
             res.sendStatus(response ? 200 : 404);
-        }
-    } catch(e) {
-        res.sendStatus(404);
-    }
-})
-
-//route to get the most recent bet from all the people a user is following
-router.get("/user/:id/recent", async (req, res) => {
-    try {
-        if (req.params.id) {
-            res.json(await dbFetch.getAllFollowingRecentBet(req.params.id));
-        } else {
-            res.sendStatus(404);
         }
     } catch(e) {
         res.sendStatus(404);
