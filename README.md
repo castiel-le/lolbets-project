@@ -1,4 +1,6 @@
 # LoLBets Project
+https://lolbets-project-production.herokuapp.com
+\
 LoLBets is a League of Legends betting website for the casuals and the competitive. It uses virtual currency for betting, so no real money is involved. The application utilizes MERN(M = MySQL) stack along with a standalone java importer tool. This java importer tool is used for reading League of Legends matches dataset, and accessing new matches from [PandaScore](https://pandascore.co/).\
 \
 The source of dataset used is from  [Oracle's Elixir](https://oracleselixir.com/).
