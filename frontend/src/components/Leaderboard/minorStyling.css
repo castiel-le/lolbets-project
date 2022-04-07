@@ -1,0 +1,59 @@
+.MuiTablePagination-caption {
+    display: none
+}
+
+a {
+    text-decoration: none
+}
+
+a:hover {
+    text-decoration: underline white
+}
+
+.searchContainer {
+    width: 91.6%;
+    margin: 30px auto;
+    padding: 10px;
+}
+
+.searchInput {
+    background-color:rgba(43, 77, 129, 0.96);
+    outline: none;
+    border: none;
+    width: 80%;
+    font-size: 23px;
+    padding: 10px;
+    margin-right: 10px;
+    vertical-align: bottom;
+    font-family: 'Lemon-Milk-Light';
+    color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.searchInput:focus {
+    background-color: rgba(123, 128, 209, 1);
+}
+
+.searchButton {
+    height: 50.5px;
+    border: none;
+    font-family: 'Lemon-Milk-Light';
+    color: #f9f9f9;
+    padding: 10px;
+    background-color: rgba(123, 128, 209, 1);
+    border-radius: 5px;
+}
+
+.searchButton:hover {
+    background-color: rgba(104, 112, 225, 1);
+}
+
+.searchButton:active {
+    background-color: rgba(43, 77, 129, 0.96);
+}
+
+
+
+::placeholder {
+    color: rgba(165, 169, 219, 1);
+}
