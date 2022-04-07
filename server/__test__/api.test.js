@@ -1,7 +1,7 @@
 const router = require("../app");
 const supertest = require("supertest");
 const request = supertest(router);
-jest.setTimeout(10000);
+jest.setTimeout(15000);
 
 describe("Gets matchs information endpoint", () => {
     test("GET matches after specific date", async () => {
@@ -57,7 +57,7 @@ test("GET top 5 users endpoint", async () => {
 })
 
 test("GET non-top 5 users endpoint", async () => {
-    const response = await request.get("/api/user/nontop5?page=1&count=1");
+    const response = await request.get("/api/user/rest?page=1&count=1");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body[5].username).toBeTruthy();
@@ -99,7 +99,7 @@ test("GET all bets from a user with match data endpoint", async () => {
 })
 
 test("GET all custom bets from an user endpoint", async () => {
-    const response = await request.get("/api/custombets/23");
+    const response = await request.get("/api/custombets/35");
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body[0].betInfo).toBeTruthy();
@@ -118,22 +118,6 @@ test("GET user history bets by id endpoint", async () => {
     expect(response.status).toBe(200);
     expect(response.type).toMatch("application/json");
     expect(response.body[0].team_betted_on).toBeTruthy();
-})
-
-test("GET all bans endpoint", async () => {
-    const response = await request.get("/api/bans");
-    expect(response.status).toBe(200);
-    expect(response.type).toMatch("application/json");
-    expect(response.body[0].ban_id).toBeTruthy();
-    expect(response.body[0].reason).toBeTruthy();
-})
-
-test("GET all timeouts endpoint", async () => {
-    const response = await request.get("/api/timeouts");
-    expect(response.status).toBe(200);
-    expect(response.type).toMatch("application/json");
-    expect(response.body[0].timeouts_id).toBeTruthy();
-    expect(response.body[0].reason).toBeTruthy();
 })
 
 test("GET categories endpoint", async () => {

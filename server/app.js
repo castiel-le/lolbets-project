@@ -5,9 +5,25 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const dbFetch = require("./db/dbFunctions");
-
-
 const passport = require("passport");
+
+
+// Sets up swagger documentation
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUI = require("swagger-ui-express");
+const swaggerDefinition = {
+    openapi: "3.0.0",
+    info: {
+        title: "Express API for LoLBets",
+        version: "1.0.0"
+    },
+};
+const options = {
+    swaggerDefinition,
+    apis: ["./server/routes/*.js"],
+}
+const swaggerSpec = swaggerJSDoc(options);
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 //establish session for Google authentication
 app.use(session({
