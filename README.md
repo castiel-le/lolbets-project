@@ -23,7 +23,7 @@ Marian Ruth Lina
 5. After setting up a new OAuth client ID, copy the `client ID` and `client secret` for the next step.
 
 ### Step 2: Setting up the Config Files
-1. In the **/server** directory, Create `.env`. It must contain the following:
+1. In the **/server** and root directory, Create `.env`. It must contain the following:
 ```
 PORT=3001
 dbURL=<INSERT YOUR DB'S URL. If locally, put "localhost">
@@ -79,6 +79,7 @@ npm run build
 2. After the build has finished, go to `/server` on the console and enter the following commands:
 ```
 npm install
+cd ..
 npm start
 ```
 **This should install all the dependencies on the `/server` directory, and run the app afterwards. After the app is running, open up a web browser and go to `localhost:3001`. Congrats! You have now deployed our LoLBets website locally.**
